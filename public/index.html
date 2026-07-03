@@ -138,8 +138,10 @@
                     <div class="bg-white rounded-2xl shadow-md border border-gray-100 grid grid-cols-2 overflow-hidden w-[72px]">
                         <button onclick="setRadius(300)" id="rad300" class="radius-btn text-[9px] font-black py-2 border-b border-r border-gray-100 text-gray-500 transition-colors">300m</button>
                         <button onclick="setRadius(500)" id="rad500" class="radius-btn text-[9px] font-black py-2 border-b border-gray-100 text-gray-500 transition-colors">500m</button>
-                        <button onclick="setRadius(1000)" id="rad1000" class="radius-btn text-[9px] font-black py-2 border-r border-gray-100 text-gray-500 transition-colors">1km</button>
-                        <button onclick="setRadius(2000)" id="rad2000" class="radius-btn text-[9px] font-black py-2 text-gray-500 transition-colors">2km</button>
+                        <button onclick="setRadius(1000)" id="rad1000" class="radius-btn text-[9px] font-black py-2 border-b border-r border-gray-100 text-gray-500 transition-colors">1km</button>
+                        <button onclick="setRadius(2000)" id="rad2000" class="radius-btn text-[9px] font-black py-2 border-b border-gray-100 text-gray-500 transition-colors">2km</button>
+                        <button onclick="setRadius(2500)" id="rad2500" class="radius-btn text-[9px] font-black py-2 border-r border-gray-100 text-gray-500 transition-colors">2.5km</button>
+                        <button onclick="setRadius(3000)" id="rad3000" class="radius-btn text-[9px] font-black py-2 text-gray-500 transition-colors">3km</button>
                     </div>
                     <button id="locateBtn" onclick="locateMe()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-blue-600 active:scale-95 transition">
                         <i class="fa-solid fa-location-crosshairs"></i>
@@ -216,7 +218,7 @@
         let isUserPanning = false;
         let streetLayer = null, satelliteLayer = null, satelliteLabelLayer = null, isSatelliteView = false;
         const MAP_BRANDS = ['MCDONALDS', 'LOTTERIA', 'MOMSTOUCH'];
-        const RADIUS_STEPS = [300, 500, 1000, 2000];
+        const RADIUS_STEPS = [300, 500, 1000, 2000, 2500, 3000];
         // 원본 편의점 앱과 동일한 브이월드(국토지리정보원) 위성영상 키 재사용 (도메인 제한 없이 동작 확인함)
         const VWORLD_KEY = '6888EEC4-8F4B-3D0D-87AE-7AE4C071E4CA';
 
