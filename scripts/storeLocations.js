@@ -1,0 +1,119 @@
+// 소상공인시장진흥공단 상가(상권)정보 API의 storeListInUpjong(업종 기반 전국 조회) 엔드포인트로
+// 전국 버거(I21004)·치킨(I21006) 소분류 매장을 가져온 뒤, 상호명 패턴으로
+// 롯데리아/맘스터치를 걸러서 맥도날드 자체 API 결과와 합쳐 public/stores.json에 저장한다.
+//
+// 업종코드는 largeUpjongList(I2 음식) -> middleUpjongList(I210 기타 간이) -> smallUpjongList로
+// 직접 조회해서 확인한 값: I21004=버거, I21006=치킨.
+//
+// * 맥도날드는 이 데이터셋에 8건밖에 안 잡힘(직영 위주 운영이라 "소상공인" 등록 자체가 적음) ->
+//   자체 공식 매장찾기 API(mcdonalds-stores.js, 전국 401건)를 대신 사용.
+// * KFC는 이 데이터셋에서도 0건, 자체 매장찾기는 세션/CSRF 기반이라 이번 단계에서는 제외.
+//   (편의점 앱과 달리 대상 브랜드가 소수라 시/도별로 나누지 않고 단일 파일로 저장한다.)
+//
+// 사용법: node scripts/storeLocations.js  (.env의 SBIZ_API_KEY 사용)
+// API 신청: https://www.data.go.kr/data/15012005/openapi.do (무료, 자동승인)
+
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
+const { crawlMcdonaldsStores } = require('./crawlers/mcdonalds-stores');
+
+const BASE = 'https://apis.data.go.kr/B553077/api/open/sdsc2';
+const OUT_PATH = path.join(__dirname, '..', 'public', 'stores.json');
+const PAGE_SIZE = 1000;
+
+const UPJONG_CODES = ['I21004', 'I21006']; // 버거, 치킨
+
+const BRAND_PATTERNS = [
+  { brand: 'LOTTERIA', pattern: /롯데리아/i },
+  { brand: 'MOMSTOUCH', pattern: /맘스터치/i },
+];
+
+function loadServiceKey() {
+  const envPath = path.join(__dirname, '..', '.env');
+  const envText = fs.readFileSync(envPath, 'utf-8');
+  const match = envText.match(/SBIZ_API_KEY\s*=\s*(.+)/);
+  if (!match) throw new Error('.env에서 SBIZ_API_KEY를 찾을 수 없습니다.');
+  return match[1].trim();
+}
+
+function classifyBrand(name) {
+  for (const { brand, pattern } of BRAND_PATTERNS) {
+    if (pattern.test(name)) return brand;
+  }
+  return null;
+}
+
+async function fetchUpjong(serviceKey, code) {
+  const stores = [];
+  let pageNo = 1;
+  let totalCount = Infinity;
+
+  while ((pageNo - 1) * PAGE_SIZE < totalCount) {
+    const { data } = await axios.get(`${BASE}/storeListInUpjong`, {
+      params: { serviceKey, type: 'json', divId: 'indsSclsCd', key: code, numOfRows: PAGE_SIZE, pageNo },
+      timeout: 20000,
+    });
+
+    const body = data && data.body;
+    const items = (body && body.items) || [];
+    totalCount = (body && body.totalCount) || items.length;
+
+    items.forEach((item) => {
+      const brand = classifyBrand(item.bizesNm || '');
+      if (!brand) return; // 4개 브랜드 외 매장(치킨집/타 버거 브랜드 등)은 제외
+      const lat = parseFloat(item.lat);
+      const lng = parseFloat(item.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      stores.push({
+        id: `${brand}_${item.bizesId}`,
+        brand,
+        name: item.bizesNm,
+        lat,
+        lng,
+        address: item.lnoAdr || item.rdnmAdr || '',
+      });
+    });
+
+    console.error(`[${code}] page ${pageNo} (${items.length}건 / 전체 ${totalCount}건, 브랜드매칭 누적 ${stores.length}건)`);
+    pageNo++;
+    await new Promise((r) => setTimeout(r, 150));
+  }
+
+  return stores;
+}
+
+async function run() {
+  const serviceKey = loadServiceKey();
+
+  let all = [];
+  for (const code of UPJONG_CODES) {
+    const stores = await fetchUpjong(serviceKey, code);
+    all = all.concat(stores);
+  }
+
+  try {
+    const mcdStores = await crawlMcdonaldsStores();
+    console.error(`맥도날드 자체 API: ${mcdStores.length}건 수집`);
+    all = all.concat(mcdStores);
+  } catch (err) {
+    console.error('맥도날드 매장 수집 실패(계속 진행):', err.message);
+  }
+
+  // 동일 매장이 두 업종코드에 중복 집계될 수 있으니 id 기준으로 중복 제거
+  const dedup = new Map();
+  all.forEach((s) => dedup.set(s.id, s));
+  const final = [...dedup.values()];
+
+  fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
+  fs.writeFileSync(OUT_PATH, JSON.stringify(final), 'utf-8');
+
+  const byBrand = final.reduce((acc, s) => { acc[s.brand] = (acc[s.brand] || 0) + 1; return acc; }, {});
+  console.error('브랜드별 매장 수:', byBrand);
+  console.error(`stores.json 작성 완료: 총 ${final.length}건 (${OUT_PATH})`);
+}
+
+run().catch((err) => {
+  console.error('매장 위치 수집 실패:', err.message);
+  process.exit(1);
+});
