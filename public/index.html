@@ -591,6 +591,7 @@
         function openStoreSheet(s) {
             const b = BRAND_INFO[s.brand] || { text: s.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600' };
             const mapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(s.name)},${s.lat},${s.lng}`;
+            const eventCount = ALL_DEALS.filter((d) => d.brand === s.brand).length;
             document.getElementById('storeSheetContent').innerHTML = `
                 <div class="flex items-start justify-between mb-2">
                     <div>
@@ -600,7 +601,10 @@
                     </div>
                     <button onclick="closeStoreSheet()" class="w-8 h-8 flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <a href="${mapUrl}" target="_blank" rel="noopener" class="block text-center mt-3 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow"><i class="fa-solid fa-diamond-turn-right mr-1"></i>길찾기</a>`;
+                <div class="grid grid-cols-2 gap-2 mt-3">
+                    <button onclick="viewBrandEvents('${s.brand}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-fire mr-1 text-orange-500"></i>행사안내 ${eventCount}건</button>
+                    <a href="${mapUrl}" target="_blank" rel="noopener" class="py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow text-center"><i class="fa-solid fa-diamond-turn-right mr-1"></i>길찾기</a>
+                </div>`;
             document.getElementById('storeSheetBg').classList.add('active');
             document.getElementById('storeSheet').classList.add('active');
         }
@@ -608,6 +612,18 @@
         function closeStoreSheet() {
             document.getElementById('storeSheetBg').classList.remove('active');
             document.getElementById('storeSheet').classList.remove('active');
+        }
+
+        // 매장 시트의 "행사안내" 버튼 - 그 브랜드로 필터링된 행사 탭으로 바로 이동
+        function viewBrandEvents(brand) {
+            closeStoreSheet();
+            activeBrand = brand;
+            activeCategory = 'ALL';
+            renderBrands();
+            renderCategories();
+            renderDeals();
+            document.getElementById('dealListArea').scrollTop = 0;
+            switchTab('events');
         }
 
         function getLocation() {
