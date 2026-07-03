@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <style>
         html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #e5e7eb; display: flex; justify-content: center; align-items: center; }
 
@@ -71,16 +68,12 @@
         .marker-mcdonalds { background: #d97706; }
         .marker-lotteria { background: #ea580c; }
         .marker-momstouch { background: #e11d48; }
-        .me-marker { width: 16px; height: 16px; border-radius: 50%; background: #2563eb; border: 3px solid white; box-shadow: 0 0 0 4px rgba(37,99,235,0.3); }
-        .marker-cluster-fastfood { background: rgba(234,88,12,0.75); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; border: 2px solid white; }
 
-        .locate-btn {
-            position: absolute; right: 12px; bottom: 16px; z-index: 400;
-            width: 44px; height: 44px; border-radius: 9999px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            display: flex; align-items: center; justify-content: center; color: #374151;
-        }
-        .locate-btn.loading i { animation: spin 0.8s linear infinite; }
+        .radius-btn.active { color: #2563eb; background: #eff6ff; }
+        #satelliteToggleBtn.active { color: #2563eb; background: #eff6ff; }
+        #locateBtn.loading i { animation: spin 0.8s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body class="font-sans antialiased text-gray-800 selection:bg-orange-100">
@@ -128,11 +121,35 @@
             </div>
             <div class="flex-1 min-h-0 relative">
                 <div id="map"></div>
-                <button id="locateBtn" onclick="locateMe()" class="locate-btn">
-                    <i class="fa-solid fa-location-crosshairs"></i>
+
+                <!-- 결과 카운트 -->
+                <div id="mapResultBadge" class="absolute top-3 left-3 z-[400] bg-white/95 px-3 py-1.5 rounded-full shadow-sm text-[11px] font-bold text-gray-700"></div>
+
+                <!-- 이 지역 재검색 -->
+                <button id="reSearchBtn" onclick="searchInCurrentArea()" class="absolute bottom-5 left-1/2 -translate-x-1/2 z-[500] bg-gray-900 text-white px-4 py-2.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-2">
+                    <i class="fa-solid fa-rotate-right text-blue-400"></i> 이 지역 재검색
                 </button>
+
+                <!-- 우측 컨트롤: 위성보기 / 반경선택 / 내위치 -->
+                <div class="absolute right-3 bottom-4 z-[400] flex flex-col gap-2 items-end">
+                    <button id="satelliteToggleBtn" onclick="toggleSatelliteView()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition">
+                        <i class="fa-solid fa-satellite"></i>
+                    </button>
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 grid grid-cols-2 overflow-hidden w-[72px]">
+                        <button onclick="setRadius(300)" id="rad300" class="radius-btn text-[9px] font-black py-2 border-b border-r border-gray-100 text-gray-500 transition-colors">300m</button>
+                        <button onclick="setRadius(500)" id="rad500" class="radius-btn text-[9px] font-black py-2 border-b border-gray-100 text-gray-500 transition-colors">500m</button>
+                        <button onclick="setRadius(1000)" id="rad1000" class="radius-btn text-[9px] font-black py-2 border-r border-gray-100 text-gray-500 transition-colors">1km</button>
+                        <button onclick="setRadius(2000)" id="rad2000" class="radius-btn text-[9px] font-black py-2 text-gray-500 transition-colors">2km</button>
+                    </div>
+                    <button id="locateBtn" onclick="locateMe()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-blue-600 active:scale-95 transition">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </button>
+                </div>
             </div>
         </div>
+
+        <!-- 토스트 알림 -->
+        <div id="toast" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900/90 backdrop-blur-md text-white px-5 py-3 rounded-2xl text-sm font-medium shadow-2xl z-[6000] opacity-0 pointer-events-none transition-all duration-300 max-w-[80%] text-center"></div>
 
         <!-- 하단 탭 바 -->
         <div class="flex-none border-t border-gray-100 bg-white flex z-[100]">
@@ -193,9 +210,15 @@
         let ALL_STORES = [];
         let mapBrand = 'ALL';
         let leafletMap = null;
-        let markerCluster = null;
-        let meMarker = null;
+        let mapMarkers = [];
+        let searchCircle = null;
+        let currentRadius = 500;
+        let isUserPanning = false;
+        let streetLayer = null, satelliteLayer = null, satelliteLabelLayer = null, isSatelliteView = false;
         const MAP_BRANDS = ['MCDONALDS', 'LOTTERIA', 'MOMSTOUCH'];
+        const RADIUS_STEPS = [300, 500, 1000, 2000];
+        // 원본 편의점 앱과 동일한 브이월드(국토지리정보원) 위성영상 키 재사용 (도메인 제한 없이 동작 확인함)
+        const VWORLD_KEY = '6888EEC4-8F4B-3D0D-87AE-7AE4C071E4CA';
 
         function dealKey(d) { return `${d.brand}:${d.id}`; }
 
@@ -405,6 +428,21 @@
         }
 
         // ===== 지도 =====
+        let toastTimer = null;
+        function showToast(msg, duration = 1800) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, duration);
+        }
+
+        function radiusText(r) { return r >= 1000 ? `${r / 1000}km` : `${r}m`; }
+
         async function loadStores() {
             try {
                 const res = await fetch(`${DATA_BASE_URL}stores.json?_=${Date.now()}`);
@@ -431,45 +469,122 @@
             }).join('');
         }
 
-        function setMapBrand(b) { mapBrand = b; renderMapBrandChips(); renderMarkers(); }
+        function setMapBrand(b) { mapBrand = b; renderMapBrandChips(); loadStoresInRadius(); }
 
-        function initMapIfNeeded() {
+        async function initMapIfNeeded() {
             if (leafletMap) return;
-            leafletMap = L.map('map', { zoomControl: false }).setView([36.5, 127.8], 7); // 대한민국 중심
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            const defaultCenter = [37.5665, 126.9780]; // 서울시청 (위치 권한 거부/실패 시 기본값)
+            leafletMap = L.map('map', { zoomControl: false }).setView(defaultCenter, 16);
+
+            streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; OpenStreetMap',
             }).addTo(leafletMap);
-            markerCluster = L.markerClusterGroup({
-                iconCreateFunction: (cluster) => L.divIcon({
-                    html: `<div class="marker-cluster-fastfood" style="width:${36 + Math.min(cluster.getChildCount(), 40)}px;height:${36 + Math.min(cluster.getChildCount(), 40)}px;">${cluster.getChildCount()}</div>`,
-                    className: '',
-                    iconSize: [40, 40],
-                }),
+
+            // 브이월드(국토지리정보원) 위성영상 + 라벨 오버레이 (편의점 앱과 동일한 방식)
+            satelliteLayer = L.tileLayer(`https://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/Satellite/{z}/{y}/{x}.jpeg`, {
+                attribution: '&copy; VWorld', maxZoom: 19,
             });
-            leafletMap.addLayer(markerCluster);
-            loadStores().then(renderMarkers);
+            satelliteLabelLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png');
+
+            searchCircle = L.circle(defaultCenter, {
+                radius: currentRadius, color: '#3b82f6', fillColor: '#3b82f6',
+                fillOpacity: 0.05, weight: 2, dashArray: '5, 5',
+            }).addTo(leafletMap);
+
+            leafletMap.on('move', () => searchCircle.setLatLng(leafletMap.getCenter()));
+            leafletMap.on('dragstart', () => { isUserPanning = true; });
+            leafletMap.on('zoomstart', () => { isUserPanning = true; });
+            leafletMap.on('moveend', () => {
+                if (isUserPanning) { showReSearchBtn(); isUserPanning = false; }
+            });
+
+            highlightRadiusButtons(currentRadius);
+            await loadStores();
+            await locateMe();
         }
 
         function brandMarkerClass(brand) {
             return { MCDONALDS: 'marker-mcdonalds', LOTTERIA: 'marker-lotteria', MOMSTOUCH: 'marker-momstouch' }[brand] || 'marker-mcdonalds';
         }
 
-        function renderMarkers() {
-            if (!markerCluster) return;
-            markerCluster.clearLayers();
-            const filtered = ALL_STORES.filter((s) => mapBrand === 'ALL' || s.brand === mapBrand);
+        // 반경 원의 중심을 기준으로 그 반경 안에 있는 매장만 걸러서 개별 마커로 그린다.
+        // (지도를 옮기는 동안엔 원이 화면 중앙을 따라오기만 하고, 실제 검색은 재검색 버튼을 눌러야 갱신됨)
+        function loadStoresInRadius() {
+            if (!leafletMap || !searchCircle) return;
+            mapMarkers.forEach((m) => leafletMap.removeLayer(m));
+            mapMarkers = [];
+
+            const center = searchCircle.getLatLng();
+            const filtered = ALL_STORES.filter((s) => {
+                if (mapBrand !== 'ALL' && s.brand !== mapBrand) return false;
+                return leafletMap.distance(center, [s.lat, s.lng]) <= currentRadius;
+            });
+
             filtered.forEach((s) => {
                 const b = BRAND_INFO[s.brand] || { emoji: '🍽️' };
                 const icon = L.divIcon({
                     html: `<div class="store-marker ${brandMarkerClass(s.brand)}"><span>${b.emoji}</span></div>`,
                     className: '', iconSize: [30, 30], iconAnchor: [15, 28],
                 });
-                const marker = L.marker([s.lat, s.lng], { icon });
+                const marker = L.marker([s.lat, s.lng], { icon }).addTo(leafletMap);
                 marker.on('click', () => openStoreSheet(s));
-                markerCluster.addLayer(marker);
+                mapMarkers.push(marker);
+            });
+
+            document.getElementById('mapResultBadge').textContent = `반경 ${radiusText(currentRadius)} 내 ${filtered.length}개 매장`;
+        }
+
+        function searchInCurrentArea() {
+            hideReSearchBtn();
+            loadStoresInRadius();
+            showToast(`반경 ${radiusText(currentRadius)} 내에서 다시 찾았어요`);
+        }
+
+        function showReSearchBtn() {
+            const btn = document.getElementById('reSearchBtn');
+            btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+            btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        }
+        function hideReSearchBtn() {
+            const btn = document.getElementById('reSearchBtn');
+            btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+            btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        }
+
+        function highlightRadiusButtons(r) {
+            RADIUS_STEPS.forEach((val) => {
+                document.getElementById(`rad${val}`).classList.toggle('active', val === r);
             });
         }
+
+        function setRadius(r) {
+            currentRadius = r;
+            highlightRadiusButtons(r);
+            searchCircle.setRadius(r);
+            leafletMap.flyToBounds(searchCircle.getBounds(), { padding: [20, 20], duration: 0.5 });
+            setTimeout(() => {
+                hideReSearchBtn(); // flyToBounds 애니메이션도 이동 이벤트를 발생시켜 재검색 버튼이 뜰 수 있어 다시 숨김
+                loadStoresInRadius();
+                showToast(`검색 반경이 ${radiusText(r)}로 변경되었습니다.`);
+            }, 600);
+        }
+
+        function applySatelliteView(on) {
+            isSatelliteView = on;
+            if (on) {
+                leafletMap.removeLayer(streetLayer);
+                satelliteLayer.addTo(leafletMap);
+                satelliteLabelLayer.addTo(leafletMap); // 위성 위에 도로명/지명 라벨 겹치기
+            } else {
+                leafletMap.removeLayer(satelliteLayer);
+                leafletMap.removeLayer(satelliteLabelLayer);
+                streetLayer.addTo(leafletMap);
+            }
+            document.getElementById('satelliteToggleBtn').classList.toggle('active', on);
+        }
+
+        function toggleSatelliteView() { applySatelliteView(!isSatelliteView); }
 
         function openStoreSheet(s) {
             const b = BRAND_INFO[s.brand] || { text: s.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600' };
@@ -513,11 +628,14 @@
             btn.querySelector('i').className = 'fa-solid fa-spinner';
             try {
                 const { lat, lng } = await getLocation();
-                if (meMarker) leafletMap.removeLayer(meMarker);
-                meMarker = L.marker([lat, lng], { icon: L.divIcon({ html: '<div class="me-marker"></div>', className: '', iconSize: [16, 16] }) }).addTo(leafletMap);
-                leafletMap.setView([lat, lng], 15);
+                leafletMap.setView([lat, lng], 16);
+                searchCircle.setLatLng([lat, lng]);
+                hideReSearchBtn();
+                loadStoresInRadius();
             } catch (e) {
-                alert('위치 정보를 가져올 수 없어요. 위치 권한을 확인해주세요.');
+                // 위치 권한이 없어도 기본 위치(서울시청) 기준으로는 계속 볼 수 있게 함
+                loadStoresInRadius();
+                showToast('위치 정보를 가져올 수 없어 기본 위치로 표시했어요.');
             } finally {
                 btn.classList.remove('loading');
                 btn.querySelector('i').className = 'fa-solid fa-location-crosshairs';
