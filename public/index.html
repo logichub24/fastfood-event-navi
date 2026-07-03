@@ -172,6 +172,10 @@
 
     <script src="ads.js" type="module"></script>
     <script>
+        // 토스인앱 등 어디에 빌드해 넣어도 데이터는 항상 GitHub Pages의 최신본을
+        // 실시간으로 받아오도록 절대경로를 쓴다. GitHub Actions가 매일 새벽 갱신함.
+        const DATA_BASE_URL = 'https://logichub24.github.io/fastfood-event-navi/public/';
+
         const CATEGORIES = ['ALL', '신메뉴', '시간대 특가', '세트･콤보', '배달', '멤버십･앱', '쿠폰･할인', '메뉴소식'];
         const BRAND_INFO = {
             'MCDONALDS': { text: '맥도날드', emoji: '🍟', bg: 'bg-amber-100', color: 'text-amber-700', ring: 'ring-amber-300' },
@@ -208,7 +212,7 @@
 
         async function loadDeals() {
             try {
-                const res = await fetch(`deals.json?_=${Date.now()}`);
+                const res = await fetch(`${DATA_BASE_URL}deals.json?_=${Date.now()}`);
                 ALL_DEALS = await res.json();
             } catch (e) {
                 ALL_DEALS = [];
@@ -403,7 +407,7 @@
         // ===== 지도 =====
         async function loadStores() {
             try {
-                const res = await fetch(`stores.json?_=${Date.now()}`);
+                const res = await fetch(`${DATA_BASE_URL}stores.json?_=${Date.now()}`);
                 ALL_STORES = await res.json();
             } catch (e) {
                 ALL_STORES = [];

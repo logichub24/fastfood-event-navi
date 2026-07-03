@@ -1,9 +1,8 @@
 // 토스인앱(Apps in Toss) 빌드용 스크립트.
 // granite.config.ts의 web.commands.build/dev에서 호출됨.
 // 정적 HTML 앱이라 별도 번들러 없이, public/ 안의 파일만 dist/로 복사한다.
-// deals.json은 (편의점 앱과 달리) GitHub Pages 등 외부 호스팅을 아직 구성하지 않았으므로
-// 빌드 시점 스냅샷을 그대로 번들에 포함시킨다. 매일 최신화하려면
-// `npm run crawl && npm run build:toss`를 배포 전에 실행해야 한다.
+// deals.json/stores.json은 복사하지 않음 - 런타임에 DATA_BASE_URL(GitHub Pages)에서 직접
+// fetch하므로 번들에 포함시키면 용량만 커지고, 매일 새벽 크론으로 갱신되는 데이터라 의미 없음.
 const fs = require('fs');
 const path = require('path');
 
@@ -15,18 +14,6 @@ fs.mkdirSync(DIST_DIR, { recursive: true });
 
 fs.copyFileSync(path.join(SRC_DIR, 'index.html'), path.join(DIST_DIR, 'index.html'));
 fs.copyFileSync(path.join(SRC_DIR, 'ads.js'), path.join(DIST_DIR, 'ads.js'));
-
-if (fs.existsSync(path.join(SRC_DIR, 'deals.json'))) {
-  fs.copyFileSync(path.join(SRC_DIR, 'deals.json'), path.join(DIST_DIR, 'deals.json'));
-} else {
-  console.warn('deals.json이 없습니다. `npm run crawl`을 먼저 실행하세요.');
-}
-
-if (fs.existsSync(path.join(SRC_DIR, 'stores.json'))) {
-  fs.copyFileSync(path.join(SRC_DIR, 'stores.json'), path.join(DIST_DIR, 'stores.json'));
-} else {
-  console.warn('stores.json이 없습니다. `npm run sync:stores`를 먼저 실행하세요.');
-}
 
 for (const file of fs.readdirSync(SRC_DIR)) {
   if (/^icon.*\.(png|svg)$/.test(file)) {
