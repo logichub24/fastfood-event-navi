@@ -12,7 +12,7 @@ const AD_CONFIG = {
 
 let interstitialReady = false;
 let detailOpenCount = 0;
-const INTERSTITIAL_EVERY_N_DETAIL_OPENS = 4;
+const INTERSTITIAL_EVERY_N_DETAIL_OPENS = 3;
 
 function loadInterstitial() {
   if (!loadFullScreenAd.isSupported || !loadFullScreenAd.isSupported()) return;
@@ -23,10 +23,11 @@ function loadInterstitial() {
   });
 }
 
-// 상세 바텀시트를 N번째 열 때 전면 광고 노출 (너무 자주 끼우면 이탈률 올라가므로 빈도 제한)
+// 행사 상세보기(이벤트 카드) 또는 매장 정보 시트(지도 마커)를 열 때마다 호출됨.
+// 1번째, 그 다음부터는 N번째마다(1, 4, 7...) 전면 광고 노출 - 매번 끼우면 이탈률이 올라가서 빈도 제한.
 window.onDetailOpened = function onDetailOpened() {
   detailOpenCount++;
-  if (detailOpenCount % INTERSTITIAL_EVERY_N_DETAIL_OPENS !== 0) return;
+  if ((detailOpenCount - 1) % INTERSTITIAL_EVERY_N_DETAIL_OPENS !== 0) return;
   if (!interstitialReady) return;
 
   showFullScreenAd({

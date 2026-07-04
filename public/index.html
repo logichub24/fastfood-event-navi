@@ -163,6 +163,9 @@
         <!-- 토스트 알림 -->
         <div id="toast" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900/90 backdrop-blur-md text-white px-5 py-3 rounded-2xl text-sm font-medium shadow-2xl z-[6000] opacity-0 pointer-events-none transition-all duration-300 max-w-[80%] text-center"></div>
 
+        <!-- 광고 배너 슬롯 (토스 인앱 전용, 웹에서는 비어있음) - 하단 탭바 바로 위에 고정 -->
+        <div id="adBannerSlot" class="flex-none"></div>
+
         <!-- 하단 탭 바 -->
         <div class="flex-none border-t border-gray-100 bg-white flex z-[100]">
             <button onclick="switchTab('events')" id="navBtnEvents" class="nav-tab-btn active flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
@@ -172,9 +175,6 @@
                 <i class="nav-tab-icon fa-solid fa-map-location-dot text-base transition-transform"></i>매장찾기
             </button>
         </div>
-
-        <!-- 광고 배너 슬롯 (토스 인앱 전용, 웹에서는 비어있음) -->
-        <div id="adBannerSlot" class="flex-none"></div>
 
         <!-- 매장 정보 바텀시트 -->
         <div class="sheet-bg" id="storeSheetBg" onclick="closeStoreSheet()"></div>
@@ -730,6 +730,7 @@
         }
 
         function openStoreSheet(s) {
+            window.onDetailOpened?.();
             const b = BRAND_INFO[s.brand] || { text: s.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600' };
             const mapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(s.name)},${s.lat},${s.lng}`;
             const eventCount = ALL_DEALS.filter((d) => d.brand === s.brand).length;
