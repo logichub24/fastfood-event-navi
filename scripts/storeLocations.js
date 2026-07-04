@@ -1,13 +1,16 @@
 // 소상공인시장진흥공단 상가(상권)정보 API의 storeListInUpjong(업종 기반 전국 조회) 엔드포인트로
 // 전국 버거(I21004)·치킨(I21006) 소분류 매장을 가져온 뒤, 상호명 패턴으로
-// 롯데리아/맘스터치를 걸러서 맥도날드 자체 API 결과와 합쳐 public/stores.json에 저장한다.
+// 롯데리아/맘스터치/버거킹/노브랜드버거/프랭크버거를 걸러서
+// 맥도날드/쉐이크쉑 자체 사이트 크롤링 결과와 합쳐 public/stores.json에 저장한다.
 //
 // 업종코드는 largeUpjongList(I2 음식) -> middleUpjongList(I210 기타 간이) -> smallUpjongList로
 // 직접 조회해서 확인한 값: I21004=버거, I21006=치킨.
 //
 // * 맥도날드는 이 데이터셋에 8건밖에 안 잡힘(직영 위주 운영이라 "소상공인" 등록 자체가 적음) ->
 //   자체 공식 매장찾기 API(mcdonalds-stores.js, 전국 401건)를 대신 사용.
-// * KFC는 이 데이터셋에서도 0건, 자체 매장찾기는 세션/CSRF 기반이라 이번 단계에서는 제외.
+// * 쉐이크쉑은 이 데이터셋에 0건 -> 자체 사이트의 지점별 개별 페이지를 순회해서 수집(shakeshack-stores.js).
+// * KFC/노브랜드버거(주문 사이트 SPA)/프랭크버거(별도 API 없음)는 이 데이터셋 매칭으로 대체하고,
+//   자체 매장찾기는 세션/CSRF나 SPA라 이번 단계에서는 제외.
 //   (편의점 앱과 달리 대상 브랜드가 소수라 시/도별로 나누지 않고 단일 파일로 저장한다.)
 //
 // 사용법: node scripts/storeLocations.js  (.env의 SBIZ_API_KEY 사용)
@@ -17,6 +20,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const { crawlMcdonaldsStores } = require('./crawlers/mcdonalds-stores');
+const { crawlShakeshackStores } = require('./crawlers/shakeshack-stores');
 
 const BASE = 'https://apis.data.go.kr/B553077/api/open/sdsc2';
 const OUT_PATH = path.join(__dirname, '..', 'public', 'stores.json');
@@ -27,6 +31,9 @@ const UPJONG_CODES = ['I21004', 'I21006']; // 버거, 치킨
 const BRAND_PATTERNS = [
   { brand: 'LOTTERIA', pattern: /롯데리아/i },
   { brand: 'MOMSTOUCH', pattern: /맘스터치/i },
+  { brand: 'BURGERKING', pattern: /버거킹/i },
+  { brand: 'NOBRANDBURGER', pattern: /노브랜드\s?버거/i },
+  { brand: 'FRANKBURGER', pattern: /프랭크\s?버거/i },
 ];
 
 function loadServiceKey() {
@@ -98,6 +105,14 @@ async function run() {
     all = all.concat(mcdStores);
   } catch (err) {
     console.error('맥도날드 매장 수집 실패(계속 진행):', err.message);
+  }
+
+  try {
+    const shakeStores = await crawlShakeshackStores();
+    console.error(`쉐이크쉑 자체 페이지: ${shakeStores.length}건 수집`);
+    all = all.concat(shakeStores);
+  } catch (err) {
+    console.error('쉐이크쉑 매장 수집 실패(계속 진행):', err.message);
   }
 
   // 동일 매장이 두 업종코드에 중복 집계될 수 있으니 id 기준으로 중복 제거

@@ -5,6 +5,9 @@ const { crawlMcdonalds } = require('./crawlers/mcdonalds');
 const { crawlKFC } = require('./crawlers/kfc');
 const { crawlLotteria } = require('./crawlers/lotteria');
 const { crawlMomstouch } = require('./crawlers/momstouch');
+const { crawlFrankburger } = require('./crawlers/frankburger');
+const { crawlShakeshack } = require('./crawlers/shakeshack');
+const { crawlSubway } = require('./crawlers/subway');
 
 const OUT_PATH = path.join(__dirname, '..', 'public', 'deals.json');
 
@@ -74,6 +77,9 @@ async function run() {
     ['KFC', crawlKFC],
     ['LOTTERIA', crawlLotteria],
     ['MOMSTOUCH', crawlMomstouch],
+    ['FRANKBURGER', crawlFrankburger],
+    ['SHAKESHACK', crawlShakeshack],
+    ['SUBWAY', crawlSubway],
   ];
 
   let all = [];

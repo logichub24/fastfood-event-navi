@@ -9,7 +9,7 @@
     "endDate": "2026-07-05",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2,
+    "daysLeft": 1,
     "isNew": false
   },
   {
@@ -22,7 +22,7 @@
     "endDate": "2026-07-08",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 5,
+    "daysLeft": 4,
     "isNew": false
   },
   {
@@ -35,7 +35,7 @@
     "endDate": "2026-07-08",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 5,
+    "daysLeft": 4,
     "isNew": false
   },
   {
@@ -49,8 +49,21 @@
     "isOngoingText": "진행종료",
     "category": "세트･콤보",
     "ongoing": true,
-    "daysLeft": 10,
+    "daysLeft": 9,
     "isNew": false
+  },
+  {
+    "brand": "FRANKBURGER",
+    "id": "176",
+    "title": "[구매영수증 인증 이벤트] 프랭크 힐링여행!",
+    "image": "https://frankburger.co.kr/upload/event_01/2026_06_22/admin_2PYMj_2026_06_22_02_38_57.jpg",
+    "link": "https://frankburger.co.kr/board/index.php?board=event_01&tab=1&type=view&select=&search=&idx=176",
+    "startDate": "2026-06-23",
+    "endDate": "2026-07-16",
+    "category": "쿠폰･할인",
+    "ongoing": true,
+    "daysLeft": 12,
+    "isNew": true
   },
   {
     "brand": "MOMSTOUCH",
@@ -62,8 +75,21 @@
     "endDate": "2026-07-20",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 17,
+    "daysLeft": 16,
     "isNew": false
+  },
+  {
+    "brand": "FRANKBURGER",
+    "id": "174",
+    "title": "[100% 보상 도전!]프랭크버거 스탬프 월드컵",
+    "image": "https://frankburger.co.kr/upload/event_01/2026_06_12/admin_ELCjF_2026_06_12_00_58_44.jpg",
+    "link": "https://frankburger.co.kr/board/index.php?board=event_01&tab=1&type=view&select=&search=&idx=174",
+    "startDate": "2026-06-12",
+    "endDate": "2026-07-20",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 16,
+    "isNew": true
   },
   {
     "brand": "LOTTERIA",
@@ -75,7 +101,7 @@
     "endDate": "2026-07-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 28,
+    "daysLeft": 27,
     "isNew": false
   },
   {
@@ -88,7 +114,7 @@
     "endDate": "2026-07-31",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 28,
+    "daysLeft": 27,
     "isNew": false
   },
   {
@@ -101,7 +127,7 @@
     "endDate": "2026-07-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 28,
+    "daysLeft": 27,
     "isNew": false
   },
   {
@@ -114,8 +140,21 @@
     "endDate": "2026-07-31",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 28,
+    "daysLeft": 27,
     "isNew": false
+  },
+  {
+    "brand": "SHAKESHACK",
+    "id": "260603",
+    "title": "쉐이크쉑 수지점 GRAND OPENING!",
+    "image": "http://www.shakeshack.kr/resources/images/news/blog_list_260603.jpg",
+    "link": "http://www.shakeshack.kr/sub/blog/newsnevent_260603.jsp",
+    "startDate": "2026-06-03",
+    "endDate": "2026-08-01",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 28,
+    "isNew": true
   },
   {
     "brand": "MCDONALDS",
@@ -127,7 +166,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 40,
+    "daysLeft": 39,
     "isNew": false
   },
   {
@@ -140,7 +179,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 40,
+    "daysLeft": 39,
     "isNew": false
   },
   {
@@ -153,8 +192,21 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 59,
+    "daysLeft": 58,
     "isNew": false
+  },
+  {
+    "brand": "SHAKESHACK",
+    "id": "260703",
+    "title": "'쉐이크쉑, 손종원 셰프와 한국 진출 10주년 '헤리티지 컬렉션' 출시",
+    "image": "http://www.shakeshack.kr/resources/images/news/blog_list_260703.jpg",
+    "link": "http://www.shakeshack.kr/sub/blog/newsnevent_260703.jsp",
+    "startDate": "2026-07-03",
+    "endDate": "2026-08-31",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 58,
+    "isNew": true
   },
   {
     "brand": "MCDONALDS",
@@ -166,7 +218,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 181,
+    "daysLeft": 180,
     "isNew": false
   },
   {
@@ -179,7 +231,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 181,
+    "daysLeft": 180,
     "isNew": false
   },
   {
@@ -192,7 +244,7 @@
     "endDate": "2026-12-31",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 181,
+    "daysLeft": 180,
     "isNew": false
   },
   {
@@ -206,7 +258,7 @@
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 546,
+    "daysLeft": 545,
     "isNew": false
   },
   {
@@ -220,7 +272,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26844,
+    "daysLeft": 26843,
     "isNew": false
   },
   {
@@ -234,7 +286,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26844,
+    "daysLeft": 26843,
     "isNew": false
   },
   {
@@ -248,7 +300,7 @@
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 26844,
+    "daysLeft": 26843,
     "isNew": false
   },
   {
@@ -261,7 +313,7 @@
     "endDate": "9999-04-01",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2911985,
+    "daysLeft": 2911984,
     "isNew": false
   },
   {
@@ -274,7 +326,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912259,
+    "daysLeft": 2912258,
     "isNew": false
   },
   {
@@ -287,7 +339,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912259,
+    "daysLeft": 2912258,
     "isNew": false
   },
   {
@@ -300,7 +352,7 @@
     "endDate": "9999-12-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912259,
+    "daysLeft": 2912258,
     "isNew": false
   },
   {
@@ -313,7 +365,7 @@
     "endDate": "9999-12-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912259,
+    "daysLeft": 2912258,
     "isNew": false
   },
   {
@@ -458,5 +510,70 @@
     "ongoing": true,
     "daysLeft": null,
     "isNew": false
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "285",
+    "title": "카도 샐러드 보냉백",
+    "image": "https://www.subway.co.kr/upload/event/1782869297380_3mO08Q.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-07-03",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "284",
+    "title": "New 샐러드",
+    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_뉴샐러드.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-06-01",
+    "endDate": null,
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "280",
+    "title": "잠봉",
+    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_쎄봉잠봉.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-03-17",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "279",
+    "title": "피자썹",
+    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_피자썹.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-02-13",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "273",
+    "title": "오늘의 수프",
+    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2025-11-18",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
   }
 ]
