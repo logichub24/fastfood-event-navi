@@ -124,7 +124,7 @@
         <div id="panel-map" class="hidden flex-1 min-h-0 flex-col overflow-hidden relative">
             <div class="flex-none px-3 pt-3 pb-2 bg-white z-20 relative">
                 <h1 class="text-sm font-black text-gray-900 mb-2">🗺️ 내 주변 매장찾기</h1>
-                <div class="flex flex-wrap gap-x-2 gap-y-1" id="mapBrandContainer"></div>
+                <div class="flex flex-wrap gap-1" id="mapBrandContainer"></div>
             </div>
             <div class="flex-1 min-h-0 relative">
                 <div id="map"></div>
@@ -514,11 +514,18 @@
             container.innerHTML = chips.map((b) => {
                 if (MAP_UNAVAILABLE_BRANDS.includes(b)) {
                     const bi = BRAND_INFO[b];
-                    return `<button disabled title="${bi.text}는 매장 위치 정보를 아직 준비중이에요" class="px-3 py-1.5 rounded-full border text-xs font-bold whitespace-nowrap shrink-0 bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed">${bi.emoji} ${bi.text} 준비중</button>`;
+                    return `<button disabled title="${bi.text}는 매장 위치 정보를 아직 준비중이에요" class="flex flex-col items-center justify-center leading-none gap-0.5 px-2 py-1 rounded-lg border shrink-0 bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed">
+                        <span class="text-[10px] font-bold whitespace-nowrap">${bi.emoji} ${bi.text}</span>
+                        <span class="text-[9px] font-bold">준비중</span>
+                    </button>`;
                 }
                 const active = mapBrand === b ? 'active' : 'bg-white border-gray-200 text-gray-600';
-                const label = b === 'ALL' ? `전체 ${ALL_STORES.length}` : `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text} ${counts[b] || 0}`;
-                return `<button onclick="setMapBrand('${b}')" class="brand-btn ${active} px-3 py-1.5 rounded-full border text-xs font-bold whitespace-nowrap shadow-sm shrink-0">${label}</button>`;
+                const label = b === 'ALL' ? '전체' : `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}`;
+                const count = b === 'ALL' ? ALL_STORES.length : (counts[b] || 0);
+                return `<button onclick="setMapBrand('${b}')" class="brand-btn ${active} flex flex-col items-center justify-center leading-none gap-0.5 px-2 py-1 rounded-lg border shadow-sm shrink-0">
+                    <span class="text-[10px] font-bold whitespace-nowrap">${label}</span>
+                    <span class="text-[9px] font-bold">${count}</span>
+                </button>`;
             }).join('');
         }
 
