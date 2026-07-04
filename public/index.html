@@ -772,7 +772,8 @@
 
         function getLocation() {
             if (document.body.classList.contains('in-toss-app') && window.tossGetCurrentLocation) {
-                return window.tossGetCurrentLocation().then((loc) => ({ lat: loc.latitude, lng: loc.longitude }));
+                // 토스 위치 브릿지는 표준 GeolocationPosition과 동일하게 coords.latitude/longitude로 내려줌
+                return window.tossGetCurrentLocation().then((loc) => ({ lat: loc.coords.latitude, lng: loc.coords.longitude }));
             }
             return new Promise((resolve, reject) => {
                 if (!navigator.geolocation) { reject(new Error('geolocation 미지원')); return; }
