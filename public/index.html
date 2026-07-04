@@ -52,6 +52,20 @@
         }
         .sheet-bg.active { opacity: 1; pointer-events: auto; }
 
+        /* 온보딩/설정처럼 화면 중앙에 뜨는 다이얼로그 (하단에서 올라오는 bottom-sheet와 구분) */
+        .modal-bg {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 5999; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+            display: flex; align-items: center; justify-content: center; padding: 24px;
+        }
+        .modal-bg.active { opacity: 1; pointer-events: auto; }
+        .modal-card {
+            background: white; border-radius: 24px; width: 100%; max-width: 300px;
+            max-height: 85%; overflow-y: auto;
+            transform: scale(0.95); opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .modal-bg.active .modal-card { transform: scale(1); opacity: 1; }
+
         .deal-card { transition: transform 0.15s ease; }
         .deal-card:active { transform: scale(0.98); }
         .heart-btn.liked i { color: #ef4444; font-weight: 900; }
@@ -97,10 +111,15 @@
                         <div class="w-px h-3 bg-gray-200"></div>
                         <p id="eventCountText" class="text-[10px] text-gray-500 font-bold leading-none m-0 pt-0.5">- </p>
                     </div>
-                    <button onclick="openLikedSheet()" class="relative w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0 ml-2">
-                        <i class="fa-solid fa-heart text-sm"></i>
-                        <span id="likedBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
-                    </button>
+                    <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                        <button onclick="openLikedSheet()" class="relative w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition">
+                            <i class="fa-solid fa-heart text-sm"></i>
+                            <span id="likedBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
+                        </button>
+                        <button onclick="openSettings()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition">
+                            <i class="fa-solid fa-gear text-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 브랜드 필터 -->
@@ -210,6 +229,54 @@
                 <button onclick="closeLocationSearch()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="locationSearchResults" class="flex-1 overflow-y-auto hide-scrollbar"></div>
+        </div>
+
+        <!-- 시작 안내(온보딩) 모달 -->
+        <div class="modal-bg" id="onboardingBg">
+            <div class="modal-card">
+                <div class="bg-gradient-to-br from-orange-500 to-red-600 pt-8 pb-6 flex flex-col items-center text-white">
+                    <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl mb-2">🍔</div>
+                    <h2 class="font-black text-base">시작하기 전에 확인해주세요</h2>
+                </div>
+                <div class="p-5 flex flex-col gap-4">
+                    <div class="flex gap-3">
+                        <i class="fa-regular fa-file-lines text-gray-400 mt-0.5 shrink-0"></i>
+                        <p class="text-xs text-gray-600 leading-relaxed">할인·쿠폰 행사는 각 브랜드 공식 페이지 기준이며, 매장이나 주문 채널(앱·배달·매장)에 따라 실제 적용 여부나 가격이 다를 수 있으니 이용 전 확인해주세요.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <i class="fa-solid fa-arrows-rotate text-gray-400 mt-0.5 shrink-0"></i>
+                        <p class="text-xs text-gray-600 leading-relaxed">행사 정보와 매장 위치는 매일 새벽 3시 자동으로 갱신됩니다.</p>
+                    </div>
+                </div>
+                <div class="p-4 pt-0">
+                    <button onclick="closeOnboarding()" class="w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm">확인했습니다</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 설정 모달 -->
+        <div class="modal-bg" id="settingsBg">
+            <div class="modal-card">
+                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="font-black text-base"><i class="fa-solid fa-gear mr-1.5 text-gray-400"></i>설정</h2>
+                    <button onclick="closeSettings()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-4 flex flex-col gap-4">
+                    <div>
+                        <p class="text-[11px] font-bold text-gray-400 mb-1.5">앱 정보</p>
+                        <div class="bg-gray-50 rounded-xl p-3 flex flex-col gap-1.5 text-xs">
+                            <div class="flex justify-between"><span class="text-gray-500">버전</span><span class="font-bold text-gray-700">1.0.0</span></div>
+                            <div class="flex justify-between items-center"><span class="text-gray-500">행사·매장 데이터</span><span class="font-bold text-gray-700 text-right">매일 새벽 3시<br>자동 갱신</span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-gray-400 mb-1.5">내 데이터</p>
+                        <button onclick="resetLikes()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600">찜 목록 초기화</button>
+                    </div>
+                    <button onclick="reopenOnboarding()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600">시작 안내 다시 보기</button>
+                    <button onclick="closeSettings()" class="w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm">확인</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -817,9 +884,44 @@
             }
         }
 
+        // ===== 설정 / 시작 안내(온보딩) =====
+        const ONBOARDING_SEEN_KEY = 'ff_onboarding_seen';
+
+        function openSettings() {
+            document.getElementById('settingsBg').classList.add('active');
+        }
+        function closeSettings() {
+            document.getElementById('settingsBg').classList.remove('active');
+        }
+
+        function showOnboarding() {
+            document.getElementById('onboardingBg').classList.add('active');
+        }
+        function closeOnboarding() {
+            document.getElementById('onboardingBg').classList.remove('active');
+            localStorage.setItem(ONBOARDING_SEEN_KEY, '1');
+        }
+        function maybeShowOnboardingOnFirstVisit() {
+            if (!localStorage.getItem(ONBOARDING_SEEN_KEY)) showOnboarding();
+        }
+        function reopenOnboarding() {
+            closeSettings();
+            showOnboarding();
+        }
+
+        function resetLikes() {
+            if (!confirm('찜 목록을 초기화할까요?')) return;
+            likedIds = new Set();
+            saveLiked();
+            renderDeals();
+            renderLikedList();
+            showToast('찜 목록을 초기화했어요.');
+        }
+
         updateLikedBadge();
         loadDeals();
         applyDeepLink();
+        maybeShowOnboardingOnFirstVisit();
     </script>
 </body>
 </html>
