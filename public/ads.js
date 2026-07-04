@@ -1,13 +1,11 @@
 // 토스인앱(Apps in Toss) 광고 SDK 연동.
 // 일반 브라우저에서는 isSupported()가 false라 전부 조용히 no-op되고,
 // 토스 앱 WebView 안에서 열렸을 때만 실제 광고가 붙는다.
-//
-// TODO: 앱인토스 콘솔에서 이 앱(fastfood-event-navi)으로 광고 그룹을 발급받은 뒤 아래 ID를 교체할 것.
 import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy } from 'https://esm.sh/@apps-in-toss/web-bridge@2.9.2';
 
 const AD_CONFIG = {
-  banner: 'ait.v2.live.PLACEHOLDER_BANNER',
-  interstitial: 'ait.v2.live.PLACEHOLDER_INTERSTITIAL',
+  banner: 'ait.v2.live.2d12e1c821d44d97',
+  interstitial: 'ait.v2.live.ac39f712a06f42c5',
 };
 
 let interstitialReady = false;
