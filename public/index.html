@@ -517,7 +517,7 @@
                 const active = mapBrand === b ? 'active' : 'bg-white border-gray-200 text-gray-600';
                 const label = b === 'ALL' ? '전체' : `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}`;
                 const count = b === 'ALL' ? ALL_STORES.length : (counts[b] || 0);
-                return `<button onclick="setMapBrand('${b}')" class="brand-btn ${active} flex flex-col items-center justify-center leading-none gap-1 px-3 py-2 rounded-xl border shadow-sm shrink-0">
+                return `<button onclick="setMapBrand('${b}')" class="brand-btn ${active} flex flex-col items-center justify-center leading-none gap-0 px-3 py-0.5 rounded-xl border shadow-sm shrink-0">
                     <span class="text-[12px] font-bold whitespace-nowrap">${label}</span>
                     <span class="text-[11px] font-bold">${count}</span>
                 </button>`;
