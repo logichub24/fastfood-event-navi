@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>패스트푸드 행사</title>
     <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+    <link rel="manifest" href="manifest.json">
+    <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -130,8 +133,11 @@
                     <i class="fa-solid fa-rotate-right text-blue-400"></i> 이 지역 재검색
                 </button>
 
-                <!-- 우측 컨트롤: 위성보기 / 반경선택 / 내위치 -->
+                <!-- 우측 컨트롤: 지역검색 / 위성보기 / 반경선택 / 내위치 -->
                 <div class="absolute right-3 bottom-4 z-[400] flex flex-col gap-2 items-end">
+                    <button onclick="openLocationSearch()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
                     <button id="satelliteToggleBtn" onclick="toggleSatelliteView()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition">
                         <i class="fa-solid fa-satellite"></i>
                     </button>
@@ -177,7 +183,10 @@
         <div class="bottom-sheet" id="likedSheet">
             <div class="flex-none p-4 border-b border-gray-100 flex items-center justify-between">
                 <h2 class="font-black text-base">❤️ 찜한 행사</h2>
-                <button onclick="closeLikedSheet()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                <div class="flex items-center gap-1">
+                    <button onclick="shareWishlist()" class="w-8 h-8 flex items-center justify-center text-gray-400" title="찜 목록 공유"><i class="fa-solid fa-share-nodes"></i></button>
+                    <button onclick="closeLikedSheet()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                </div>
             </div>
             <div id="likedList" class="flex-1 overflow-y-auto hide-scrollbar p-4 flex flex-col gap-3"></div>
         </div>
@@ -186,6 +195,17 @@
         <div class="sheet-bg" id="detailSheetBg" onclick="closeDetailSheet()"></div>
         <div class="bottom-sheet" id="detailSheet">
             <div id="detailContent" class="flex-1 overflow-y-auto hide-scrollbar"></div>
+        </div>
+
+        <!-- 지역/주소 검색 바텀시트 -->
+        <div class="sheet-bg" id="locationSearchBg" onclick="closeLocationSearch()"></div>
+        <div class="bottom-sheet" id="locationSearchSheet" style="height: 85vh;">
+            <div class="flex-none p-4 border-b border-gray-100 flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass text-gray-400 ml-1"></i>
+                <input type="text" id="locationSearchInput" oninput="handleLocationSearchInput()" placeholder="지역/장소명으로 검색 (예: 강남역)" class="flex-1 text-sm font-bold outline-none placeholder-gray-300">
+                <button onclick="closeLocationSearch()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="locationSearchResults" class="flex-1 overflow-y-auto hide-scrollbar"></div>
         </div>
     </div>
 
@@ -408,6 +428,24 @@
             }
         }
 
+        function shareWishlist() {
+            const items = ALL_DEALS.filter((d) => likedIds.has(dealKey(d)));
+            if (items.length === 0) { showToast?.('찜한 행사가 없어요') ?? alert('찜한 행사가 없어요'); return; }
+            const lines = items.map((d) => {
+                const b = BRAND_INFO[d.brand] || { text: d.brand };
+                return `· [${b.text}] ${d.title}`;
+            });
+            const message = `🛍️ 찜한 행사 목록 (${items.length}개)\n${lines.join('\n')}\n\n📱 패스트푸드 행사 앱에서 확인하세요!`;
+            if (document.body.classList.contains('in-toss-app') && window.tossShare) {
+                window.tossShare(message).catch(() => {});
+            } else if (navigator.share) {
+                navigator.share({ title: '찜한 행사 목록', text: message }).catch(() => {});
+            } else {
+                navigator.clipboard?.writeText(message);
+                alert('찜 목록을 클립보드에 복사했어요!');
+            }
+        }
+
         // ===== 탭 전환 =====
         function switchTab(name) {
             const isEvents = name === 'events';
@@ -587,6 +625,92 @@
         }
 
         function toggleSatelliteView() { applySatelliteView(!isSatelliteView); }
+
+        // ===== 지역/주소 검색 (VWorld 검색 API, CORS 차단으로 JSONP 사용) =====
+        function vworldJsonp(url) {
+            return new Promise((resolve) => {
+                const cbName = `vworldCb${Date.now()}${Math.floor(Math.random() * 1e6)}`;
+                const cleanup = () => { delete window[cbName]; script.remove(); };
+                const timer = setTimeout(() => { cleanup(); resolve(null); }, 5000);
+                window[cbName] = (json) => { clearTimeout(timer); cleanup(); resolve(json); };
+                const script = document.createElement('script');
+                script.src = `${url}&callback=${cbName}`;
+                script.onerror = () => { clearTimeout(timer); cleanup(); resolve(null); };
+                document.body.appendChild(script);
+            });
+        }
+
+        let locationSearchTimer = null;
+        function openLocationSearch() {
+            document.getElementById('locationSearchResults').innerHTML = '';
+            document.getElementById('locationSearchBg').classList.add('active');
+            document.getElementById('locationSearchSheet').classList.add('active');
+            setTimeout(() => document.getElementById('locationSearchInput').focus(), 100);
+        }
+        function closeLocationSearch() {
+            document.getElementById('locationSearchBg').classList.remove('active');
+            document.getElementById('locationSearchSheet').classList.remove('active');
+            document.getElementById('locationSearchInput').value = '';
+        }
+
+        function handleLocationSearchInput() {
+            clearTimeout(locationSearchTimer);
+            locationSearchTimer = setTimeout(runLocationSearch, 400);
+        }
+
+        function renderLocationSearchResults(items) {
+            const container = document.getElementById('locationSearchResults');
+            if (items.length === 0) {
+                container.innerHTML = `<p class="text-center text-sm text-gray-400 py-10">검색 결과가 없습니다.</p>`;
+                return;
+            }
+            container.innerHTML = items.map((item, i) => `
+                <button onclick="selectSearchResult(${i})" class="w-full text-left px-5 py-3.5 border-b border-gray-50 hover:bg-gray-50 active:bg-gray-100 transition flex items-start gap-3">
+                    <i class="fa-solid ${item.icon} text-gray-400 mt-0.5"></i>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900 truncate">${item.title}</p>
+                        <p class="text-xs text-gray-500 truncate mt-0.5">${item.subtitle}</p>
+                    </div>
+                </button>
+            `).join('');
+            window._locationSearchResultsData = items;
+        }
+
+        async function runLocationSearch() {
+            const query = document.getElementById('locationSearchInput').value.trim();
+            const container = document.getElementById('locationSearchResults');
+            if (!query) { container.innerHTML = ''; return; }
+            container.innerHTML = `<p class="text-center text-sm text-gray-400 py-10">검색 중...</p>`;
+
+            const placeJson = await vworldJsonp(`https://api.vworld.kr/req/search?service=search&request=search&version=2.0&query=${encodeURIComponent(query)}&type=place&format=json&key=${VWORLD_KEY}`);
+            const placeItems = (placeJson?.response?.status === 'OK' ? placeJson.response.result.items : []).map((p) => ({
+                title: p.title.replace(/<[^>]+>/g, ''),
+                subtitle: p.address.road || p.address.parcel || p.category,
+                lat: parseFloat(p.point.y), lng: parseFloat(p.point.x),
+                icon: 'fa-location-dot',
+            }));
+
+            const addrJson = await vworldJsonp(`https://api.vworld.kr/req/search?service=search&request=search&version=2.0&query=${encodeURIComponent(query)}&type=address&category=road&format=json&key=${VWORLD_KEY}`);
+            const addrItems = (addrJson?.response?.status === 'OK' ? addrJson.response.result.items : []).slice(0, 5).map((a) => ({
+                title: a.address.road || a.address.parcel,
+                subtitle: a.address.bldnm || '주소',
+                lat: parseFloat(a.point.y), lng: parseFloat(a.point.x),
+                icon: 'fa-map',
+            }));
+
+            renderLocationSearchResults([...placeItems, ...addrItems]);
+        }
+
+        function selectSearchResult(index) {
+            const item = window._locationSearchResultsData?.[index];
+            if (!item) return;
+            closeLocationSearch();
+            showToast(`'${item.title}' 위치로 이동합니다.`);
+            leafletMap.setView([item.lat, item.lng], 16);
+            searchCircle.setLatLng([item.lat, item.lng]);
+            hideReSearchBtn();
+            loadStoresInRadius();
+        }
 
         function openStoreSheet(s) {
             const b = BRAND_INFO[s.brand] || { text: s.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600' };

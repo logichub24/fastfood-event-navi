@@ -5,7 +5,9 @@ export default defineConfig({
   brand: {
     displayName: '패스트푸드 행사',
     primaryColor: '#EA580C',
-    icon: 'https://placehold.co/512x512/EA580C/FFFFFF.png?text=%F0%9F%8D%94', // TODO: 콘솔 등록용 실제 아이콘 이미지 주소로 교체 필요
+    // TODO: 지금은 임시 아이콘(주황 배경 + 버거 이모지)임. 실제 브랜드 로고로 교체 권장.
+    // Toss 콘솔에 등록할 로고 이미지와 반드시 일치해야 하므로, 교체 시 이 URL과 콘솔 등록 이미지를 함께 바꿀 것.
+    icon: 'https://logichub24.github.io/fastfood-event-navi/public/icon-512.png',
   },
   web: {
     host: 'localhost',

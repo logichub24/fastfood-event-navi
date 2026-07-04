@@ -14,6 +14,8 @@ fs.mkdirSync(DIST_DIR, { recursive: true });
 
 fs.copyFileSync(path.join(SRC_DIR, 'index.html'), path.join(DIST_DIR, 'index.html'));
 fs.copyFileSync(path.join(SRC_DIR, 'ads.js'), path.join(DIST_DIR, 'ads.js'));
+fs.copyFileSync(path.join(SRC_DIR, 'sw.js'), path.join(DIST_DIR, 'sw.js'));
+fs.copyFileSync(path.join(SRC_DIR, 'manifest.json'), path.join(DIST_DIR, 'manifest.json'));
 
 for (const file of fs.readdirSync(SRC_DIR)) {
   if (/^icon.*\.(png|svg)$/.test(file)) {
