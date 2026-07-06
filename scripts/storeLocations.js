@@ -37,10 +37,14 @@ const BRAND_PATTERNS = [
 ];
 
 function loadServiceKey() {
+  // GitHub Actions에서는 .env 파일이 없고(gitignore 대상) 워크플로우가 환경변수로 주입하므로
+  // process.env를 우선 확인하고, 로컬 개발 편의를 위해 .env 파일을 폴백으로 읽는다.
+  if (process.env.SBIZ_API_KEY) return process.env.SBIZ_API_KEY.trim();
+
   const envPath = path.join(__dirname, '..', '.env');
   const envText = fs.readFileSync(envPath, 'utf-8');
   const match = envText.match(/SBIZ_API_KEY\s*=\s*(.+)/);
-  if (!match) throw new Error('.env에서 SBIZ_API_KEY를 찾을 수 없습니다.');
+  if (!match) throw new Error('SBIZ_API_KEY를 찾을 수 없습니다 (환경변수 또는 .env 파일 필요).');
   return match[1].trim();
 }
 
