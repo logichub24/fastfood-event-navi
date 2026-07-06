@@ -1,19 +1,6 @@
 [
   {
     "brand": "MCDONALDS",
-    "id": "1010",
-    "title": "4주간 신제품 할인 쿠폰 혜택!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/06/NewBF_GMALPromo_corpsite_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-06-12",
-    "endDate": "2026-07-05",
-    "category": "신메뉴",
-    "ongoing": true,
-    "daysLeft": 1,
-    "isNew": false
-  },
-  {
-    "brand": "MCDONALDS",
     "id": "1003",
     "title": "맥앤치즈로 즐기는 아메리칸 풍미!",
     "image": "https://www.mcdonalds.co.kr/upload/2026/05/FWC_corpsite_thumbnail_860x704.jpg",
@@ -22,7 +9,7 @@
     "endDate": "2026-07-08",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 4,
+    "daysLeft": 2,
     "isNew": false
   },
   {
@@ -35,7 +22,7 @@
     "endDate": "2026-07-08",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 4,
+    "daysLeft": 2,
     "isNew": false
   },
   {
@@ -49,7 +36,7 @@
     "isOngoingText": "진행종료",
     "category": "세트･콤보",
     "ongoing": true,
-    "daysLeft": 9,
+    "daysLeft": 7,
     "isNew": false
   },
   {
@@ -62,8 +49,8 @@
     "endDate": "2026-07-16",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 12,
-    "isNew": true
+    "daysLeft": 10,
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -75,7 +62,7 @@
     "endDate": "2026-07-20",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 16,
+    "daysLeft": 14,
     "isNew": false
   },
   {
@@ -88,8 +75,8 @@
     "endDate": "2026-07-20",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 16,
-    "isNew": true
+    "daysLeft": 14,
+    "isNew": false
   },
   {
     "brand": "LOTTERIA",
@@ -101,7 +88,7 @@
     "endDate": "2026-07-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 27,
+    "daysLeft": 25,
     "isNew": false
   },
   {
@@ -114,7 +101,7 @@
     "endDate": "2026-07-31",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 27,
+    "daysLeft": 25,
     "isNew": false
   },
   {
@@ -127,7 +114,7 @@
     "endDate": "2026-07-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 27,
+    "daysLeft": 25,
     "isNew": false
   },
   {
@@ -140,7 +127,7 @@
     "endDate": "2026-07-31",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 27,
+    "daysLeft": 25,
     "isNew": false
   },
   {
@@ -153,8 +140,8 @@
     "endDate": "2026-08-01",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 28,
-    "isNew": true
+    "daysLeft": 26,
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -166,7 +153,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 39,
+    "daysLeft": 37,
     "isNew": false
   },
   {
@@ -179,7 +166,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 39,
+    "daysLeft": 37,
     "isNew": false
   },
   {
@@ -192,7 +179,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 58,
+    "daysLeft": 56,
     "isNew": false
   },
   {
@@ -205,8 +192,8 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 58,
-    "isNew": true
+    "daysLeft": 56,
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -218,7 +205,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 180,
+    "daysLeft": 178,
     "isNew": false
   },
   {
@@ -231,7 +218,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 180,
+    "daysLeft": 178,
     "isNew": false
   },
   {
@@ -244,7 +231,7 @@
     "endDate": "2026-12-31",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 180,
+    "daysLeft": 178,
     "isNew": false
   },
   {
@@ -258,7 +245,7 @@
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 545,
+    "daysLeft": 543,
     "isNew": false
   },
   {
@@ -272,7 +259,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26843,
+    "daysLeft": 26841,
     "isNew": false
   },
   {
@@ -286,7 +273,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26843,
+    "daysLeft": 26841,
     "isNew": false
   },
   {
@@ -300,7 +287,7 @@
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 26843,
+    "daysLeft": 26841,
     "isNew": false
   },
   {
@@ -313,7 +300,7 @@
     "endDate": "9999-04-01",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2911984,
+    "daysLeft": 2911982,
     "isNew": false
   },
   {
@@ -326,7 +313,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912258,
+    "daysLeft": 2912256,
     "isNew": false
   },
   {
@@ -339,7 +326,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912258,
+    "daysLeft": 2912256,
     "isNew": false
   },
   {
@@ -352,7 +339,7 @@
     "endDate": "9999-12-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912258,
+    "daysLeft": 2912256,
     "isNew": false
   },
   {
@@ -365,7 +352,7 @@
     "endDate": "9999-12-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912258,
+    "daysLeft": 2912256,
     "isNew": false
   },
   {
@@ -522,7 +509,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": null,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SUBWAY",
@@ -535,7 +522,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": null,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SUBWAY",
@@ -548,7 +535,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": null,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SUBWAY",
@@ -561,7 +548,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": null,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SUBWAY",
@@ -574,6 +561,6 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": null,
-    "isNew": true
+    "isNew": false
   }
 ]
