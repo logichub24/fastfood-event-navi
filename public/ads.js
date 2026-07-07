@@ -9,8 +9,6 @@ const AD_CONFIG = {
 };
 
 let interstitialReady = false;
-let detailOpenCount = 0;
-const INTERSTITIAL_EVERY_N_DETAIL_OPENS = 3;
 
 function loadInterstitial() {
   if (!loadFullScreenAd.isSupported || !loadFullScreenAd.isSupported()) return;
@@ -21,13 +19,8 @@ function loadInterstitial() {
   });
 }
 
-// 행사 상세보기(이벤트 카드) 또는 매장 정보 시트(지도 마커)를 열 때마다 호출됨.
-// 1번째, 그 다음부터는 N번째마다(1, 4, 7...) 전면 광고 노출 - 매번 끼우면 이탈률이 올라가서 빈도 제한.
-window.onDetailOpened = function onDetailOpened() {
-  detailOpenCount++;
-  if ((detailOpenCount - 1) % INTERSTITIAL_EVERY_N_DETAIL_OPENS !== 0) return;
+function showInterstitial() {
   if (!interstitialReady) return;
-
   showFullScreenAd({
     options: { adGroupId: AD_CONFIG.interstitial },
     onEvent: (event) => {
@@ -38,6 +31,25 @@ window.onDetailOpened = function onDetailOpened() {
     },
     onError: () => {},
   });
+}
+
+// 행동 기반 전면광고 트리거 엔진.
+// "사용자의 탐색을 방해하지 않고, 목적 행동 직전에 광고를 배치한다"는 원칙에 따라
+// 트리거마다 노출 빈도를 다르게 둔다 (구매의사가 높을수록 자주, 탐색 중일수록 드물게).
+// every=1이면 매번, every=3이면 1·4·7번째... 식으로 노출.
+const AD_TRIGGER_CONFIG = {
+  map: { every: 2 },        // 매장찾기 탭 진입("지도 보기") - 자연스러운 전환 지점
+  navigation: { every: 1 }, // 길찾기 클릭 - 구매의사가 가장 높은 시점이라 거의 매번
+  detail: { every: 4 },     // 행사 상세보기 - 탐색 중이라 빈도를 낮게 제한
+};
+const adTriggerCounts = {};
+
+window.onAdTrigger = function onAdTrigger(trigger) {
+  const config = AD_TRIGGER_CONFIG[trigger];
+  if (!config) return;
+  adTriggerCounts[trigger] = (adTriggerCounts[trigger] || 0) + 1;
+  if ((adTriggerCounts[trigger] - 1) % config.every !== 0) return;
+  showInterstitial();
 };
 
 // 토스 앱 안에서는 navigator.share 대신 SDK 네이티브 공유 시트를 써야 함.

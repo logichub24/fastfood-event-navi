@@ -440,7 +440,7 @@
         function openDetail(key) {
             const d = findDeal(key);
             if (!d) return;
-            window.onDetailOpened?.();
+            window.onAdTrigger?.('detail'); // 행사 상세보기 - 빈도 낮게 제한
             const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
             const dday = ddayText(d.daysLeft);
             const period = d.startDate && d.endDate ? `${d.startDate} ~ ${d.endDate}` : '상시 진행';
@@ -534,6 +534,7 @@
             document.getElementById('navBtnEvents').classList.toggle('active', isEvents);
             document.getElementById('navBtnMap').classList.toggle('active', !isEvents);
             if (!isEvents) {
+                window.onAdTrigger?.('map'); // "지도 보기" 진입 - 광고 우선순위 1순위
                 // 탭 전환 직후엔 flex 레이아웃이 아직 최종 크기로 반영되기 전이라
                 // Leaflet이 실제보다 작은 크기로 타일을 그리는 문제가 생김.
                 // rAF를 두 번 중첩해 레이아웃/페인트가 끝난 다음 프레임에 초기화/재계산한다.
@@ -799,7 +800,7 @@
         }
 
         function openStoreSheet(s) {
-            window.onDetailOpened?.();
+            // 매장 시트를 여는 것 자체는 단순 열람이라 광고를 걸지 않음 - 길찾기 클릭 시점(구매의사 최고점)으로 옮김
             const b = BRAND_INFO[s.brand] || { text: s.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600' };
             const mapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(s.name)},${s.lat},${s.lng}`;
             const eventCount = ALL_DEALS.filter((d) => d.brand === s.brand).length;
@@ -814,7 +815,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2 mt-3">
                     <button onclick="viewBrandEvents('${s.brand}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-fire mr-1 text-orange-500"></i>행사안내 ${eventCount}건</button>
-                    <a href="${mapUrl}" target="_blank" rel="noopener" class="py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow text-center"><i class="fa-solid fa-diamond-turn-right mr-1"></i>길찾기</a>
+                    <a href="${mapUrl}" target="_blank" rel="noopener" onclick="window.onAdTrigger?.('navigation')" class="py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow text-center"><i class="fa-solid fa-diamond-turn-right mr-1"></i>길찾기</a>
                 </div>`;
             document.getElementById('storeSheetBg').classList.add('active');
             document.getElementById('storeSheet').classList.add('active');
