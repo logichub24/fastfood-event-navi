@@ -1,7 +1,7 @@
 // 토스인앱(Apps in Toss) 광고 SDK 연동.
 // 일반 브라우저에서는 isSupported()가 false라 전부 조용히 no-op되고,
 // 토스 앱 WebView 안에서 열렸을 때만 실제 광고가 붙는다.
-import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy } from 'https://esm.sh/@apps-in-toss/web-bridge@2.9.2';
+import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy, requestNotificationAgreement } from 'https://esm.sh/@apps-in-toss/web-bridge@2.9.2';
 
 const AD_CONFIG = {
   banner: 'ait.v2.live.2d12e1c821d44d97',
@@ -50,6 +50,24 @@ window.onAdTrigger = function onAdTrigger(trigger) {
   adTriggerCounts[trigger] = (adTriggerCounts[trigger] || 0) + 1;
   if ((adTriggerCounts[trigger] - 1) % config.every !== 0) return;
   showInterstitial();
+};
+
+// TODO: 콘솔 > 스마트 발송 > 기능성 탭에서 알림 동의문(발송 코드)을 등록한 뒤 아래 코드로 교체할 것.
+// 이 값이 없으면 실제 동의창이 뜨지 않거나 에러가 남 (등록 전까지는 호출부에서 안내만 노출).
+const NOTIFICATION_TEMPLATE_CODE = 'PLACEHOLDER_TEMPLATE_CODE';
+
+// 알림 수신 동의를 요청하는 클라이언트 측 훅. 동의를 받아도 실제 발송은 별도로
+// (콘솔의 "토스에게 발송 요청" 또는 서버의 스마트 발송 API 호출) 이뤄져야 함 - 이 함수는 그 전 단계인
+// "사용자 동의"만 담당한다.
+window.tossRequestNotificationAgreement = function tossRequestNotificationAgreement() {
+  return new Promise((resolve, reject) => {
+    if (!requestNotificationAgreement) { reject(new Error('알림 동의 기능을 지원하지 않아요.')); return; }
+    requestNotificationAgreement({
+      options: { templateCode: NOTIFICATION_TEMPLATE_CODE },
+      onEvent: (event) => resolve(event),
+      onError: (error) => reject(error),
+    });
+  });
 };
 
 // 토스 앱 안에서는 navigator.share 대신 SDK 네이티브 공유 시트를 써야 함.

@@ -273,6 +273,10 @@
                         <p class="text-[11px] font-bold text-gray-400 mb-1.5">내 데이터</p>
                         <button onclick="resetLikes()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600">찜 목록 초기화</button>
                     </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-gray-400 mb-1.5">알림</p>
+                        <button onclick="requestNotifications()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600"><i class="fa-regular fa-bell mr-1"></i>새 행사 알림 받기</button>
+                    </div>
                     <button onclick="reopenOnboarding()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600">시작 안내 다시 보기</button>
                     <button onclick="closeSettings()" class="w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm">확인</button>
                 </div>
@@ -285,6 +289,8 @@
         // 토스인앱 등 어디에 빌드해 넣어도 데이터는 항상 GitHub Pages의 최신본을
         // 실시간으로 받아오도록 절대경로를 쓴다. GitHub Actions가 매일 새벽 갱신함.
         const DATA_BASE_URL = 'https://logichub24.github.io/fastfood-event-navi/public/';
+        // granite.config.ts의 appName과 반드시 일치해야 intoss:// 딥링크가 이 앱으로 열림
+        const APP_NAME = 'fastfood-event-navi';
 
         const CATEGORIES = ['ALL', '신메뉴', '시간대 특가', '세트･콤보', '배달', '멤버십･앱', '쿠폰･할인', '메뉴소식'];
         const BRAND_INFO = {
@@ -488,9 +494,15 @@
             container.innerHTML = items.map(dealCardHtml).join('');
         }
 
+        // 공유 링크를 눌러 앱으로 돌아오면 이 특정 행사가 바로 열리도록(재방문 전환율 개선).
+        // intoss:// 스킴은 토스 앱이 설치되어 있을 때만 열리므로, 텍스트에 안내 문구도 함께 남긴다.
+        function dealDeepLink(d) {
+            return `intoss://${APP_NAME}?deal=${encodeURIComponent(dealKey(d))}`;
+        }
+
         function shareText(d) {
             const b = BRAND_INFO[d.brand] || { text: d.brand };
-            return `🍔 ${b.text} 행사 발견!\n[${d.title}]\n\n📱 패스트푸드 행사 앱에서 더 많은 행사를 확인하세요!`;
+            return `🍔 ${b.text} 행사 발견!\n[${d.title}]\n\n📱 패스트푸드 행사 앱에서 확인하세요!\n${dealDeepLink(d)}`;
         }
 
         function shareDeal(key) {
@@ -879,7 +891,16 @@
         function applyDeepLink() {
             const path = location.pathname || '';
             const hash = (location.hash || '').replace('#', '');
-            const screen = new URLSearchParams(location.search).get('screen') || new URLSearchParams(location.search).get('tab') || '';
+            const params = new URLSearchParams(location.search);
+            const screen = params.get('screen') || params.get('tab') || '';
+
+            // 공유 링크(예: ?deal=MCDONALDS%3A1010)로 유입된 경우, 그 특정 행사 상세를 바로 연다.
+            const dealParam = params.get('deal') || (hash.match(/deal=([^&]+)/) || [])[1];
+            if (dealParam) {
+                const key = decodeURIComponent(dealParam);
+                if (findDeal(key)) { openDetail(key); return; }
+            }
+
             if ([path, hash, screen].some((v) => /map/i.test(v))) {
                 switchTab('map');
             }
@@ -919,9 +940,19 @@
             showToast('찜 목록을 초기화했어요.');
         }
 
+        // 알림 수신 동의만 받는 단계 - 실제 "언제 무엇을 보낼지"는 콘솔의 스마트 발송 설정이 별도로 필요함.
+        function requestNotifications() {
+            if (!document.body.classList.contains('in-toss-app') || !window.tossRequestNotificationAgreement) {
+                showToast('토스 앱에서만 알림 설정이 가능해요.');
+                return;
+            }
+            window.tossRequestNotificationAgreement()
+                .then(() => showToast('알림 동의가 완료됐어요!'))
+                .catch(() => showToast('알림 동의를 완료하지 못했어요.'));
+        }
+
         updateLikedBadge();
-        loadDeals();
-        applyDeepLink();
+        loadDeals().then(applyDeepLink); // 특정 행사로 바로 열기는 ALL_DEALS가 로드된 뒤에만 가능
         maybeShowOnboardingOnFirstVisit();
     </script>
 </body>
