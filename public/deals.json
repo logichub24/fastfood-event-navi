@@ -1,31 +1,5 @@
 [
   {
-    "brand": "MCDONALDS",
-    "id": "1003",
-    "title": "맥앤치즈로 즐기는 아메리칸 풍미!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/05/FWC_corpsite_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-06-03",
-    "endDate": "2026-07-08",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 0,
-    "isNew": false
-  },
-  {
-    "brand": "MCDONALDS",
-    "id": "677",
-    "title": "여름 시즌 한정 간식이 1500원부터!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/05/BAQ2_corpsite_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-05-18",
-    "endDate": "2026-07-08",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 0,
-    "isNew": false
-  },
-  {
     "brand": "KFC",
     "id": "1114",
     "title": "KFC 골인박스!",
@@ -36,7 +10,7 @@
     "isOngoingText": "진행종료",
     "category": "세트･콤보",
     "ongoing": true,
-    "daysLeft": 5,
+    "daysLeft": 4,
     "isNew": false
   },
   {
@@ -49,7 +23,7 @@
     "endDate": "2026-07-16",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 8,
+    "daysLeft": 7,
     "isNew": false
   },
   {
@@ -62,7 +36,7 @@
     "endDate": "2026-07-20",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 12,
+    "daysLeft": 11,
     "isNew": false
   },
   {
@@ -75,7 +49,7 @@
     "endDate": "2026-07-20",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 12,
+    "daysLeft": 11,
     "isNew": false
   },
   {
@@ -88,7 +62,7 @@
     "endDate": "2026-07-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 23,
+    "daysLeft": 22,
     "isNew": false
   },
   {
@@ -101,7 +75,7 @@
     "endDate": "2026-07-31",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 23,
+    "daysLeft": 22,
     "isNew": false
   },
   {
@@ -114,7 +88,7 @@
     "endDate": "2026-07-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 23,
+    "daysLeft": 22,
     "isNew": false
   },
   {
@@ -127,7 +101,7 @@
     "endDate": "2026-07-31",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 23,
+    "daysLeft": 22,
     "isNew": false
   },
   {
@@ -140,7 +114,20 @@
     "endDate": "2026-08-01",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 24,
+    "daysLeft": 23,
+    "isNew": false
+  },
+  {
+    "brand": "MCDONALDS",
+    "id": "1011",
+    "title": "맥도날드가 찾은 한국의 맛!",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/06/TOK1_corpsite_thumbnail_860x704.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-07-09",
+    "endDate": "2026-08-12",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 34,
     "isNew": false
   },
   {
@@ -153,21 +140,8 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 35,
-    "isNew": true
-  },
-  {
-    "brand": "MCDONALDS",
-    "id": "1011",
-    "title": "맥도날드가 찾은 한국의 맛!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/06/TOK1_corpsite_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-07-09",
-    "endDate": "2026-08-12",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 35,
-    "isNew": true
+    "daysLeft": 34,
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -179,7 +153,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 35,
+    "daysLeft": 34,
     "isNew": false
   },
   {
@@ -192,7 +166,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 35,
+    "daysLeft": 34,
     "isNew": false
   },
   {
@@ -205,7 +179,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 54,
+    "daysLeft": 53,
     "isNew": false
   },
   {
@@ -218,7 +192,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 54,
+    "daysLeft": 53,
     "isNew": false
   },
   {
@@ -231,7 +205,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 176,
+    "daysLeft": 175,
     "isNew": false
   },
   {
@@ -244,7 +218,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 176,
+    "daysLeft": 175,
     "isNew": false
   },
   {
@@ -257,7 +231,7 @@
     "endDate": "2026-12-31",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 176,
+    "daysLeft": 175,
     "isNew": false
   },
   {
@@ -271,7 +245,7 @@
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 541,
+    "daysLeft": 540,
     "isNew": false
   },
   {
@@ -285,7 +259,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26839,
+    "daysLeft": 26838,
     "isNew": false
   },
   {
@@ -299,7 +273,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26839,
+    "daysLeft": 26838,
     "isNew": false
   },
   {
@@ -313,7 +287,7 @@
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 26839,
+    "daysLeft": 26838,
     "isNew": false
   },
   {
@@ -326,7 +300,7 @@
     "endDate": "9999-04-01",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2911980,
+    "daysLeft": 2911979,
     "isNew": false
   },
   {
@@ -339,7 +313,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912254,
+    "daysLeft": 2912253,
     "isNew": false
   },
   {
@@ -352,7 +326,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912254,
+    "daysLeft": 2912253,
     "isNew": false
   },
   {
@@ -365,7 +339,7 @@
     "endDate": "9999-12-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912254,
+    "daysLeft": 2912253,
     "isNew": false
   },
   {
@@ -378,7 +352,7 @@
     "endDate": "9999-12-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912254,
+    "daysLeft": 2912253,
     "isNew": false
   },
   {
