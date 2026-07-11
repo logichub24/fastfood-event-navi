@@ -123,7 +123,7 @@
                 </div>
 
                 <!-- 브랜드 필터 -->
-                <div class="flex flex-wrap px-3 gap-x-2 gap-y-1 pb-1" id="brandContainer"></div>
+                <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1" id="brandContainer"></div>
                 <!-- 카테고리 필터 -->
                 <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1" id="categoryContainer"></div>
             </div>
@@ -143,7 +143,7 @@
         <div id="panel-map" class="hidden flex-1 min-h-0 flex-col overflow-hidden relative">
             <div class="flex-none px-3 pt-3 pb-2 bg-white z-20 relative">
                 <h1 class="text-sm font-black text-gray-900 mb-2">🗺️ 내 주변 매장찾기</h1>
-                <div class="flex flex-wrap gap-1" id="mapBrandContainer"></div>
+                <div class="flex overflow-x-auto hide-scrollbar gap-2" id="mapBrandContainer"></div>
             </div>
             <div class="flex-1 min-h-0 relative">
                 <div id="map"></div>
@@ -360,8 +360,8 @@
             const chips = ['ALL', ...EVENT_BRANDS];
             container.innerHTML = chips.map((b) => {
                 const active = activeBrand === b ? 'active' : 'bg-white border-gray-200 text-gray-600';
-                const label = b === 'ALL' ? `전체 ${ALL_DEALS.length}` : `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text} ${counts[b] || 0}`;
-                return `<button onclick="setBrand('${b}')" class="brand-btn ${active} px-3 py-1.5 rounded-full border text-xs font-bold whitespace-nowrap shadow-sm shrink-0">${label}</button>`;
+                const label = b === 'ALL' ? '전체' : `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}`;
+                return `<button onclick="setBrand('${b}')" class="brand-btn ${active} px-3 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${label}</button>`;
             }).join('');
         }
 
@@ -370,7 +370,7 @@
             container.innerHTML = CATEGORIES.map((cat) => {
                 const active = activeCategory === cat ? 'active' : 'bg-white border-gray-200 text-gray-500';
                 const label = cat === 'ALL' ? '전체' : cat;
-                return `<button onclick="setCategory('${cat}')" class="category-btn ${active} px-3 py-1 rounded-full border text-[11px] font-bold whitespace-nowrap shrink-0">${label}</button>`;
+                return `<button onclick="setCategory('${cat}')" class="category-btn ${active} px-3 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${label}</button>`;
             }).join('');
         }
 
@@ -596,11 +596,7 @@
             container.innerHTML = chips.map((b) => {
                 const active = mapBrand === b ? 'active' : 'bg-white border-gray-200 text-gray-600';
                 const label = b === 'ALL' ? '전체' : `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}`;
-                const count = b === 'ALL' ? ALL_STORES.length : (counts[b] || 0);
-                return `<button onclick="setMapBrand('${b}')" class="brand-btn ${active} flex flex-col items-center justify-center leading-none gap-0 px-3 py-0.5 rounded-xl border shadow-sm shrink-0">
-                    <span class="text-[12px] font-bold whitespace-nowrap">${label}</span>
-                    <span class="text-[11px] font-bold">${count}</span>
-                </button>`;
+                return `<button onclick="setMapBrand('${b}')" class="brand-btn ${active} px-3 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${label}</button>`;
             }).join('');
         }
 
