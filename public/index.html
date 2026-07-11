@@ -123,7 +123,10 @@
                 </div>
 
                 <!-- 브랜드 필터 -->
-                <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1" id="brandContainer" style="-webkit-mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 40px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 40px),transparent 100%)"></div>
+                <div class="flex items-center gap-1 pl-3 pr-2">
+                    <div class="flex overflow-x-auto hide-scrollbar gap-2 pb-1 flex-1" id="brandContainer" style="-webkit-mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 24px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 24px),transparent 100%)"></div>
+                    <button onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>브랜드</button>
+                </div>
                 <!-- 카테고리 필터 -->
                 <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1" id="categoryContainer" style="-webkit-mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 40px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 40px),transparent 100%)"></div>
             </div>
@@ -143,7 +146,10 @@
         <div id="panel-map" class="hidden flex-1 min-h-0 flex-col overflow-hidden relative">
             <div class="flex-none px-3 pt-3 pb-2 bg-white z-20 relative">
                 <h1 class="text-sm font-black text-gray-900 mb-2">🗺️ 내 주변 매장찾기</h1>
-                <div class="flex overflow-x-auto hide-scrollbar gap-2" id="mapBrandContainer" style="-webkit-mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 40px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 40px),transparent 100%)"></div>
+                <div class="flex items-center gap-1">
+                    <div class="flex overflow-x-auto hide-scrollbar gap-2 flex-1" id="mapBrandContainer" style="-webkit-mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 24px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,black 12px,black calc(100% - 24px),transparent 100%)"></div>
+                    <button onclick="openBrandModal('map')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>브랜드</button>
+                </div>
             </div>
             <div class="flex-1 min-h-0 relative">
                 <div id="map"></div>
@@ -279,6 +285,21 @@
                     </div>
                     <button onclick="reopenOnboarding()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600">시작 안내 다시 보기</button>
                     <button onclick="closeSettings()" class="w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm">확인</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 브랜드 선택 모달 -->
+        <div class="modal-bg" id="brandModalBg">
+            <div class="modal-card">
+                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="font-black text-base">🍔 브랜드 선택</h2>
+                    <button onclick="closeBrandModal()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-gray-400 mb-3">원하는 브랜드를 선택해 필터링하세요.</p>
+                    <button onclick="pickBrand('ALL')" id="brandModalAll" class="w-full py-3 rounded-xl font-bold text-sm mb-3">전체 브랜드</button>
+                    <div class="grid grid-cols-3 gap-2" id="brandModalGrid"></div>
                 </div>
             </div>
         </div>
@@ -900,6 +921,46 @@
             if ([path, hash, screen].some((v) => /map/i.test(v))) {
                 switchTab('map');
             }
+        }
+
+        // ===== 브랜드 선택 모달 =====
+        // 행사 탭('event')과 매장찾기 탭('map')이 하나의 모달을 공유하되,
+        // 열린 컨텍스트에 따라 대상 브랜드 목록과 선택 결과 반영 함수를 달리한다.
+        let brandModalContext = 'event';
+
+        function openBrandModal(ctx) {
+            brandModalContext = ctx;
+            renderBrandModalGrid();
+            document.getElementById('brandModalBg').classList.add('active');
+        }
+        function closeBrandModal() {
+            document.getElementById('brandModalBg').classList.remove('active');
+        }
+        function renderBrandModalGrid() {
+            const brands = brandModalContext === 'map' ? MAP_BRANDS : EVENT_BRANDS;
+            const active = brandModalContext === 'map' ? mapBrand : activeBrand;
+
+            const allBtn = document.getElementById('brandModalAll');
+            allBtn.className = active === 'ALL'
+                ? 'w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm mb-3'
+                : 'w-full py-3 rounded-xl border border-gray-200 text-gray-600 font-bold text-sm mb-3';
+
+            const grid = document.getElementById('brandModalGrid');
+            grid.innerHTML = brands.map((b) => {
+                const info = BRAND_INFO[b];
+                const cls = active === b
+                    ? 'border-gray-900 bg-gray-900 text-white'
+                    : 'border-gray-200 bg-white text-gray-700';
+                return `<button onclick="pickBrand('${b}')" class="flex flex-col items-center justify-center gap-0.5 py-3 rounded-xl border ${cls} text-[12px] font-bold">
+                    <span class="text-lg leading-none">${info.emoji}</span>
+                    <span>${info.text}</span>
+                </button>`;
+            }).join('');
+        }
+        function pickBrand(b) {
+            if (brandModalContext === 'map') setMapBrand(b);
+            else setBrand(b);
+            closeBrandModal();
         }
 
         // ===== 설정 / 시작 안내(온보딩) =====
