@@ -123,9 +123,15 @@
                 </div>
 
                 <!-- 브랜드 필터 -->
-                <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1" id="brandContainer"></div>
+                <div class="relative">
+                    <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1 pr-8" id="brandContainer"></div>
+                    <div class="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white to-transparent"></div>
+                </div>
                 <!-- 카테고리 필터 -->
-                <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1" id="categoryContainer"></div>
+                <div class="relative">
+                    <div class="flex overflow-x-auto hide-scrollbar px-3 gap-2 pb-1 pr-8" id="categoryContainer"></div>
+                    <div class="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white to-transparent"></div>
+                </div>
             </div>
 
             <!-- 이벤트 목록 -->
@@ -143,7 +149,10 @@
         <div id="panel-map" class="hidden flex-1 min-h-0 flex-col overflow-hidden relative">
             <div class="flex-none px-3 pt-3 pb-2 bg-white z-20 relative">
                 <h1 class="text-sm font-black text-gray-900 mb-2">🗺️ 내 주변 매장찾기</h1>
-                <div class="flex overflow-x-auto hide-scrollbar gap-2" id="mapBrandContainer"></div>
+                <div class="relative">
+                    <div class="flex overflow-x-auto hide-scrollbar gap-2 pr-8" id="mapBrandContainer"></div>
+                    <div class="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white to-transparent"></div>
+                </div>
             </div>
             <div class="flex-1 min-h-0 relative">
                 <div id="map"></div>
