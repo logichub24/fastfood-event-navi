@@ -321,8 +321,7 @@
         let currentRadius = 500;
         let isUserPanning = false;
         let streetLayer = null, satelliteLayer = null, satelliteLabelLayer = null, isSatelliteView = false;
-        // KFC/서브웨이는 매장 위치 데이터가 아직 없어서 지도 브랜드 목록에서 제외 (행사 탭에는 그대로 나옴)
-        const MAP_BRANDS = ['MCDONALDS', 'LOTTERIA', 'MOMSTOUCH', 'BURGERKING', 'NOBRANDBURGER', 'FRANKBURGER', 'SHAKESHACK'];
+        const MAP_BRANDS = ['MCDONALDS', 'LOTTERIA', 'MOMSTOUCH', 'BURGERKING', 'NOBRANDBURGER', 'FRANKBURGER', 'SHAKESHACK', 'KFC', 'SUBWAY'];
         const RADIUS_STEPS = [300, 500, 1000, 2000, 2500, 3000];
         // 원본 편의점 앱과 동일한 브이월드(국토지리정보원) 위성영상 키 재사용 (도메인 제한 없이 동작 확인함)
         const VWORLD_KEY = '6888EEC4-8F4B-3D0D-87AE-7AE4C071E4CA';
@@ -542,6 +541,7 @@
             const isEvents = name === 'events';
             document.getElementById('panel-events').classList.toggle('hidden', !isEvents);
             document.getElementById('panel-map').classList.toggle('hidden', isEvents);
+            document.getElementById('panel-map').parentElement.scrollTop = 0;
             document.getElementById('panel-map').classList.toggle('flex', !isEvents);
             document.getElementById('navBtnEvents').classList.toggle('active', isEvents);
             document.getElementById('navBtnMap').classList.toggle('active', !isEvents);

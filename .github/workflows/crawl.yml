@@ -27,6 +27,7 @@ jobs:
       - name: 매장 위치 동기화 (맥도날드/롯데리아/맘스터치, KFC는 아직 미지원)
         env:
           SBIZ_API_KEY: ${{ secrets.SBIZ_API_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: npm run sync:stores
 
       - name: 변경사항 커밋

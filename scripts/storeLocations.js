@@ -21,6 +21,7 @@ const path = require('path');
 const axios = require('axios');
 const { crawlMcdonaldsStores } = require('./crawlers/mcdonalds-stores');
 const { crawlShakeshackStores } = require('./crawlers/shakeshack-stores');
+const { crawlKakaoStores } = require('./crawlers/kakao-stores');
 
 const BASE = 'https://apis.data.go.kr/B553077/api/open/sdsc2';
 const OUT_PATH = path.join(__dirname, '..', 'public', 'stores.json');
@@ -46,6 +47,35 @@ function loadServiceKey() {
   const match = envText.match(/SBIZ_API_KEY\s*=\s*(.+)/);
   if (!match) throw new Error('SBIZ_API_KEY를 찾을 수 없습니다 (환경변수 또는 .env 파일 필요).');
   return match[1].trim();
+}
+
+function loadKakaoKey() {
+  if (process.env.KAKAO_REST_API_KEY) return process.env.KAKAO_REST_API_KEY.trim();
+  const envPath = path.join(__dirname, '..', '.env');
+  try {
+    const envText = fs.readFileSync(envPath, 'utf-8');
+    const match = envText.match(/KAKAO_REST_API_KEY\s*=\s*(.+)/);
+    if (match) return match[1].trim();
+  } catch (_) {}
+  return null;
+}
+
+// 두 좌표 사이의 거리(미터)를 Haversine 공식으로 계산한다.
+function distanceMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// 기존 매장 목록(existing)에서 100m 이내 같은 브랜드 매장이 있으면 중복으로 판단한다.
+function isDuplicate(store, existingByBrand) {
+  const nearby = existingByBrand[store.brand];
+  if (!nearby) return false;
+  return nearby.some((s) => distanceMeters(s.lat, s.lng, store.lat, store.lng) < 100);
 }
 
 function classifyBrand(name) {
@@ -122,7 +152,35 @@ async function run() {
   // 동일 매장이 두 업종코드에 중복 집계될 수 있으니 id 기준으로 중복 제거
   const dedup = new Map();
   all.forEach((s) => dedup.set(s.id, s));
-  const final = [...dedup.values()];
+  let final = [...dedup.values()];
+
+  // 카카오 로컬 API로 누락 매장 보완
+  const kakaoKey = loadKakaoKey();
+  if (kakaoKey) {
+    try {
+      const kakaoStores = await crawlKakaoStores(kakaoKey);
+
+      // 브랜드별 인덱스 구성 (근접 중복 판단용)
+      const byBrand = {};
+      for (const s of final) {
+        (byBrand[s.brand] = byBrand[s.brand] || []).push(s);
+      }
+
+      let added = 0;
+      for (const s of kakaoStores) {
+        if (!isDuplicate(s, byBrand)) {
+          final.push(s);
+          (byBrand[s.brand] = byBrand[s.brand] || []).push(s);
+          added++;
+        }
+      }
+      console.error(`카카오 보완: ${kakaoStores.length}건 수집 → ${added}건 신규 추가`);
+    } catch (err) {
+      console.error('카카오 매장 수집 실패(계속 진행):', err.message);
+    }
+  } else {
+    console.error('KAKAO_REST_API_KEY 없음 — 카카오 보완 건너뜀');
+  }
 
   fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
   fs.writeFileSync(OUT_PATH, JSON.stringify(final), 'utf-8');
