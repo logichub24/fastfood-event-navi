@@ -128,7 +128,10 @@
                     <button onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>브랜드</button>
                 </div>
                 <!-- 카테고리 필터 -->
-                <div class="flex overflow-x-auto hide-scrollbar px-3 gap-1.5 pb-1" id="categoryContainer"></div>
+                <div class="flex items-center gap-1.5 pl-3 pr-2">
+                    <div class="flex gap-1.5 pb-1 flex-1 min-w-0" id="categoryContainer"></div>
+                    <button onclick="openCategoryModal()" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>카테고리</button>
+                </div>
             </div>
 
             <!-- 이벤트 목록 -->
@@ -303,6 +306,21 @@
                 </div>
             </div>
         </div>
+
+        <!-- 카테고리 선택 모달 -->
+        <div class="modal-bg" id="categoryModalBg">
+            <div class="modal-card">
+                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="font-black text-base">🏷️ 카테고리 선택</h2>
+                    <button onclick="closeCategoryModal()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-gray-400 mb-3">원하는 카테고리를 선택해 필터링하세요.</p>
+                    <button onclick="pickCategory('ALL')" id="categoryModalAll" class="w-full py-3 rounded-xl font-bold text-sm mb-3">전체 카테고리</button>
+                    <div class="grid grid-cols-2 gap-2" id="categoryModalGrid"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="ads.js" type="module"></script>
@@ -391,7 +409,14 @@
 
         function renderCategories() {
             const container = document.getElementById('categoryContainer');
-            container.innerHTML = CATEGORIES.filter((cat) => cat !== 'ALL').map((cat) => {
+            // 인라인에는 대표 3개만 노출하고 나머지는 '카테고리' 모달에서 고른다.
+            // 모달에서 대표 3개 밖을 선택하면 마지막 칩을 교체해 선택 상태가 보이게 한다.
+            const cats = CATEGORIES.filter((cat) => cat !== 'ALL');
+            let inline = cats.slice(0, 3);
+            if (activeCategory !== 'ALL' && !inline.includes(activeCategory)) {
+                inline = [...inline.slice(0, 2), activeCategory];
+            }
+            container.innerHTML = inline.map((cat) => {
                 const active = activeCategory === cat ? 'active' : 'bg-white border-gray-200 text-gray-500';
                 return `<button onclick="setCategory('${cat}')" class="category-btn ${active} px-2.5 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${cat}</button>`;
             }).join('');
@@ -964,6 +989,35 @@
             if (brandModalContext === 'map') setMapBrand(b);
             else setBrand(b);
             closeBrandModal();
+        }
+
+        // ===== 카테고리 선택 모달 =====
+        function openCategoryModal() {
+            renderCategoryModalGrid();
+            document.getElementById('categoryModalBg').classList.add('active');
+        }
+        function closeCategoryModal() {
+            document.getElementById('categoryModalBg').classList.remove('active');
+        }
+        function renderCategoryModalGrid() {
+            const allBtn = document.getElementById('categoryModalAll');
+            allBtn.className = activeCategory === 'ALL'
+                ? 'w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm mb-3'
+                : 'w-full py-3 rounded-xl border border-gray-200 text-gray-600 font-bold text-sm mb-3';
+
+            const grid = document.getElementById('categoryModalGrid');
+            grid.innerHTML = CATEGORIES.filter((cat) => cat !== 'ALL').map((cat) => {
+                const cls = activeCategory === cat
+                    ? 'border-gray-900 bg-gray-900 text-white'
+                    : 'border-gray-200 bg-white text-gray-700';
+                return `<button onclick="pickCategory('${cat}')" class="py-3 rounded-xl border ${cls} text-[12px] font-bold">${cat}</button>`;
+            }).join('');
+        }
+        function pickCategory(c) {
+            activeCategory = c; // 모달은 명시적 선택이므로 토글하지 않는다.
+            renderCategories();
+            renderDeals();
+            closeCategoryModal();
         }
 
         // ===== 설정 / 시작 안내(온보딩) =====
