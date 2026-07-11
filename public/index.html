@@ -331,8 +331,7 @@
         // granite.config.ts의 appName과 반드시 일치해야 intoss:// 딥링크가 이 앱으로 열림
         const APP_NAME = 'fastfood-event-navi';
 
-        // '배달'은 중요한 필터라 인라인 대표 3개(신메뉴/시간대 특가/배달)에 항상 노출되도록 앞으로 배치.
-        const CATEGORIES = ['ALL', '신메뉴', '시간대 특가', '배달', '세트･콤보', '멤버십･앱', '쿠폰･할인', '메뉴소식'];
+        const CATEGORIES = ['ALL', '신메뉴', '시간대 특가', '세트･콤보', '배달', '멤버십･앱', '쿠폰･할인', '메뉴소식'];
         const BRAND_INFO = {
             'MCDONALDS':     { text: '맥도날드',   emoji: '🍟', bg: 'bg-amber-100',  color: 'text-amber-700',  ring: 'ring-amber-300' },
             'KFC':           { text: 'KFC',       emoji: '🍗', bg: 'bg-red-100',    color: 'text-red-700',    ring: 'ring-red-300' },
@@ -413,13 +412,13 @@
             // 인라인에는 대표 3개만 노출하고 나머지는 '카테고리' 모달에서 고른다.
             // 모달에서 대표 3개 밖을 선택하면 마지막 칩을 교체해 선택 상태가 보이게 한다.
             const cats = CATEGORIES.filter((cat) => cat !== 'ALL');
-            let inline = cats.slice(0, 3);
+            let inline = cats.slice(0, 4);
             if (activeCategory !== 'ALL' && !inline.includes(activeCategory)) {
-                inline = [...inline.slice(0, 2), activeCategory];
+                inline = [...inline.slice(0, 3), activeCategory];
             }
             container.innerHTML = inline.map((cat) => {
                 const active = activeCategory === cat ? 'active' : 'bg-white border-gray-200 text-gray-500';
-                return `<button onclick="setCategory('${cat}')" class="category-btn ${active} px-2.5 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${cat}</button>`;
+                return `<button onclick="setCategory('${cat}')" class="category-btn ${active} px-2 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${cat}</button>`;
             }).join('');
         }
 
