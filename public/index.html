@@ -331,7 +331,8 @@
         // granite.config.ts의 appName과 반드시 일치해야 intoss:// 딥링크가 이 앱으로 열림
         const APP_NAME = 'fastfood-event-navi';
 
-        const CATEGORIES = ['ALL', '신메뉴', '시간대 특가', '세트･콤보', '배달', '멤버십･앱', '쿠폰･할인', '메뉴소식'];
+        // '배달'은 중요한 필터라 인라인 대표 3개(신메뉴/시간대 특가/배달)에 항상 노출되도록 앞으로 배치.
+        const CATEGORIES = ['ALL', '신메뉴', '시간대 특가', '배달', '세트･콤보', '멤버십･앱', '쿠폰･할인', '메뉴소식'];
         const BRAND_INFO = {
             'MCDONALDS':     { text: '맥도날드',   emoji: '🍟', bg: 'bg-amber-100',  color: 'text-amber-700',  ring: 'ring-amber-300' },
             'KFC':           { text: 'KFC',       emoji: '🍗', bg: 'bg-red-100',    color: 'text-red-700',    ring: 'ring-red-300' },
