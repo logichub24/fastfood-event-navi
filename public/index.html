@@ -122,6 +122,18 @@
                     </div>
                 </div>
 
+                <!-- 알림 배너: 오늘 새 행사 / 찜한 행사 마감 임박 (해당 시에만 노출) -->
+                <div class="flex flex-wrap gap-1.5 px-3" id="alertBanners">
+                    <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[11px] font-bold text-blue-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                        <span id="newDealsBannerText"></span>
+                    </button>
+                    <button id="expiringLikedBanner" onclick="openLikedSheet()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600">
+                        <i class="fa-solid fa-heart text-[10px]"></i>
+                        <span id="expiringLikedBannerText"></span>
+                    </button>
+                </div>
+
                 <!-- 브랜드 필터 -->
                 <div class="flex items-center gap-1.5 pl-3 pr-2">
                     <div class="flex gap-1.5 pb-1 flex-1 min-w-0" id="brandContainer"></div>
@@ -347,6 +359,7 @@
         let ALL_DEALS = [];
         let activeCategory = 'ALL';
         let activeBrand = 'ALL';
+        let newOnly = false; // '오늘 새 행사' 배너로 켜는 신규만 보기 필터
         let likedIds = new Set(JSON.parse(localStorage.getItem('ff_liked') || '[]'));
         // 버거킹/노브랜드버거는 매장 위치는 있지만 이벤트 크롤러가 없어서 행사 탭 필터에는 노출 안 함
         const EVENT_BRANDS = ['MCDONALDS', 'KFC', 'LOTTERIA', 'MOMSTOUCH', 'FRANKBURGER', 'SHAKESHACK', 'SUBWAY'];
@@ -390,6 +403,42 @@
             renderBrands();
             renderCategories();
             renderDeals();
+            updateAlertBanners();
+        }
+
+        // 오늘 새 행사 / 찜한 행사 마감 임박 배너를 상태에 맞춰 갱신한다.
+        function updateAlertBanners() {
+            let anyShown = false;
+            const newCount = ALL_DEALS.filter((d) => d.isNew).length;
+            const newBanner = document.getElementById('newDealsBanner');
+            if (newCount > 0) {
+                document.getElementById('newDealsBannerText').textContent = newOnly ? `새 행사 ${newCount}개만 보는 중 · 전체보기` : `오늘 새 행사 ${newCount}개`;
+                newBanner.className = `flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold border ${newOnly ? 'bg-blue-600 border-blue-600 text-white' : 'bg-blue-50 border-blue-200 text-blue-700'}`;
+                anyShown = true;
+            } else {
+                newBanner.className = 'hidden';
+                if (newOnly) { newOnly = false; renderDeals(); } // 신규가 없어졌으면 필터 해제
+            }
+
+            // 찜한 행사 중 오늘/내일 마감(daysLeft 0~1)인 것
+            const expiring = ALL_DEALS.filter((d) => likedIds.has(dealKey(d)) && d.daysLeft !== null && d.daysLeft >= 0 && d.daysLeft <= 1);
+            const expBanner = document.getElementById('expiringLikedBanner');
+            if (expiring.length > 0) {
+                document.getElementById('expiringLikedBannerText').textContent = `찜한 행사 ${expiring.length}개 곧 마감`;
+                expBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600';
+                anyShown = true;
+            } else {
+                expBanner.className = 'hidden';
+            }
+
+            // 배너가 하나라도 보일 때만 아래 필터와의 간격을 준다.
+            document.getElementById('alertBanners').className = anyShown ? 'flex flex-wrap gap-1.5 px-3 pb-2' : 'flex flex-wrap gap-1.5 px-3';
+        }
+
+        function toggleNewOnly() {
+            newOnly = !newOnly;
+            renderDeals();
+            updateAlertBanners();
         }
 
         function renderBrands() {
@@ -462,7 +511,11 @@
         }
 
         function getFiltered() {
-            return ALL_DEALS.filter((d) => (activeBrand === 'ALL' || d.brand === activeBrand) && (activeCategory === 'ALL' || d.category === activeCategory));
+            return ALL_DEALS.filter((d) =>
+                (activeBrand === 'ALL' || d.brand === activeBrand) &&
+                (activeCategory === 'ALL' || d.category === activeCategory) &&
+                (!newOnly || d.isNew)
+            );
         }
 
         function renderDeals() {
@@ -481,10 +534,25 @@
         }
 
         function toggleLike(key) {
-            if (likedIds.has(key)) likedIds.delete(key); else likedIds.add(key);
+            const wasLiked = likedIds.has(key);
+            if (wasLiked) likedIds.delete(key); else likedIds.add(key);
             saveLiked();
             renderDeals();
             renderLikedList();
+            updateAlertBanners();
+            if (!wasLiked) maybePromptNotifOnLike(); // 찜 추가 = 관심 최고조 시점 → 알림 동의 유도
+        }
+
+        // 찜을 처음 누른 순간(관심이 가장 높은 시점)에 알림 동의를 딱 한 번 요청한다.
+        // 설정 메뉴에 묻어둔 것보다 이 타이밍이 동의율이 훨씬 높다.
+        const NOTIF_PROMPTED_KEY = 'ff_notif_prompted';
+        function maybePromptNotifOnLike() {
+            if (localStorage.getItem(NOTIF_PROMPTED_KEY)) return;
+            if (!document.body.classList.contains('in-toss-app') || !window.tossRequestNotificationAgreement) return;
+            localStorage.setItem(NOTIF_PROMPTED_KEY, '1');
+            window.tossRequestNotificationAgreement()
+                .then(() => showToast('마감·새 행사 알림을 보내드릴게요!'))
+                .catch(() => {});
         }
 
         function findDeal(key) {
@@ -1051,6 +1119,7 @@
             saveLiked();
             renderDeals();
             renderLikedList();
+            updateAlertBanners();
             showToast('찜 목록을 초기화했어요.');
         }
 
