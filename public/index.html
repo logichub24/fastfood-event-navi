@@ -105,29 +105,29 @@
         <div id="panel-events" class="flex-1 min-h-0 flex flex-col overflow-hidden">
             <!-- 상단 헤더 -->
             <div class="flex-none pt-3 z-[100]">
-                <div class="px-3 pb-2 flex items-center justify-between">
-                    <div id="titlePill" class="bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-100 inline-flex items-center gap-2">
-                        <h1 class="text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 tracking-tight leading-none m-0">🍔 패스트푸드 행사</h1>
-                        <div class="w-px h-3 bg-gray-200"></div>
-                        <p id="eventCountText" class="text-[10px] text-gray-500 font-bold leading-none m-0 pt-0.5">- </p>
+                <div class="px-3 pb-2 flex items-center gap-1.5">
+                    <!-- 진행중 행사 수 -->
+                    <div class="bg-white px-3 py-2 rounded-full shadow-sm border border-gray-100 flex items-center gap-1.5 shrink-0">
+                        <span class="text-[10px] text-gray-500 font-bold leading-none">진행중</span>
+                        <span id="eventCountText" class="text-[13px] font-black text-gray-900 leading-none">-</span>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0 ml-2">
-                        <button onclick="openLikedSheet()" class="relative w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition">
-                            <i class="fa-solid fa-heart text-sm"></i>
-                            <span id="likedBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
-                        </button>
-                        <button onclick="openSettings()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition">
-                            <i class="fa-solid fa-gear text-sm"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 알림 배너: 오늘 새 행사 / 찜한 행사 마감 임박 (해당 시에만 노출) -->
-                <div class="flex flex-wrap gap-1.5 px-3" id="alertBanners">
-                    <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[11px] font-bold text-blue-700">
+                    <!-- 오늘 새 행사 (있을 때만, 탭하면 신규만 필터) -->
+                    <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0">
                         <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                         <span id="newDealsBannerText"></span>
                     </button>
+                    <div class="flex-1"></div>
+                    <button onclick="openLikedSheet()" class="relative w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
+                        <i class="fa-solid fa-heart text-sm"></i>
+                        <span id="likedBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
+                    </button>
+                    <button onclick="openSettings()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
+                        <i class="fa-solid fa-gear text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- 알림 배너: 찜한 행사 마감 임박 (해당 시에만 노출) -->
+                <div class="flex flex-wrap gap-1.5 px-3" id="alertBanners">
                     <button id="expiringLikedBanner" onclick="openLikedSheet()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600">
                         <i class="fa-solid fa-heart text-[10px]"></i>
                         <span id="expiringLikedBannerText"></span>
@@ -399,22 +399,21 @@
                 ALL_DEALS = [];
                 console.error('deals.json 로드 실패', e);
             }
-            document.getElementById('eventCountText').textContent = `진행중 행사 ${ALL_DEALS.length}건`;
+            document.getElementById('eventCountText').textContent = `${ALL_DEALS.length}건`;
             renderBrands();
             renderCategories();
             renderDeals();
             updateAlertBanners();
         }
 
-        // 오늘 새 행사 / 찜한 행사 마감 임박 배너를 상태에 맞춰 갱신한다.
+        // 헤더의 '오늘 새 행사' 칩과 '찜한 행사 마감 임박' 배너를 상태에 맞춰 갱신한다.
         function updateAlertBanners() {
-            let anyShown = false;
+            // 오늘 새 행사 칩 (헤더 안, 탭하면 신규만 필터)
             const newCount = ALL_DEALS.filter((d) => d.isNew).length;
             const newBanner = document.getElementById('newDealsBanner');
             if (newCount > 0) {
-                document.getElementById('newDealsBannerText').textContent = newOnly ? `새 행사 ${newCount}개만 보는 중 · 전체보기` : `오늘 새 행사 ${newCount}개`;
-                newBanner.className = `flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold border ${newOnly ? 'bg-blue-600 border-blue-600 text-white' : 'bg-blue-50 border-blue-200 text-blue-700'}`;
-                anyShown = true;
+                document.getElementById('newDealsBannerText').textContent = newOnly ? `새 행사 ${newCount} · 전체보기` : `새 행사 ${newCount}`;
+                newBanner.className = `flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0 ${newOnly ? 'bg-blue-600 border-blue-600 text-white' : 'bg-blue-50 border-blue-200 text-blue-700'}`;
             } else {
                 newBanner.className = 'hidden';
                 if (newOnly) { newOnly = false; renderDeals(); } // 신규가 없어졌으면 필터 해제
@@ -426,13 +425,11 @@
             if (expiring.length > 0) {
                 document.getElementById('expiringLikedBannerText').textContent = `찜한 행사 ${expiring.length}개 곧 마감`;
                 expBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600';
-                anyShown = true;
+                document.getElementById('alertBanners').className = 'flex flex-wrap gap-1.5 px-3 pb-2';
             } else {
                 expBanner.className = 'hidden';
+                document.getElementById('alertBanners').className = 'flex flex-wrap gap-1.5 px-3';
             }
-
-            // 배너가 하나라도 보일 때만 아래 필터와의 간격을 준다.
-            document.getElementById('alertBanners').className = anyShown ? 'flex flex-wrap gap-1.5 px-3 pb-2' : 'flex flex-wrap gap-1.5 px-3';
         }
 
         function toggleNewOnly() {
