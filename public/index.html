@@ -484,6 +484,21 @@
             return { text: `D-${daysLeft}`, cls: 'bg-gray-100 text-gray-500' };
         }
 
+        // 카테고리별 이모지 배지 - 이미지 없는 카드에서 시각적 구분을 대신한다.
+        const CATEGORY_BADGE = {
+            '신메뉴': '🆕', '시간대 특가': '⏰', '세트･콤보': '🍔', '배달': '🛵',
+            '멤버십･앱': '📱', '쿠폰･할인': '💰', '메뉴소식': '📣',
+        };
+
+        // 카테고리 배지 + 제목 키워드로 파생한 배지 1개(경품/할인/1+1)까지 최대 2개.
+        function dealBadges(d) {
+            const badges = [`${CATEGORY_BADGE[d.category] || '🍽️'} ${d.category}`];
+            if (/1\s*\+\s*1/.test(d.title)) badges.push('🎉 1+1');
+            else if (/경품|응모|추첨|증정|받자/.test(d.title)) badges.push('🎁 경품');
+            else if (d.category !== '쿠폰･할인' && /할인|특가|쿠폰|[0-9,]{3,}원/.test(d.title)) badges.push('💰 할인');
+            return badges;
+        }
+
         // 공식 프로모션 배너 대신 자체 제작 브랜드 비주얼 밴드를 쓴다 (저작권·심사 리스크 회피).
         function dealCardHtml(d) {
             const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600', grad: 'from-gray-400 to-gray-600' };
@@ -498,7 +513,9 @@
                         <span class="text-white font-black text-[15px] drop-shadow-sm">${b.emoji} ${b.text}</span>
                         ${d.isNew ? '<span class="bg-white text-blue-600 text-[9px] font-black px-1.5 py-0.5 rounded">NEW</span>' : ''}
                     </div>
-                    <span class="absolute bottom-2.5 left-3 text-white/85 text-[10px] font-bold">${d.category}</span>
+                    <div class="absolute bottom-2.5 left-3 flex items-center gap-1">
+                        ${dealBadges(d).map((t) => `<span class="bg-white/25 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">${t}</span>`).join('')}
+                    </div>
                     <span class="absolute top-2.5 right-2.5 text-[9px] font-bold px-1.5 py-0.5 rounded ${dday.cls} shadow-sm">${dday.text}</span>
                     <button onclick="event.stopPropagation(); toggleLike('${dealKey(d)}')" class="heart-btn ${liked ? 'liked' : ''} absolute bottom-2 right-2 w-7 h-7 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-regular fa-heart text-gray-400 text-xs"></i></button>
                 </div>
@@ -572,14 +589,25 @@
                     <button onclick="closeDetailSheet()" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-5">
-                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${b.bg} ${b.color}">${b.emoji} ${b.text}</span>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${b.bg} ${b.color}">${b.emoji} ${b.text}</span>
+                        ${dealBadges(d).map((t) => `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">${t}</span>`).join('')}
+                    </div>
                     <h2 class="text-lg font-black mt-2 leading-snug">${d.title}</h2>
                     <p class="text-xs text-gray-500 mt-2"><i class="fa-regular fa-clock mr-1"></i>${period} <span class="ml-1 px-1.5 py-0.5 rounded ${dday.cls} font-bold">${dday.text}</span></p>
                     <div class="grid grid-cols-2 gap-2 mt-5">
                         <button onclick="toggleLike('${dealKey(d)}'); openDetail('${dealKey(d)}')" class="py-3 rounded-xl font-bold text-sm border ${likedIds.has(dealKey(d)) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-gray-50 border-gray-200 text-gray-600'}"><i class="fa-solid fa-heart mr-1"></i>${likedIds.has(dealKey(d)) ? '찜 완료' : '찜하기'}</button>
                         <button onclick="shareDeal('${dealKey(d)}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-share-nodes mr-1"></i>공유하기</button>
                     </div>
-                    <a href="${d.link}" target="_blank" rel="noopener" class="block text-center mt-2 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow">${b.text} 공식 페이지에서 보기</a>
+                    <a href="${d.link}" target="_blank" rel="noopener" class="block text-center mt-2 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow">공식 이벤트 보기 <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i></a>
+                    <div class="mt-4 bg-gray-50 rounded-xl p-3.5">
+                        <p class="text-[11px] font-bold text-gray-600 mb-1.5"><i class="fa-solid fa-circle-info mr-1 text-gray-400"></i>행사 안내</p>
+                        <ul class="text-[11px] text-gray-500 leading-relaxed flex flex-col gap-0.5">
+                            <li>· 일부 매장에서는 행사가 적용되지 않을 수 있어요.</li>
+                            <li>· 행사 내용과 기간은 브랜드 사정에 따라 변경될 수 있어요.</li>
+                            <li>· 최신 정보는 공식 이벤트 페이지에서 확인해 주세요.</li>
+                        </ul>
+                    </div>
                 </div>`;
             document.getElementById('detailSheetBg').classList.add('active');
             document.getElementById('detailSheet').classList.add('active');
