@@ -1,19 +1,5 @@
 [
   {
-    "brand": "KFC",
-    "id": "1114",
-    "title": "KFC 골인박스!",
-    "image": "https://www.kfckorea.com/nas/event/2026/06/11/Bo1g6UAByY3x.png",
-    "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
-    "startDate": "2026-06-16",
-    "endDate": "2026-07-13",
-    "isOngoingText": "진행종료",
-    "category": "세트･콤보",
-    "ongoing": true,
-    "daysLeft": 0,
-    "isNew": false
-  },
-  {
     "brand": "FRANKBURGER",
     "id": "176",
     "title": "[구매영수증 인증 이벤트] 프랭크 힐링여행!",
@@ -29,8 +15,8 @@
   {
     "brand": "BURGERKING",
     "id": "1476",
-    "title": "단 4일간! 돌아온 와퍼 3900원 프로모션",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/08/ecfd24e8-0ad8-4868-996d-b44b6225a4ef.jpg",
+    "title": "단 3일간! 돌아온 와퍼 3900원 프로모션",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/13/cdafdf95-1080-489c-9c9f-fb8386d297a9.jpg",
     "link": "https://www.burgerking.co.kr/event/ongoing",
     "startDate": "2026-07-13",
     "endDate": "2026-07-16",
@@ -38,7 +24,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 3,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -64,7 +50,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -78,7 +64,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -118,7 +104,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 9,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "LOTTERIA",
@@ -184,7 +170,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 18,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -198,7 +184,7 @@
     "category": "쿠폰･할인",
     "ongoing": true,
     "daysLeft": 18,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -212,7 +198,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 18,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -226,7 +212,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 18,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SHAKESHACK",
@@ -294,6 +280,20 @@
     "isNew": false
   },
   {
+    "brand": "KFC",
+    "id": "1118",
+    "title": "복날에는 복버켓!",
+    "image": "https://www.kfckorea.com/nas/event/2026/07/07/Gt4uo2crrLH0.png",
+    "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
+    "startDate": "2026-07-14",
+    "endDate": "2026-08-17",
+    "isOngoingText": "진행종료",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 35,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1178",
     "title": "갈릭불고기 맥시멈에 도전하라",
@@ -305,7 +305,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 44,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -319,7 +319,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 48,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "LOTTERIA",
@@ -372,7 +372,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 49,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -386,7 +386,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 49,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -400,7 +400,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 49,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -414,7 +414,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 49,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -428,7 +428,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 65,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -442,7 +442,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 65,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -456,7 +456,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 79,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -470,7 +470,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 79,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -484,7 +484,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 79,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -498,7 +498,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 110,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -512,7 +512,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 135,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -565,7 +565,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 171,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -579,7 +579,7 @@
     "category": "쿠폰･할인",
     "ongoing": true,
     "daysLeft": 202,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
@@ -607,7 +607,7 @@
     "category": "쿠폰･할인",
     "ongoing": true,
     "daysLeft": 8845,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
@@ -728,7 +728,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -742,7 +742,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -756,7 +756,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -770,7 +770,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -784,7 +784,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -798,7 +798,7 @@
     "category": "시간대 특가",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -812,7 +812,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -826,7 +826,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 2912249,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
