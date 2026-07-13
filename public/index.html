@@ -362,7 +362,7 @@
         let newOnly = false; // '오늘 새 행사' 배너로 켜는 신규만 보기 필터
         let likedIds = new Set(JSON.parse(localStorage.getItem('ff_liked') || '[]'));
         // 버거킹/노브랜드버거는 매장 위치는 있지만 이벤트 크롤러가 없어서 행사 탭 필터에는 노출 안 함
-        const EVENT_BRANDS = ['MCDONALDS', 'KFC', 'LOTTERIA', 'MOMSTOUCH', 'FRANKBURGER', 'SHAKESHACK', 'SUBWAY'];
+        const EVENT_BRANDS = ['MCDONALDS', 'KFC', 'LOTTERIA', 'MOMSTOUCH', 'BURGERKING', 'NOBRANDBURGER', 'FRANKBURGER', 'SHAKESHACK', 'SUBWAY'];
 
         // 지도 탭 상태
         let ALL_STORES = [];
