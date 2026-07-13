@@ -10,7 +10,7 @@
     "isOngoingText": "진행종료",
     "category": "세트･콤보",
     "ongoing": true,
-    "daysLeft": 1,
+    "daysLeft": 0,
     "isNew": false
   },
   {
@@ -23,7 +23,7 @@
     "endDate": "2026-07-16",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 4,
+    "daysLeft": 3,
     "isNew": false
   },
   {
@@ -36,8 +36,8 @@
     "endDate": "2026-07-19",
     "category": "세트･콤보",
     "ongoing": true,
-    "daysLeft": 7,
-    "isNew": true
+    "daysLeft": 6,
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -49,7 +49,7 @@
     "endDate": "2026-07-20",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 8,
+    "daysLeft": 7,
     "isNew": false
   },
   {
@@ -62,7 +62,7 @@
     "endDate": "2026-07-20",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 8,
+    "daysLeft": 7,
     "isNew": false
   },
   {
@@ -75,7 +75,7 @@
     "endDate": "2026-07-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 19,
+    "daysLeft": 18,
     "isNew": false
   },
   {
@@ -88,7 +88,7 @@
     "endDate": "2026-07-31",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 19,
+    "daysLeft": 18,
     "isNew": false
   },
   {
@@ -101,7 +101,7 @@
     "endDate": "2026-07-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 19,
+    "daysLeft": 18,
     "isNew": false
   },
   {
@@ -114,7 +114,7 @@
     "endDate": "2026-07-31",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 19,
+    "daysLeft": 18,
     "isNew": false
   },
   {
@@ -127,7 +127,7 @@
     "endDate": "2026-08-01",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 20,
+    "daysLeft": 19,
     "isNew": false
   },
   {
@@ -140,7 +140,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 31,
+    "daysLeft": 30,
     "isNew": false
   },
   {
@@ -153,7 +153,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 31,
+    "daysLeft": 30,
     "isNew": false
   },
   {
@@ -166,7 +166,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 31,
+    "daysLeft": 30,
     "isNew": false
   },
   {
@@ -179,8 +179,21 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 31,
+    "daysLeft": 30,
     "isNew": false
+  },
+  {
+    "brand": "LOTTERIA",
+    "id": "17780",
+    "title": "통통 튀는 새우 패티로 두툼하게! 리아두툼새우 출시",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/07/13/20260713093232136_6.png/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/17780",
+    "startDate": "2026-07-16",
+    "endDate": "2026-08-31",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 49,
+    "isNew": true
   },
   {
     "brand": "LOTTERIA",
@@ -192,7 +205,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 50,
+    "daysLeft": 49,
     "isNew": false
   },
   {
@@ -205,7 +218,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 50,
+    "daysLeft": 49,
     "isNew": false
   },
   {
@@ -218,7 +231,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 172,
+    "daysLeft": 171,
     "isNew": false
   },
   {
@@ -231,7 +244,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 172,
+    "daysLeft": 171,
     "isNew": false
   },
   {
@@ -244,7 +257,7 @@
     "endDate": "2026-12-31",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 172,
+    "daysLeft": 171,
     "isNew": false
   },
   {
@@ -258,7 +271,7 @@
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 537,
+    "daysLeft": 536,
     "isNew": false
   },
   {
@@ -272,7 +285,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26835,
+    "daysLeft": 26834,
     "isNew": false
   },
   {
@@ -286,7 +299,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26835,
+    "daysLeft": 26834,
     "isNew": false
   },
   {
@@ -300,7 +313,7 @@
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 26835,
+    "daysLeft": 26834,
     "isNew": false
   },
   {
@@ -313,7 +326,7 @@
     "endDate": "9999-04-01",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2911976,
+    "daysLeft": 2911975,
     "isNew": false
   },
   {
@@ -326,7 +339,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912250,
+    "daysLeft": 2912249,
     "isNew": false
   },
   {
@@ -339,7 +352,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912250,
+    "daysLeft": 2912249,
     "isNew": false
   },
   {
@@ -352,7 +365,7 @@
     "endDate": "9999-12-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912250,
+    "daysLeft": 2912249,
     "isNew": false
   },
   {
@@ -365,7 +378,7 @@
     "endDate": "9999-12-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912250,
+    "daysLeft": 2912249,
     "isNew": false
   },
   {
