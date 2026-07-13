@@ -499,6 +499,16 @@
             return badges;
         }
 
+        // 카드 하단에 붙는 사람 친화형 상태 문구. D-day 배지(D-3)를 문장으로 풀어준다.
+        function dealStatusText(d) {
+            if (d.daysLeft === null || d.daysLeft === undefined || d.daysLeft > 180) return null; // 상시는 배지로 충분
+            if (d.daysLeft <= 0) return { t: '오늘 종료', cls: 'text-red-500' };
+            const now = new Date();
+            const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            if (d.startDate === todayIso) return { t: '오늘 시작', cls: 'text-blue-500' };
+            return { t: `${d.daysLeft}일 남음`, cls: d.daysLeft <= 3 ? 'text-red-500' : 'text-gray-400' };
+        }
+
         // 공식 프로모션 배너 대신 자체 제작 브랜드 비주얼 밴드를 쓴다 (저작권·심사 리스크 회피).
         function dealCardHtml(d) {
             const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600', grad: 'from-gray-400 to-gray-600' };
@@ -521,7 +531,10 @@
                 </div>
                 <div class="p-3">
                     <p class="text-[13px] font-bold text-gray-900 leading-snug line-clamp-2">${d.title}</p>
-                    <p class="text-[10px] text-gray-400 font-medium mt-1.5"><i class="fa-regular fa-clock mr-1"></i>${period}</p>
+                    <div class="flex items-center justify-between mt-1.5">
+                        <p class="text-[10px] text-gray-400 font-medium"><i class="fa-regular fa-clock mr-1"></i>${period}</p>
+                        ${(() => { const s = dealStatusText(d); return s ? `<span class="text-[10px] font-bold ${s.cls}">⏰ ${s.t}</span>` : ''; })()}
+                    </div>
                 </div>
             </div>`;
         }
@@ -599,7 +612,7 @@
                         <button onclick="toggleLike('${dealKey(d)}'); openDetail('${dealKey(d)}')" class="py-3 rounded-xl font-bold text-sm border ${likedIds.has(dealKey(d)) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-gray-50 border-gray-200 text-gray-600'}"><i class="fa-solid fa-heart mr-1"></i>${likedIds.has(dealKey(d)) ? '찜 완료' : '찜하기'}</button>
                         <button onclick="shareDeal('${dealKey(d)}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-share-nodes mr-1"></i>공유하기</button>
                     </div>
-                    <a href="${d.link}" target="_blank" rel="noopener" class="block text-center mt-2 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow">공식 이벤트 보기 <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i></a>
+                    <a href="${d.link}" target="_blank" rel="noopener" class="block text-center mt-2 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow"><i class="fa-solid fa-arrow-up-right-from-square mr-1.5 text-xs"></i>공식 이벤트 보기</a>
                     <div class="mt-4 bg-gray-50 rounded-xl p-3.5">
                         <p class="text-[11px] font-bold text-gray-600 mb-1.5"><i class="fa-solid fa-circle-info mr-1 text-gray-400"></i>행사 안내</p>
                         <ul class="text-[11px] text-gray-500 leading-relaxed flex flex-col gap-0.5">
