@@ -344,16 +344,18 @@
         const APP_NAME = 'fastfood-event-navi';
 
         const CATEGORIES = ['ALL', '신메뉴', '시간대 특가', '세트･콤보', '배달', '멤버십･앱', '쿠폰･할인', '메뉴소식'];
+        // grad: 공식 프로모션 이미지 대신 쓰는 자체 제작 카드 비주얼(브랜드 톤 그라데이션).
+        // 저작권·심사 리스크 때문에 브랜드 배너 이미지는 앱 화면에 노출하지 않는다.
         const BRAND_INFO = {
-            'MCDONALDS':     { text: '맥도날드',   emoji: '🍟', bg: 'bg-amber-100',  color: 'text-amber-700',  ring: 'ring-amber-300' },
-            'KFC':           { text: 'KFC',       emoji: '🍗', bg: 'bg-red-100',    color: 'text-red-700',    ring: 'ring-red-300' },
-            'LOTTERIA':      { text: '롯데리아',   emoji: '🍔', bg: 'bg-orange-100', color: 'text-orange-700', ring: 'ring-orange-300' },
-            'MOMSTOUCH':     { text: '맘스터치',   emoji: '🐔', bg: 'bg-rose-100',   color: 'text-rose-700',   ring: 'ring-rose-300' },
-            'FRANKBURGER':   { text: '프랭크버거', emoji: '🍔', bg: 'bg-yellow-100', color: 'text-yellow-700', ring: 'ring-yellow-300' },
-            'SHAKESHACK':    { text: '쉐이크쉑',   emoji: '🍔', bg: 'bg-green-100',  color: 'text-green-700',  ring: 'ring-green-300' },
-            'SUBWAY':        { text: '서브웨이',   emoji: '🥪', bg: 'bg-teal-100',   color: 'text-teal-700',   ring: 'ring-teal-300' },
-            'BURGERKING':    { text: '버거킹',     emoji: '👑', bg: 'bg-blue-100',   color: 'text-blue-700',   ring: 'ring-blue-300' },
-            'NOBRANDBURGER': { text: '노브랜드버거', emoji: '🍔', bg: 'bg-slate-100',  color: 'text-slate-700',  ring: 'ring-slate-300' },
+            'MCDONALDS':     { text: '맥도날드',   emoji: '🍟', bg: 'bg-amber-100',  color: 'text-amber-700',  ring: 'ring-amber-300',  grad: 'from-amber-400 to-orange-500' },
+            'KFC':           { text: 'KFC',       emoji: '🍗', bg: 'bg-red-100',    color: 'text-red-700',    ring: 'ring-red-300',    grad: 'from-red-500 to-red-700' },
+            'LOTTERIA':      { text: '롯데리아',   emoji: '🍔', bg: 'bg-orange-100', color: 'text-orange-700', ring: 'ring-orange-300', grad: 'from-orange-400 to-red-500' },
+            'MOMSTOUCH':     { text: '맘스터치',   emoji: '🐔', bg: 'bg-rose-100',   color: 'text-rose-700',   ring: 'ring-rose-300',   grad: 'from-rose-400 to-rose-600' },
+            'FRANKBURGER':   { text: '프랭크버거', emoji: '🍔', bg: 'bg-yellow-100', color: 'text-yellow-700', ring: 'ring-yellow-300', grad: 'from-yellow-400 to-amber-600' },
+            'SHAKESHACK':    { text: '쉐이크쉑',   emoji: '🍔', bg: 'bg-green-100',  color: 'text-green-700',  ring: 'ring-green-300',  grad: 'from-green-500 to-emerald-600' },
+            'SUBWAY':        { text: '서브웨이',   emoji: '🥪', bg: 'bg-teal-100',   color: 'text-teal-700',   ring: 'ring-teal-300',   grad: 'from-teal-400 to-emerald-600' },
+            'BURGERKING':    { text: '버거킹',     emoji: '👑', bg: 'bg-blue-100',   color: 'text-blue-700',   ring: 'ring-blue-300',   grad: 'from-blue-500 to-indigo-600' },
+            'NOBRANDBURGER': { text: '노브랜드버거', emoji: '🍔', bg: 'bg-slate-100',  color: 'text-slate-700',  ring: 'ring-slate-300',  grad: 'from-slate-500 to-slate-700' },
         };
 
         let ALL_DEALS = [];
@@ -482,27 +484,27 @@
             return { text: `D-${daysLeft}`, cls: 'bg-gray-100 text-gray-500' };
         }
 
+        // 공식 프로모션 배너 대신 자체 제작 브랜드 비주얼 밴드를 쓴다 (저작권·심사 리스크 회피).
         function dealCardHtml(d) {
-            const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600' };
+            const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️', bg: 'bg-gray-100', color: 'text-gray-600', grad: 'from-gray-400 to-gray-600' };
             const dday = ddayText(d.daysLeft);
             const liked = likedIds.has(dealKey(d));
-            const img = d.image
-                ? `<img src="${d.image}" loading="lazy" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-3xl bg-gray-50\\'>${b.emoji}</div>'">`
-                : `<div class="w-full h-full flex items-center justify-center text-3xl bg-gray-50">${b.emoji}</div>`;
+            const period = d.startDate && d.endDate ? `${d.startDate.slice(5).replace('-', '.')} ~ ${d.endDate.slice(5).replace('-', '.')}` : '상시 진행';
             return `
             <div class="deal-card bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden cursor-pointer" onclick="openDetail('${dealKey(d)}')">
-                <div class="relative w-full h-36 bg-gray-100">
-                    ${img}
-                    ${d.isNew ? '<span class="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>' : ''}
-                    <span class="absolute top-2 right-2 text-[9px] font-bold px-1.5 py-0.5 rounded ${dday.cls}">${dday.text}</span>
+                <div class="relative w-full h-20 bg-gradient-to-br ${b.grad} overflow-hidden">
+                    <span class="absolute -right-1 -bottom-5 text-[64px] opacity-25 -rotate-12 select-none pointer-events-none">${b.emoji}</span>
+                    <div class="absolute top-2.5 left-3 flex items-center gap-1.5">
+                        <span class="text-white font-black text-[15px] drop-shadow-sm">${b.emoji} ${b.text}</span>
+                        ${d.isNew ? '<span class="bg-white text-blue-600 text-[9px] font-black px-1.5 py-0.5 rounded">NEW</span>' : ''}
+                    </div>
+                    <span class="absolute bottom-2.5 left-3 text-white/85 text-[10px] font-bold">${d.category}</span>
+                    <span class="absolute top-2.5 right-2.5 text-[9px] font-bold px-1.5 py-0.5 rounded ${dday.cls} shadow-sm">${dday.text}</span>
                     <button onclick="event.stopPropagation(); toggleLike('${dealKey(d)}')" class="heart-btn ${liked ? 'liked' : ''} absolute bottom-2 right-2 w-7 h-7 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-regular fa-heart text-gray-400 text-xs"></i></button>
                 </div>
                 <div class="p-3">
-                    <div class="flex items-center gap-1.5 mb-1.5">
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${b.bg} ${b.color}">${b.emoji} ${b.text}</span>
-                        <span class="text-[9px] text-gray-400 font-medium">${d.category}</span>
-                    </div>
                     <p class="text-[13px] font-bold text-gray-900 leading-snug line-clamp-2">${d.title}</p>
+                    <p class="text-[10px] text-gray-400 font-medium mt-1.5"><i class="fa-regular fa-clock mr-1"></i>${period}</p>
                 </div>
             </div>`;
         }
@@ -564,8 +566,9 @@
             const dday = ddayText(d.daysLeft);
             const period = d.startDate && d.endDate ? `${d.startDate} ~ ${d.endDate}` : '상시 진행';
             document.getElementById('detailContent').innerHTML = `
-                <div class="relative w-full h-56 bg-gray-100">
-                    ${d.image ? `<img src="${d.image}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-5xl">${b.emoji}</div>`}
+                <div class="relative w-full h-32 bg-gradient-to-br ${b.grad || 'from-gray-400 to-gray-600'} overflow-hidden">
+                    <span class="absolute -right-2 -bottom-8 text-[110px] opacity-25 -rotate-12 select-none pointer-events-none">${b.emoji}</span>
+                    <span class="absolute bottom-4 left-5 text-white font-black text-2xl drop-shadow-sm">${b.emoji} ${b.text}</span>
                     <button onclick="closeDetailSheet()" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-5">
