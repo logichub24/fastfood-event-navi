@@ -204,13 +204,16 @@
                     <i class="fa-solid fa-rotate-right text-blue-400"></i> 이 지역 재검색
                 </button>
 
-                <!-- 우측 컨트롤: 지역검색 / 위성보기 / 반경선택 / 내위치 -->
+                <!-- 우측 컨트롤: 지역검색 / 위성보기 / 내위치 / 반경선택 -->
                 <div class="absolute right-3 bottom-4 z-[400] flex flex-col gap-2 items-end">
                     <button onclick="openLocationSearch()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                     <button id="satelliteToggleBtn" onclick="toggleSatelliteView()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition">
                         <i class="fa-solid fa-satellite"></i>
+                    </button>
+                    <button id="locateBtn" onclick="locateMe()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-blue-600 active:scale-95 transition">
+                        <i class="fa-solid fa-location-crosshairs"></i>
                     </button>
                     <div class="bg-white rounded-2xl shadow-md border border-gray-100 grid grid-cols-2 overflow-hidden w-[72px]">
                         <button onclick="setRadius(300)" id="rad300" class="radius-btn text-[9px] font-black py-2 border-b border-r border-gray-100 text-gray-500 transition-colors">300m</button>
@@ -220,9 +223,6 @@
                         <button onclick="setRadius(2500)" id="rad2500" class="radius-btn text-[9px] font-black py-2 border-r border-gray-100 text-gray-500 transition-colors">2.5km</button>
                         <button onclick="setRadius(3000)" id="rad3000" class="radius-btn text-[9px] font-black py-2 text-gray-500 transition-colors">3km</button>
                     </div>
-                    <button id="locateBtn" onclick="locateMe()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-blue-600 active:scale-95 transition">
-                        <i class="fa-solid fa-location-crosshairs"></i>
-                    </button>
                 </div>
             </div>
         </div>
