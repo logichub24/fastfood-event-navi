@@ -106,17 +106,26 @@
             <!-- 상단 헤더 -->
             <div class="flex-none pt-3 z-[100]">
                 <div class="px-3 pb-2 flex items-center gap-1.5">
-                    <!-- 진행중 행사 수 -->
-                    <div class="bg-white px-3 py-2 rounded-full shadow-sm border border-gray-100 flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-gray-500 font-bold leading-none">진행중</span>
-                        <span id="eventCountText" class="text-[13px] font-black text-gray-900 leading-none">-</span>
+                    <div class="flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto hide-scrollbar">
+                        <!-- 진행중 행사 수 -->
+                        <div class="bg-white px-3 py-2 rounded-full shadow-sm border border-gray-100 flex items-center gap-1.5 shrink-0">
+                            <span class="text-[10px] text-gray-500 font-bold leading-none">진행중</span>
+                            <span id="eventCountText" class="text-[13px] font-black text-gray-900 leading-none">-</span>
+                        </div>
+                        <!-- 오늘 새 행사 (있을 때만, 탭하면 신규만 필터) -->
+                        <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                            <span id="newDealsBannerText"></span>
+                        </button>
+                        <!-- 오늘 종료 (있을 때만, 탭하면 오늘마감만 필터) -->
+                        <button id="endingTodayBanner" onclick="toggleEndingToday()" class="hidden items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                            <span id="endingTodayBannerText"></span>
+                        </button>
                     </div>
-                    <!-- 오늘 새 행사 (있을 때만, 탭하면 신규만 필터) -->
-                    <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0">
-                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                        <span id="newDealsBannerText"></span>
+                    <button onclick="openSearchSheet()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
                     </button>
-                    <div class="flex-1"></div>
                     <button onclick="openLikedSheet()" class="relative w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
                         <i class="fa-solid fa-heart text-sm"></i>
                         <span id="likedBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
@@ -126,11 +135,18 @@
                     </button>
                 </div>
 
-                <!-- 알림 배너: 찜한 행사 마감 임박 (해당 시에만 노출) -->
+                <!-- 알림 배너: 찜 마감 임박 / 찜 브랜드 새 행사 / 날씨 추천 (해당 시에만 노출) -->
                 <div class="flex flex-wrap gap-1.5 px-3" id="alertBanners">
                     <button id="expiringLikedBanner" onclick="openLikedSheet()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600">
                         <i class="fa-solid fa-heart text-[10px]"></i>
                         <span id="expiringLikedBannerText"></span>
+                    </button>
+                    <button id="likedNewBanner" onclick="viewLikedBrandNew()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-600">
+                        <i class="fa-solid fa-bell text-[10px]"></i>
+                        <span id="likedNewBannerText"></span>
+                    </button>
+                    <button id="weatherBanner" onclick="window._weatherAct?.()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-[11px] font-bold text-sky-700">
+                        <span id="weatherBannerText"></span>
                     </button>
                 </div>
 
@@ -185,6 +201,8 @@
                     <button id="satelliteToggleBtn" onclick="toggleSatelliteView()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition">
                         <i class="fa-solid fa-satellite"></i>
                     </button>
+                    <!-- 드라이브스루 매장만 보기 (매장명의 DT 패턴으로 판별) -->
+                    <button id="dtToggleBtn" onclick="toggleDtOnly()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition text-[10px] font-black">DT</button>
                     <div class="bg-white rounded-2xl shadow-md border border-gray-100 grid grid-cols-2 overflow-hidden w-[72px]">
                         <button onclick="setRadius(300)" id="rad300" class="radius-btn text-[9px] font-black py-2 border-b border-r border-gray-100 text-gray-500 transition-colors">300m</button>
                         <button onclick="setRadius(500)" id="rad500" class="radius-btn text-[9px] font-black py-2 border-b border-gray-100 text-gray-500 transition-colors">500m</button>
@@ -233,6 +251,22 @@
                 </div>
             </div>
             <div id="likedList" class="flex-1 overflow-y-auto hide-scrollbar p-4 flex flex-col gap-3"></div>
+        </div>
+
+        <!-- 검색 바텀시트 (카페행사맵의 통합 검색 이식 - 초성 검색 지원) -->
+        <div class="sheet-bg" id="searchSheetBg" onclick="closeSearchSheet()"></div>
+        <div class="bottom-sheet" id="searchSheet">
+            <div class="flex-none p-4 border-b border-gray-100">
+                <div class="flex items-center gap-2">
+                    <div class="flex-1 flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2.5">
+                        <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+                        <input id="searchInput" oninput="performSearch()" placeholder="행사명·브랜드·카테고리 검색" class="flex-1 bg-transparent outline-none text-sm font-medium min-w-0" />
+                    </div>
+                    <button onclick="closeSearchSheet()" class="w-8 h-8 flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="flex flex-wrap gap-1.5 mt-2.5" id="quickSearchChips"></div>
+            </div>
+            <div id="searchResults" class="flex-1 overflow-y-auto hide-scrollbar p-4 flex flex-col gap-3"></div>
         </div>
 
         <!-- 상세 바텀시트 -->
@@ -362,6 +396,7 @@
         let activeCategory = 'ALL';
         let activeBrand = 'ALL';
         let newOnly = false; // '오늘 새 행사' 배너로 켜는 신규만 보기 필터
+        let endingOnly = false; // '오늘 종료' 칩으로 켜는 오늘마감만 보기 필터
         let likedIds = new Set(JSON.parse(localStorage.getItem('ff_liked') || '[]'));
         // 버거킹/노브랜드버거는 매장 위치는 있지만 이벤트 크롤러가 없어서 행사 탭 필터에는 노출 안 함
         const EVENT_BRANDS = ['MCDONALDS', 'KFC', 'LOTTERIA', 'MOMSTOUCH', 'BURGERKING', 'NOBRANDBURGER', 'FRANKBURGER', 'SHAKESHACK', 'SUBWAY'];
@@ -421,23 +456,71 @@
                 if (newOnly) { newOnly = false; renderDeals(); } // 신규가 없어졌으면 필터 해제
             }
 
+            // 오늘 종료 칩 (헤더 안, 탭하면 오늘마감만 필터)
+            const endCount = ALL_DEALS.filter((d) => d.daysLeft !== null && d.daysLeft <= 0).length;
+            const endBanner = document.getElementById('endingTodayBanner');
+            if (endCount > 0) {
+                document.getElementById('endingTodayBannerText').textContent = endingOnly ? `오늘 종료 ${endCount} · 전체보기` : `오늘 종료 ${endCount}`;
+                endBanner.className = `flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0 ${endingOnly ? 'bg-red-600 border-red-600 text-white' : 'bg-red-50 border-red-200 text-red-600'}`;
+            } else {
+                endBanner.className = 'hidden';
+                if (endingOnly) { endingOnly = false; renderDeals(); }
+            }
+
             // 찜한 행사 중 오늘/내일 마감(daysLeft 0~1)인 것
             const expiring = ALL_DEALS.filter((d) => likedIds.has(dealKey(d)) && d.daysLeft !== null && d.daysLeft >= 0 && d.daysLeft <= 1);
             const expBanner = document.getElementById('expiringLikedBanner');
             if (expiring.length > 0) {
                 document.getElementById('expiringLikedBannerText').textContent = `찜한 행사 ${expiring.length}개 곧 마감`;
                 expBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600';
-                document.getElementById('alertBanners').className = 'flex flex-wrap gap-1.5 px-3 pb-2';
             } else {
                 expBanner.className = 'hidden';
-                document.getElementById('alertBanners').className = 'flex flex-wrap gap-1.5 px-3';
             }
+
+            // 찜한 브랜드에 새 행사가 뜬 경우 (카페행사맵의 '찜 변동 감지' 이식 - 찜의 효용을 완성)
+            const likedBrands = new Set([...likedIds].map((k) => k.split(':')[0]));
+            const likedNew = ALL_DEALS.filter((d) => d.isNew && likedBrands.has(d.brand) && !likedIds.has(dealKey(d)));
+            const likedNewBanner = document.getElementById('likedNewBanner');
+            if (likedNew.length > 0) {
+                document.getElementById('likedNewBannerText').textContent = `찜한 브랜드에 새 행사 ${likedNew.length}개`;
+                likedNewBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-600';
+            } else {
+                likedNewBanner.className = 'hidden';
+            }
+
+            syncAlertBannersPad();
         }
 
+        // 배너 줄에 보이는 항목이 하나라도 있을 때만 아래 필터와의 간격을 준다 (날씨 칩 등 비동기 항목 포함).
+        function syncAlertBannersPad() {
+            const wrap = document.getElementById('alertBanners');
+            const anyShown = [...wrap.children].some((c) => !c.className.includes('hidden'));
+            wrap.className = anyShown ? 'flex flex-wrap gap-1.5 px-3 pb-2' : 'flex flex-wrap gap-1.5 px-3';
+        }
+
+        // 새 행사/오늘 종료 필터는 상호 배타 - 하나를 켜면 다른 쪽은 끈다.
         function toggleNewOnly() {
             newOnly = !newOnly;
+            if (newOnly) endingOnly = false;
             renderDeals();
             updateAlertBanners();
+        }
+
+        function toggleEndingToday() {
+            endingOnly = !endingOnly;
+            if (endingOnly) newOnly = false;
+            renderDeals();
+            updateAlertBanners();
+        }
+
+        // '찜한 브랜드 새 행사' 배너 탭 - 신규만 보기로 전환
+        function viewLikedBrandNew() {
+            newOnly = true;
+            endingOnly = false;
+            renderDeals();
+            updateAlertBanners();
+            document.getElementById('dealListArea').scrollTop = 0;
+            switchTab('events');
         }
 
         function renderBrands() {
@@ -543,7 +626,8 @@
             return ALL_DEALS.filter((d) =>
                 (activeBrand === 'ALL' || d.brand === activeBrand) &&
                 (activeCategory === 'ALL' || d.category === activeCategory) &&
-                (!newOnly || d.isNew)
+                (!newOnly || d.isNew) &&
+                (!endingOnly || (d.daysLeft !== null && d.daysLeft <= 0))
             );
         }
 
@@ -629,6 +713,91 @@
         function closeDetailSheet() {
             document.getElementById('detailSheetBg').classList.remove('active');
             document.getElementById('detailSheet').classList.remove('active');
+        }
+
+        // ===== 통합 검색 (카페행사맵 이식 - 초성 검색 지원) =====
+        const QUICK_SEARCH = ['1+1', '할인', '신메뉴', '버거', '치킨', '아이스', '배달', '세트'];
+
+        // 한글 문자열을 초성 문자열로 변환 (예: '버거킹' -> 'ㅂㄱㅋ'). 비한글 문자는 그대로 둔다.
+        const CHOSUNG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+        function toChosung(str) {
+            let out = '';
+            for (const ch of str) {
+                const code = ch.charCodeAt(0);
+                if (code >= 0xAC00 && code <= 0xD7A3) out += CHOSUNG[Math.floor((code - 0xAC00) / 588)];
+                else out += ch;
+            }
+            return out;
+        }
+
+        function matchSearch(d, q) {
+            const b = BRAND_INFO[d.brand] || { text: d.brand };
+            const target = `${d.title} ${b.text} ${d.brand} ${d.category}`.toLowerCase();
+            const query = q.toLowerCase().trim();
+            if (target.includes(query)) return true;
+            // 질의가 전부 초성이면 초성 매칭도 시도 (ㅂㄱ -> 버거)
+            if (/^[ㄱ-ㅎ]+$/.test(query)) return toChosung(target).includes(query);
+            return false;
+        }
+
+        function openSearchSheet(prefill) {
+            document.getElementById('quickSearchChips').innerHTML = QUICK_SEARCH.map((k) =>
+                `<button onclick="quickSearch('${k}')" class="px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-[11px] font-bold">${k}</button>`
+            ).join('');
+            const input = document.getElementById('searchInput');
+            input.value = typeof prefill === 'string' ? prefill : '';
+            performSearch();
+            document.getElementById('searchSheetBg').classList.add('active');
+            document.getElementById('searchSheet').classList.add('active');
+            if (!input.value) setTimeout(() => input.focus(), 250);
+        }
+        function closeSearchSheet() {
+            document.getElementById('searchSheetBg').classList.remove('active');
+            document.getElementById('searchSheet').classList.remove('active');
+        }
+        function quickSearch(k) {
+            document.getElementById('searchInput').value = k;
+            performSearch();
+        }
+        function performSearch() {
+            const q = document.getElementById('searchInput').value.trim();
+            const box = document.getElementById('searchResults');
+            if (!q) {
+                box.innerHTML = `<div class="text-center text-gray-400 text-xs py-16"><span class="text-4xl block mb-3">🔍</span>행사명, 브랜드, 카테고리로 검색해보세요<br>초성 검색도 돼요 (ㅂㄱ → 버거)</div>`;
+                return;
+            }
+            const hits = ALL_DEALS.filter((d) => matchSearch(d, q));
+            box.innerHTML = hits.length
+                ? `<p class="text-[11px] font-bold text-gray-400">검색 결과 ${hits.length}건</p>` + hits.map(dealCardHtml).join('')
+                : `<div class="text-center text-gray-400 text-xs py-16"><span class="text-4xl block mb-3">🤔</span>'${q}' 검색 결과가 없어요</div>`;
+        }
+
+        // ===== 날씨 기반 행사 추천 (카페행사맵 이식 - Open-Meteo, 키 불필요) =====
+        // 서울시청 기준 현재 날씨로 상황 추천 칩을 1개 띄운다. 실패 시 조용히 생략.
+        async function fetchWeatherChip() {
+            try {
+                const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current=temperature_2m,weather_code,precipitation&timezone=Asia%2FSeoul');
+                const j = await r.json();
+                const t = j.current?.temperature_2m;
+                const code = j.current?.weather_code ?? 0;
+                const prec = j.current?.precipitation || 0;
+                if (t === undefined) return;
+
+                let rec = null;
+                if (prec > 0 || code >= 51) {
+                    rec = { label: '☔ 비 오는 날엔 배달 행사 어때요?', act: () => { activeCategory = '배달'; renderCategories(); renderDeals(); closeSearchSheet(); switchTab('events'); } };
+                } else if (t >= 28) {
+                    rec = { label: `🥵 ${Math.round(t)}°C 무더위, 시원한 메뉴 찾기`, act: () => openSearchSheet('아이스') };
+                } else if (t <= 5) {
+                    rec = { label: `🥶 ${Math.round(t)}°C, 따뜻한 세트 어때요?`, act: () => { activeCategory = '세트･콤보'; renderCategories(); renderDeals(); switchTab('events'); } };
+                }
+                if (!rec) return;
+
+                window._weatherAct = rec.act;
+                document.getElementById('weatherBannerText').textContent = rec.label;
+                document.getElementById('weatherBanner').className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-[11px] font-bold text-sky-700';
+                syncAlertBannersPad();
+            } catch (e) { /* 날씨는 부가 기능 - 실패해도 아무것도 하지 않음 */ }
         }
 
         function openLikedSheet() {
@@ -760,6 +929,20 @@
 
         function setMapBrand(b) { mapBrand = (mapBrand === b) ? 'ALL' : b; renderMapBrandChips(); loadStoresInRadius(); }
 
+        // ===== 드라이브스루 필터 (카페행사맵의 편의정보 필터 이식 - 매장명 DT 패턴 추론) =====
+        // 별도 편의정보 데이터 없이 매장명 관례(맥도날드 XXDT점, 버거킹 XX DT점 등)로 판별한다.
+        let mapDtOnly = false;
+        function isDriveThrough(s) { return /DT|드라이브\s?스루|드라이빙\s?스루/i.test(s.name); }
+        function toggleDtOnly() {
+            mapDtOnly = !mapDtOnly;
+            const btn = document.getElementById('dtToggleBtn');
+            btn.className = mapDtOnly
+                ? 'w-11 h-11 bg-gray-900 rounded-full shadow-md border border-gray-900 flex items-center justify-center text-white active:scale-95 transition text-[10px] font-black'
+                : 'w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition text-[10px] font-black';
+            loadStoresInRadius();
+            showToast(mapDtOnly ? '드라이브스루 매장만 표시해요' : '전체 매장을 표시해요');
+        }
+
         async function initMapIfNeeded() {
             if (leafletMap) return;
             const defaultCenter = [37.5665, 126.9780]; // 서울시청 (위치 권한 거부/실패 시 기본값)
@@ -811,6 +994,7 @@
             const center = searchCircle.getLatLng();
             const filtered = ALL_STORES.filter((s) => {
                 if (mapBrand !== 'ALL' && s.brand !== mapBrand) return false;
+                if (mapDtOnly && !isDriveThrough(s)) return false;
                 return leafletMap.distance(center, [s.lat, s.lng]) <= currentRadius;
             });
 
@@ -979,8 +1163,9 @@
                     </div>
                     <button onclick="closeStoreSheet()" class="w-8 h-8 flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div class="grid grid-cols-2 gap-2 mt-3">
-                    <button onclick="viewBrandEvents('${s.brand}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-fire mr-1 text-orange-500"></i>행사안내 ${eventCount}건</button>
+                <div class="grid ${s.phone ? 'grid-cols-3' : 'grid-cols-2'} gap-2 mt-3">
+                    ${s.phone ? `<a href="tel:${s.phone}" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600 text-center"><i class="fa-solid fa-phone mr-1 text-green-500"></i>전화</a>` : ''}
+                    <button onclick="viewBrandEvents('${s.brand}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-fire mr-1 text-orange-500"></i>행사 ${eventCount}건</button>
                     <a href="${mapUrl}" target="_blank" rel="noopener" onclick="window.onAdTrigger?.('navigation')" class="py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow text-center"><i class="fa-solid fa-diamond-turn-right mr-1"></i>길찾기</a>
                 </div>`;
             document.getElementById('storeSheetBg').classList.add('active');
@@ -1178,6 +1363,7 @@
         updateLikedBadge();
         loadDeals().then(applyDeepLink); // 특정 행사로 바로 열기는 ALL_DEALS가 로드된 뒤에만 가능
         maybeShowOnboardingOnFirstVisit();
+        fetchWeatherChip();
     </script>
 </body>
 </html>

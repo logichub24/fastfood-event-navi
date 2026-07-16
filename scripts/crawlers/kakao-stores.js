@@ -58,6 +58,7 @@ async function fetchBrandInSido(apiKey, brand, sido) {
         lat,
         lng,
         address: doc.road_address_name || doc.address_name || '',
+        phone: doc.phone || '',
         kakaoId: doc.id,
       });
     }
