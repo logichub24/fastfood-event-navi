@@ -185,8 +185,11 @@
             <div class="flex-1 min-h-0 relative">
                 <div id="map"></div>
 
-                <!-- 결과 카운트 -->
-                <div id="mapResultBadge" class="absolute top-3 left-3 z-[400] bg-white/95 px-3 py-1.5 rounded-full shadow-sm text-[11px] font-bold text-gray-700"></div>
+                <!-- 결과 카운트 + 드라이브스루 필터 (아이콘+라벨로 명확히 노출) -->
+                <div class="absolute top-3 left-3 z-[400] flex items-center gap-1.5">
+                    <div id="mapResultBadge" class="bg-white/95 px-3 py-1.5 rounded-full shadow-sm text-[11px] font-bold text-gray-700"></div>
+                    <button id="dtToggleBtn" onclick="toggleDtOnly()" class="bg-white/95 px-3 py-1.5 rounded-full shadow-sm text-[11px] font-bold text-gray-600 flex items-center gap-1 active:scale-95 transition">🚗 드라이브스루</button>
+                </div>
 
                 <!-- 이 지역 재검색 -->
                 <button id="reSearchBtn" onclick="searchInCurrentArea()" class="absolute bottom-5 left-1/2 -translate-x-1/2 z-[500] bg-gray-900 text-white px-4 py-2.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-2">
@@ -201,8 +204,6 @@
                     <button id="satelliteToggleBtn" onclick="toggleSatelliteView()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition">
                         <i class="fa-solid fa-satellite"></i>
                     </button>
-                    <!-- 드라이브스루 매장만 보기 (매장명의 DT 패턴으로 판별) -->
-                    <button id="dtToggleBtn" onclick="toggleDtOnly()" class="w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition text-[10px] font-black">DT</button>
                     <div class="bg-white rounded-2xl shadow-md border border-gray-100 grid grid-cols-2 overflow-hidden w-[72px]">
                         <button onclick="setRadius(300)" id="rad300" class="radius-btn text-[9px] font-black py-2 border-b border-r border-gray-100 text-gray-500 transition-colors">300m</button>
                         <button onclick="setRadius(500)" id="rad500" class="radius-btn text-[9px] font-black py-2 border-b border-gray-100 text-gray-500 transition-colors">500m</button>
@@ -937,10 +938,10 @@
             mapDtOnly = !mapDtOnly;
             const btn = document.getElementById('dtToggleBtn');
             btn.className = mapDtOnly
-                ? 'w-11 h-11 bg-gray-900 rounded-full shadow-md border border-gray-900 flex items-center justify-center text-white active:scale-95 transition text-[10px] font-black'
-                : 'w-11 h-11 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-600 active:scale-95 transition text-[10px] font-black';
+                ? 'bg-gray-900 px-3 py-1.5 rounded-full shadow-sm text-[11px] font-bold text-white flex items-center gap-1 active:scale-95 transition'
+                : 'bg-white/95 px-3 py-1.5 rounded-full shadow-sm text-[11px] font-bold text-gray-600 flex items-center gap-1 active:scale-95 transition';
             loadStoresInRadius();
-            showToast(mapDtOnly ? '드라이브스루 매장만 표시해요' : '전체 매장을 표시해요');
+            showToast(mapDtOnly ? '드라이브스루(차량 주문) 매장만 표시해요' : '전체 매장을 표시해요');
         }
 
         async function initMapIfNeeded() {
