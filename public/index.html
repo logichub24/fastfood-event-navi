@@ -82,6 +82,14 @@
             border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.35); color: white;
         }
         .store-marker span { transform: rotate(-45deg); }
+        /* 드라이브스루 매장 마커에 붙는 자동차 배지 (회전 영향 안 받게 래퍼 기준 배치) */
+        .marker-wrap { position: relative; width: 30px; height: 30px; }
+        .dt-badge {
+            position: absolute; right: -7px; bottom: -3px; width: 17px; height: 17px;
+            background: #fff; border-radius: 50%; font-size: 9px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4); z-index: 1;
+        }
         .marker-mcdonalds { background: #d97706; }
         .marker-lotteria { background: #ea580c; }
         .marker-momstouch { background: #e11d48; }
@@ -1001,8 +1009,9 @@
 
             filtered.forEach((s) => {
                 const b = BRAND_INFO[s.brand] || { emoji: '🍽️' };
+                const dtBadge = isDriveThrough(s) ? '<span class="dt-badge">🚗</span>' : '';
                 const icon = L.divIcon({
-                    html: `<div class="store-marker ${brandMarkerClass(s.brand)}"><span>${b.emoji}</span></div>`,
+                    html: `<div class="marker-wrap"><div class="store-marker ${brandMarkerClass(s.brand)}"><span>${b.emoji}</span></div>${dtBadge}</div>`,
                     className: '', iconSize: [30, 30], iconAnchor: [15, 28],
                 });
                 const marker = L.marker([s.lat, s.lng], { icon }).addTo(leafletMap);
