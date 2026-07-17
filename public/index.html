@@ -98,22 +98,9 @@
         .band-shimmer { position: absolute; top: 0; left: 0; width: 45%; height: 100%; pointer-events: none;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
             animation: shimmer-sweep 3.8s ease-in-out infinite; }
-        /* 카테고리별 SVG 씬 (자체 제작, 저작권 안전) */
-        .scene-item { position: absolute; top: 0; pointer-events: none; will-change: transform; }
-        @keyframes coin-fall { 0% { transform: translateY(-22px) rotate(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(120px) rotate(240deg); opacity: 0; } }
-        .scene-coin { animation: coin-fall linear infinite; }
-        @keyframes confetti-fall { 0% { transform: translateY(-18px) rotate(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(122px) rotate(400deg); opacity: 0; } }
-        .scene-confetti { animation: confetti-fall linear infinite; }
-        @keyframes ride { 0% { transform: translateX(-46px); } 100% { transform: translateX(320px); } }
-        .scene-ride { bottom: 10px; top: auto; animation: ride linear infinite; }
-        @keyframes twinkle { 0%, 100% { transform: scale(0.5); opacity: 0.15; } 50% { transform: scale(1.15); opacity: 1; } }
-        .scene-star { animation: twinkle ease-in-out infinite; }
-        @keyframes road-dash { to { stroke-dashoffset: -24px; } }
-        .scene-road { position: absolute; left: 0; bottom: 8px; width: 100%; pointer-events: none; }
-        .scene-road line { animation: road-dash 0.6s linear infinite; }
         /* 성능: 화면에 보이는 카드만 애니메이션을 돌린다 (나머지는 일시정지) */
-        .deal-card :is(.band-flow, .band-shimmer, .banner-float, .scene-item, .scene-road line) { animation-play-state: paused; }
-        .deal-card.in-view :is(.band-flow, .band-shimmer, .banner-float, .scene-item, .scene-road line) { animation-play-state: running; }
+        .deal-card :is(.band-flow, .band-shimmer, .banner-float) { animation-play-state: paused; }
+        .deal-card.in-view :is(.band-flow, .band-shimmer, .banner-float) { animation-play-state: running; }
         .marker-wrap { position: relative; width: 30px; height: 30px; }
         .dt-badge {
             position: absolute; right: -7px; bottom: -3px; width: 17px; height: 17px;
@@ -622,55 +609,34 @@
             return badges;
         }
 
-        // 밴드에서 떠오르는 이모지를 이벤트 내용에 맞게 고른다. 제목 키워드 우선, 없으면 카테고리, 최후엔 브랜드 이모지.
-        const FLOAT_KEYWORD_RULES = [
-            [/1\s*\+\s*1|원\s*플러스/, ['🎉', '🥤', '🍟']],
-            [/경품|응모|추첨|증정|받자|당첨/, ['🎁', '✨', '🎊']],
-            [/할인|특가|세일|쿠폰|[0-9,]{3,}원/, ['💰', '🏷️', '🪙']],
-            [/배달|배민|쿠팡이츠|요기요|땡겨요|딜리버리/, ['🛵', '📦', '🏠']],
-            [/신메뉴|신제품|출시|NEW/i, ['🆕', '✨', '😋']],
-            [/커피|아메리카노|라떼|카페|아이스/, ['☕', '🧊', '🥤']],
-            [/치킨|윙|텐더|너겟/, ['🍗', '🍟', '😋']],
-            [/버거|와퍼|불고기/, ['🍔', '🍟', '🥤']],
-            [/세트|콤보|박스|팩/, ['🍔', '🍟', '🥤']],
-            [/아이스크림|콘|선데이|디저트|쉐이크/, ['🍦', '🍨', '✨']],
-        ];
-        function dealFloatEmojis(d, brandEmoji) {
-            for (const [pattern, emojis] of FLOAT_KEYWORD_RULES) {
-                if (pattern.test(d.title)) return emojis;
-            }
-            const c = CATEGORY_BADGE[d.category];
-            if (c) return [c, brandEmoji, '✨'];
-            return [brandEmoji, brandEmoji, brandEmoji];
+        // 브랜드별 시그니처 메뉴 이모지 - 떠오르는 애니메이션을 브랜드마다 차별화한다.
+        const BRAND_FLOAT = {
+            'MCDONALDS':     ['🍟', '🍔', '🥤'],
+            'KFC':           ['🍗', '🍟', '🥤'],
+            'LOTTERIA':      ['🍔', '🍟', '🥤'],
+            'MOMSTOUCH':     ['🍗', '🍔', '🥤'],
+            'FRANKBURGER':   ['🍔', '🌭', '🍟'],
+            'SHAKESHACK':    ['🥤', '🍔', '🍦'],
+            'SUBWAY':        ['🥪', '🥬', '🧀'],
+            'BURGERKING':    ['👑', '🍔', '🔥'],
+            'NOBRANDBURGER': ['🍔', '🍟', '🥤'],
+        };
+
+        // 행사 유형을 나타내는 힌트 이모지 1개(있으면). 브랜드 시그니처 사이에 섞어 딜 성격을 드러낸다.
+        function dealAccentEmoji(d) {
+            if (/1\s*\+\s*1|원\s*플러스/.test(d.title)) return '🎉';
+            if (/경품|응모|추첨|증정|받자|당첨/.test(d.title)) return '🎁';
+            if (/배달|배민|쿠팡이츠|요기요|땡겨요|딜리버리/.test(d.title)) return '🛵';
+            if (d.category === '쿠폰･할인' || /할인|특가|세일|쿠폰|[0-9,]{3,}원/.test(d.title)) return '💰';
+            if (/신메뉴|신제품|출시|NEW/i.test(d.title)) return '🆕';
+            return null;
         }
 
-        // 이벤트 성격별 SVG 모션 씬. 매칭 없으면 null → 기존 플로팅 이모지로 폴백.
-        const COIN_SVG = '<svg width="18" height="18" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/><text x="10" y="14" font-size="10" text-anchor="middle" fill="#b45309" font-weight="bold">₩</text></svg>';
-        const STAR_SVG = '<svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 0l1.9 5.2L15 6l-4 3.4L12.4 15 8 12 3.6 15 5 9.4 1 6l5.1-.8z" fill="#fff"/></svg>';
-        const CONFETTI_COLORS = ['#fff', '#fde68a', '#fca5a5', '#a5f3fc', '#bbf7d0'];
-
-        function dealSceneHtml(d) {
-            // 배달 — 점선 도로 위를 스쿠터가 가로지른다
-            if (/배달|배민|쿠팡이츠|요기요|땡겨요|딜리버리/.test(d.title)) {
-                return `<svg class="scene-road" height="14" viewBox="0 0 300 14" preserveAspectRatio="none"><line x1="0" y1="7" x2="300" y2="7" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-dasharray="8 6"/></svg>
-                    <span class="scene-item scene-ride text-[22px]" style="animation-duration:3s">🛵</span>`;
-            }
-            // 할인/특가 — 동전이 떨어진다
-            if (/할인|특가|세일|쿠폰|[0-9,]{3,}원/.test(d.title) || d.category === '쿠폰･할인') {
-                const xs = [16, 40, 60, 78];
-                return xs.map((x, i) => `<span class="scene-item scene-coin" style="left:${x}%;animation-duration:${2.2 + i * 0.4}s;animation-delay:${i * 0.55}s">${COIN_SVG}</span>`).join('');
-            }
-            // 1+1·경품 — 색종이가 흩날린다
-            if (/1\s*\+\s*1|원\s*플러스|경품|응모|추첨|증정|받자|당첨/.test(d.title)) {
-                const xs = [12, 30, 46, 62, 78, 90];
-                return xs.map((x, i) => `<span class="scene-item scene-confetti" style="left:${x}%;animation-duration:${2 + (i % 3) * 0.5}s;animation-delay:${i * 0.35}s"><span style="display:inline-block;width:7px;height:10px;background:${CONFETTI_COLORS[i % CONFETTI_COLORS.length]};border-radius:1px"></span></span>`).join('');
-            }
-            // 신메뉴 — 별이 반짝인다
-            if (/신메뉴|신제품|출시|NEW/i.test(d.title)) {
-                const pos = [[18, 20], [40, 55], [62, 25], [80, 60], [30, 75]];
-                return pos.map(([x, y], i) => `<span class="scene-item scene-star" style="left:${x}%;top:${y}%;animation-duration:${1.6 + i * 0.3}s;animation-delay:${i * 0.4}s">${STAR_SVG}</span>`).join('');
-            }
-            return null;
+        // 밴드에서 떠오르는 이모지 3개: 브랜드 시그니처를 기본으로, 가운데에 딜 힌트를 섞는다.
+        function dealFloatEmojis(d, brandEmoji) {
+            const sig = BRAND_FLOAT[d.brand] || [brandEmoji, brandEmoji, brandEmoji];
+            const accent = dealAccentEmoji(d);
+            return accent ? [sig[0], accent, sig[2]] : sig;
         }
 
         // 카드 하단에 붙는 사람 친화형 상태 문구. D-day 배지(D-3)를 문장으로 풀어준다.
@@ -694,7 +660,7 @@
                 <div class="band-flow relative w-full h-28 bg-gradient-to-br ${b.grad} overflow-hidden">
                     <span class="band-shimmer"></span>
                     <span class="absolute -right-1 -bottom-5 text-[80px] opacity-20 -rotate-12 select-none pointer-events-none">${b.emoji}</span>
-                    ${dealSceneHtml(d) || (() => { const fe = dealFloatEmojis(d, b.emoji); return `
+                    ${(() => { const fe = dealFloatEmojis(d, b.emoji); return `
                     <span class="banner-float text-[18px]" style="left:18%;bottom:4px;animation-duration:2.8s;animation-delay:0s">${fe[0]}</span>
                     <span class="banner-float text-[14px]" style="left:42%;bottom:6px;animation-duration:3.4s;animation-delay:1.1s">${fe[1]}</span>
                     <span class="banner-float text-[16px]" style="left:65%;bottom:2px;animation-duration:2.5s;animation-delay:0.6s">${fe[2]}</span>`; })()}
@@ -793,10 +759,10 @@
                 <div class="band-flow relative w-full h-32 bg-gradient-to-br ${b.grad || 'from-gray-400 to-gray-600'} overflow-hidden">
                     <span class="band-shimmer"></span>
                     <span class="absolute -right-2 -bottom-8 text-[110px] opacity-25 -rotate-12 select-none pointer-events-none">${b.emoji}</span>
-                    ${dealSceneHtml(d) || `
-                    <span class="banner-float text-[26px]" style="left:20%;bottom:6px;animation-duration:2.8s;animation-delay:0s">${b.emoji}</span>
-                    <span class="banner-float text-[20px]" style="left:48%;bottom:8px;animation-duration:3.4s;animation-delay:1.1s">${b.emoji}</span>
-                    <span class="banner-float text-[22px]" style="left:70%;bottom:4px;animation-duration:2.5s;animation-delay:0.6s">${b.emoji}</span>`}
+                    ${(() => { const fe = dealFloatEmojis(d, b.emoji); return `
+                    <span class="banner-float text-[26px]" style="left:20%;bottom:6px;animation-duration:2.8s;animation-delay:0s">${fe[0]}</span>
+                    <span class="banner-float text-[20px]" style="left:48%;bottom:8px;animation-duration:3.4s;animation-delay:1.1s">${fe[1]}</span>
+                    <span class="banner-float text-[22px]" style="left:70%;bottom:4px;animation-duration:2.5s;animation-delay:0.6s">${fe[2]}</span>`; })()}
                     <span class="absolute bottom-4 left-5 text-white font-black text-2xl drop-shadow-sm">${b.emoji} ${b.text}</span>
                     <button onclick="closeDetailSheet()" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-solid fa-xmark"></i></button>
                 </div>
