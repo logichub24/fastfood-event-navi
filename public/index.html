@@ -220,8 +220,8 @@
                         <button onclick="setRadius(500)" id="rad500" class="radius-btn text-[9px] font-black py-2 border-b border-gray-100 text-gray-500 transition-colors">500m</button>
                         <button onclick="setRadius(1000)" id="rad1000" class="radius-btn text-[9px] font-black py-2 border-b border-r border-gray-100 text-gray-500 transition-colors">1km</button>
                         <button onclick="setRadius(2000)" id="rad2000" class="radius-btn text-[9px] font-black py-2 border-b border-gray-100 text-gray-500 transition-colors">2km</button>
-                        <button onclick="setRadius(2500)" id="rad2500" class="radius-btn text-[9px] font-black py-2 border-r border-gray-100 text-gray-500 transition-colors">2.5km</button>
-                        <button onclick="setRadius(3000)" id="rad3000" class="radius-btn text-[9px] font-black py-2 text-gray-500 transition-colors">3km</button>
+                        <button onclick="setRadius(3000)" id="rad3000" class="radius-btn text-[9px] font-black py-2 border-r border-gray-100 text-gray-500 transition-colors">3km</button>
+                        <button onclick="setRadius(5000)" id="rad5000" class="radius-btn text-[9px] font-black py-2 text-gray-500 transition-colors">5km</button>
                     </div>
                 </div>
             </div>
@@ -420,7 +420,7 @@
         let isUserPanning = false;
         let streetLayer = null, satelliteLayer = null, satelliteLabelLayer = null, isSatelliteView = false;
         const MAP_BRANDS = ['MCDONALDS', 'LOTTERIA', 'MOMSTOUCH', 'BURGERKING', 'NOBRANDBURGER', 'FRANKBURGER', 'SHAKESHACK', 'KFC', 'SUBWAY'];
-        const RADIUS_STEPS = [300, 500, 1000, 2000, 2500, 3000];
+        const RADIUS_STEPS = [300, 500, 1000, 2000, 3000, 5000]; // 그리드 좌→우, 위→아래 순서와 일치
         // 원본 편의점 앱과 동일한 브이월드(국토지리정보원) 위성영상 키 재사용 (도메인 제한 없이 동작 확인함)
         const VWORLD_KEY = '6888EEC4-8F4B-3D0D-87AE-7AE4C071E4CA';
 
