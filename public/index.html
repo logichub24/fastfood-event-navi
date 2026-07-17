@@ -125,9 +125,19 @@
         .deal-headline { transform-origin: left center; }
         .hero-card .deal-headline { animation: deal-pop-in 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.15s both; }
         .detail-pop { animation: deal-pop-in 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.1s both; }
+        /* 브랜드별 대표 모션 요소 1개 (불꽃/빛/흔들림/펑) */
+        .brand-sig { position: absolute; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)); }
+        @keyframes sig-flicker { 0%, 100% { opacity: 0.85; transform: scale(1) rotate(-4deg); } 30% { opacity: 1; transform: scale(1.15) rotate(4deg); } 60% { opacity: 0.7; transform: scale(0.94) rotate(-3deg); } }
+        .sig-flicker { animation: sig-flicker 0.85s ease-in-out infinite; }
+        @keyframes sig-twinkle { 0%, 100% { opacity: 0.35; transform: scale(0.8) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(18deg); } }
+        .sig-twinkle { animation: sig-twinkle 1.8s ease-in-out infinite; }
+        @keyframes sig-sway { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+        .sig-sway { animation: sig-sway 2.2s ease-in-out infinite; transform-origin: bottom center; }
+        @keyframes sig-pop { 0%, 100% { transform: scale(1) rotate(0deg); } 45% { transform: scale(1.22) rotate(-6deg); } }
+        .sig-pop { animation: sig-pop 1.6s ease-in-out infinite; }
         /* 성능: 화면에 보이는 카드만 애니메이션을 돌린다 (나머지는 일시정지) */
-        .deal-card :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line, .deal-pop, .spark) { animation-play-state: paused; }
-        .deal-card.in-view :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line, .deal-pop, .spark) { animation-play-state: running; }
+        .deal-card :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line, .deal-pop, .spark, .brand-sig) { animation-play-state: paused; }
+        .deal-card.in-view :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line, .deal-pop, .spark, .brand-sig) { animation-play-state: running; }
         .marker-wrap { position: relative; width: 30px; height: 30px; }
         .dt-badge {
             position: absolute; right: -7px; bottom: -3px; width: 17px; height: 17px;
@@ -649,6 +659,19 @@
             'NOBRANDBURGER': ['🍔', '🍟', '🥤'],
         };
 
+        // 브랜드마다 기억에 남는 대표 모션 요소 1개 (불꽃/빛/흔들림/펑).
+        const BRAND_MOTION = {
+            'MCDONALDS':     { e: '✨', cls: 'sig-twinkle' },
+            'KFC':           { e: '🔥', cls: 'sig-flicker' },
+            'LOTTERIA':      { e: '✨', cls: 'sig-twinkle' },
+            'MOMSTOUCH':     { e: '💥', cls: 'sig-pop' },
+            'FRANKBURGER':   { e: '🔥', cls: 'sig-flicker' },
+            'SHAKESHACK':    { e: '❄️', cls: 'sig-sway' },
+            'SUBWAY':        { e: '🥬', cls: 'sig-sway' },
+            'BURGERKING':    { e: '🔥', cls: 'sig-flicker' },
+            'NOBRANDBURGER': { e: '✨', cls: 'sig-twinkle' },
+        };
+
         // 배달 행사는 세로 중앙을 가로지르는 스쿠터 씬으로 표현하므로, 배달 매칭은 여기서 제외한다.
         const DELIVERY_RE = /배달|배민|쿠팡이츠|요기요|땡겨요|딜리버리/;
 
@@ -666,7 +689,12 @@
             if (/무료|증정|공짜/.test(t)) return '증정';
             if (/쿠폰/.test(t)) return '쿠폰';
             if (/출시|신메뉴|신제품|NEW/i.test(t)) return 'NEW';
-            return null;
+            // 딜 문구가 없으면 카테고리 기반 문구로 초점을 준다 (혜택 과장 없이 정직하게).
+            const CAT_HL = {
+                '신메뉴': '신메뉴', '세트･콤보': '세트 메뉴', '시간대 특가': '타임 특가',
+                '배달': '배달 행사', '멤버십･앱': '앱 전용', '쿠폰･할인': '할인 행사', '메뉴소식': '메뉴 소식',
+            };
+            return CAT_HL[d.category] || '진행중';
         }
 
         // 행사 유형을 나타내는 힌트 이모지 1개(있으면). 브랜드 시그니처 사이에 섞어 딜 성격을 드러낸다.
@@ -721,6 +749,7 @@
                     <span class="banner-float text-[18px]" style="left:45%;bottom:7px;animation-duration:3.4s;animation-delay:1.1s">${fe[1]}</span>
                     <span class="banner-float text-[20px]" style="left:76%;bottom:2px;animation-duration:2.5s;animation-delay:0.6s">${fe[2]}</span>`; })()}
                     ${DELIVERY_RE.test(d.title) && !hl ? deliverySceneHtml(24) : ''}
+                    ${BRAND_MOTION[d.brand] ? `<span class="brand-sig ${BRAND_MOTION[d.brand].cls} text-[20px]" style="top:26%;right:15%">${BRAND_MOTION[d.brand].e}</span>` : ''}
                     ${isHero ? `
                     <span class="spark text-[14px]" style="top:16%;right:12%;animation-delay:0s">✨</span>
                     <span class="spark text-[11px]" style="top:54%;right:26%;animation-delay:0.5s">✨</span>
@@ -737,8 +766,8 @@
                     <span class="absolute top-2.5 right-2.5 text-[9px] font-bold px-1.5 py-0.5 rounded ${dday.cls} shadow-sm">${dday.text}</span>
                     <button onclick="event.stopPropagation(); toggleLike('${dealKey(d)}')" class="heart-btn ${liked ? 'liked' : ''} absolute bottom-2 right-2 w-7 h-7 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-regular fa-heart text-gray-400 text-xs"></i></button>
                 </div>
-                <div class="px-3.5 pt-3 pb-3">
-                    <p class="text-[15px] font-extrabold text-gray-900 leading-snug line-clamp-2 tracking-tight">${d.title}</p>
+                <div class="px-3.5 pt-3.5 pb-3">
+                    <p class="text-[15px] font-black text-gray-900 leading-normal line-clamp-2 tracking-tight">${d.title}</p>
                     <div class="flex items-center justify-between mt-2.5">
                         <p class="text-[10px] text-gray-400 font-medium"><i class="fa-regular fa-clock mr-1"></i>${period}</p>
                         ${(() => { const s = dealStatusText(d); return s ? `<span class="text-[10px] font-bold ${s.cls}">⏰ ${s.t}</span>` : ''; })()}
