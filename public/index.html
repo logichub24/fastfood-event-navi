@@ -98,9 +98,16 @@
         .band-shimmer { position: absolute; top: 0; left: 0; width: 45%; height: 100%; pointer-events: none;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
             animation: shimmer-sweep 3.8s ease-in-out infinite; }
+        /* 배달 씬: 스쿠터가 세로 중앙에서 오른쪽으로 달린다 (도로 점선도 흐름) */
+        @keyframes ride { 0% { transform: translateX(-46px); } 100% { transform: translateX(320px); } }
+        @keyframes road-dash { to { stroke-dashoffset: -24px; } }
+        .scene-road { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 100%; pointer-events: none; }
+        .scene-road line { animation: road-dash 0.6s linear infinite; }
+        .scene-scooter { position: absolute; left: 0; top: 50%; margin-top: -15px; pointer-events: none; animation: ride linear infinite; }
+        .scene-scooter > span { display: inline-block; transform: scaleX(-1); } /* 🛵가 진행 방향(오른쪽)을 보게 뒤집음 */
         /* 성능: 화면에 보이는 카드만 애니메이션을 돌린다 (나머지는 일시정지) */
-        .deal-card :is(.band-flow, .band-shimmer, .banner-float) { animation-play-state: paused; }
-        .deal-card.in-view :is(.band-flow, .band-shimmer, .banner-float) { animation-play-state: running; }
+        .deal-card :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line) { animation-play-state: paused; }
+        .deal-card.in-view :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line) { animation-play-state: running; }
         .marker-wrap { position: relative; width: 30px; height: 30px; }
         .dt-badge {
             position: absolute; right: -7px; bottom: -3px; width: 17px; height: 17px;
@@ -622,14 +629,22 @@
             'NOBRANDBURGER': ['🍔', '🍟', '🥤'],
         };
 
+        // 배달 행사는 세로 중앙을 가로지르는 스쿠터 씬으로 표현하므로, 배달 매칭은 여기서 제외한다.
+        const DELIVERY_RE = /배달|배민|쿠팡이츠|요기요|땡겨요|딜리버리/;
+
         // 행사 유형을 나타내는 힌트 이모지 1개(있으면). 브랜드 시그니처 사이에 섞어 딜 성격을 드러낸다.
         function dealAccentEmoji(d) {
             if (/1\s*\+\s*1|원\s*플러스/.test(d.title)) return '🎉';
             if (/경품|응모|추첨|증정|받자|당첨/.test(d.title)) return '🎁';
-            if (/배달|배민|쿠팡이츠|요기요|땡겨요|딜리버리/.test(d.title)) return '🛵';
             if (d.category === '쿠폰･할인' || /할인|특가|세일|쿠폰|[0-9,]{3,}원/.test(d.title)) return '💰';
             if (/신메뉴|신제품|출시|NEW/i.test(d.title)) return '🆕';
             return null;
+        }
+
+        // 배달 행사용 스쿠터 씬. size는 스쿠터 이모지 크기(px).
+        function deliverySceneHtml(size) {
+            return `<svg class="scene-road" height="14" viewBox="0 0 300 14" preserveAspectRatio="none"><line x1="0" y1="7" x2="300" y2="7" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-dasharray="8 6"/></svg>
+                    <span class="scene-scooter" style="animation-duration:3s"><span style="font-size:${size}px">🛵</span></span>`;
         }
 
         // 밴드에서 떠오르는 이모지 3개: 브랜드 시그니처를 기본으로, 가운데에 딜 힌트를 섞는다.
@@ -664,6 +679,7 @@
                     <span class="banner-float text-[18px]" style="left:18%;bottom:4px;animation-duration:2.8s;animation-delay:0s">${fe[0]}</span>
                     <span class="banner-float text-[14px]" style="left:42%;bottom:6px;animation-duration:3.4s;animation-delay:1.1s">${fe[1]}</span>
                     <span class="banner-float text-[16px]" style="left:65%;bottom:2px;animation-duration:2.5s;animation-delay:0.6s">${fe[2]}</span>`; })()}
+                    ${DELIVERY_RE.test(d.title) ? deliverySceneHtml(24) : ''}
                     <div class="absolute top-2.5 left-3 flex items-center gap-1.5">
                         <span class="text-white font-black text-[15px] drop-shadow-sm">${b.emoji} ${b.text}</span>
                         ${d.isNew ? '<span class="bg-white text-blue-600 text-[9px] font-black px-1.5 py-0.5 rounded">NEW</span>' : ''}
@@ -763,6 +779,7 @@
                     <span class="banner-float text-[26px]" style="left:20%;bottom:6px;animation-duration:2.8s;animation-delay:0s">${fe[0]}</span>
                     <span class="banner-float text-[20px]" style="left:48%;bottom:8px;animation-duration:3.4s;animation-delay:1.1s">${fe[1]}</span>
                     <span class="banner-float text-[22px]" style="left:70%;bottom:4px;animation-duration:2.5s;animation-delay:0.6s">${fe[2]}</span>`; })()}
+                    ${DELIVERY_RE.test(d.title) ? deliverySceneHtml(32) : ''}
                     <span class="absolute bottom-4 left-5 text-white font-black text-2xl drop-shadow-sm">${b.emoji} ${b.text}</span>
                     <button onclick="closeDetailSheet()" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-solid fa-xmark"></i></button>
                 </div>
