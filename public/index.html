@@ -84,11 +84,20 @@
         .store-marker span { transform: rotate(-45deg); }
         /* 드라이브스루 매장 마커에 붙는 자동차 배지 (회전 영향 안 받게 래퍼 기준 배치) */
         @keyframes float-up {
-            0%   { transform: translateY(0) scale(1) rotate(0deg);   opacity: 0.7; }
-            80%  { opacity: 0.3; }
-            100% { transform: translateY(-52px) scale(0.6) rotate(20deg); opacity: 0; }
+            0%   { transform: translateY(0) translateX(0) scale(1) rotate(0deg);   opacity: 0.7; }
+            30%  { transform: translateY(-16px) translateX(6px) scale(0.92) rotate(6deg); }
+            60%  { transform: translateY(-32px) translateX(-6px) scale(0.8) rotate(-6deg); opacity: 0.4; }
+            100% { transform: translateY(-52px) translateX(2px) scale(0.6) rotate(12deg); opacity: 0; }
         }
-        .banner-float { position: absolute; pointer-events: none; select: none; animation: float-up linear infinite; }
+        .banner-float { position: absolute; pointer-events: none; user-select: none; animation: float-up linear infinite; }
+        /* 밴드 그라데이션이 은은하게 흐른다 */
+        @keyframes grad-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .band-flow { background-size: 200% 200%; animation: grad-flow 6s ease-in-out infinite; }
+        /* 빛이 대각선으로 한 번씩 쓸고 지나간다 */
+        @keyframes shimmer-sweep { 0% { transform: translateX(-160%) skewX(-20deg); } 100% { transform: translateX(260%) skewX(-20deg); } }
+        .band-shimmer { position: absolute; top: 0; left: 0; width: 45%; height: 100%; pointer-events: none;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+            animation: shimmer-sweep 3.8s ease-in-out infinite; }
         .marker-wrap { position: relative; width: 30px; height: 30px; }
         .dt-badge {
             position: absolute; right: -7px; bottom: -3px; width: 17px; height: 17px;
@@ -637,7 +646,8 @@
             const period = d.startDate && d.endDate ? `${d.startDate.slice(5).replace('-', '.')} ~ ${d.endDate.slice(5).replace('-', '.')}` : '상시 진행';
             return `
             <div class="deal-card bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden cursor-pointer" onclick="openDetail('${dealKey(d)}')">
-                <div class="relative w-full h-28 bg-gradient-to-br ${b.grad} overflow-hidden">
+                <div class="band-flow relative w-full h-28 bg-gradient-to-br ${b.grad} overflow-hidden">
+                    <span class="band-shimmer"></span>
                     <span class="absolute -right-1 -bottom-5 text-[80px] opacity-20 -rotate-12 select-none pointer-events-none">${b.emoji}</span>
                     ${(() => { const fe = dealFloatEmojis(d, b.emoji); return `
                     <span class="banner-float text-[18px]" style="left:18%;bottom:4px;animation-duration:2.8s;animation-delay:0s">${fe[0]}</span>
