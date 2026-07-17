@@ -597,6 +597,28 @@
             return badges;
         }
 
+        // 밴드에서 떠오르는 이모지를 이벤트 내용에 맞게 고른다. 제목 키워드 우선, 없으면 카테고리, 최후엔 브랜드 이모지.
+        const FLOAT_KEYWORD_RULES = [
+            [/1\s*\+\s*1|원\s*플러스/, ['🎉', '🥤', '🍟']],
+            [/경품|응모|추첨|증정|받자|당첨/, ['🎁', '✨', '🎊']],
+            [/할인|특가|세일|쿠폰|[0-9,]{3,}원/, ['💰', '🏷️', '🪙']],
+            [/배달|배민|쿠팡이츠|요기요|땡겨요|딜리버리/, ['🛵', '📦', '🏠']],
+            [/신메뉴|신제품|출시|NEW/i, ['🆕', '✨', '😋']],
+            [/커피|아메리카노|라떼|카페|아이스/, ['☕', '🧊', '🥤']],
+            [/치킨|윙|텐더|너겟/, ['🍗', '🍟', '😋']],
+            [/버거|와퍼|불고기/, ['🍔', '🍟', '🥤']],
+            [/세트|콤보|박스|팩/, ['🍔', '🍟', '🥤']],
+            [/아이스크림|콘|선데이|디저트|쉐이크/, ['🍦', '🍨', '✨']],
+        ];
+        function dealFloatEmojis(d, brandEmoji) {
+            for (const [pattern, emojis] of FLOAT_KEYWORD_RULES) {
+                if (pattern.test(d.title)) return emojis;
+            }
+            const c = CATEGORY_BADGE[d.category];
+            if (c) return [c, brandEmoji, '✨'];
+            return [brandEmoji, brandEmoji, brandEmoji];
+        }
+
         // 카드 하단에 붙는 사람 친화형 상태 문구. D-day 배지(D-3)를 문장으로 풀어준다.
         function dealStatusText(d) {
             if (d.daysLeft === null || d.daysLeft === undefined || d.daysLeft > 180) return null; // 상시는 배지로 충분
@@ -617,9 +639,10 @@
             <div class="deal-card bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden cursor-pointer" onclick="openDetail('${dealKey(d)}')">
                 <div class="relative w-full h-28 bg-gradient-to-br ${b.grad} overflow-hidden">
                     <span class="absolute -right-1 -bottom-5 text-[80px] opacity-20 -rotate-12 select-none pointer-events-none">${b.emoji}</span>
-                    <span class="banner-float text-[18px]" style="left:18%;bottom:4px;animation-duration:2.8s;animation-delay:0s">${b.emoji}</span>
-                    <span class="banner-float text-[14px]" style="left:42%;bottom:6px;animation-duration:3.4s;animation-delay:1.1s">${b.emoji}</span>
-                    <span class="banner-float text-[16px]" style="left:65%;bottom:2px;animation-duration:2.5s;animation-delay:0.6s">${b.emoji}</span>
+                    ${(() => { const fe = dealFloatEmojis(d, b.emoji); return `
+                    <span class="banner-float text-[18px]" style="left:18%;bottom:4px;animation-duration:2.8s;animation-delay:0s">${fe[0]}</span>
+                    <span class="banner-float text-[14px]" style="left:42%;bottom:6px;animation-duration:3.4s;animation-delay:1.1s">${fe[1]}</span>
+                    <span class="banner-float text-[16px]" style="left:65%;bottom:2px;animation-duration:2.5s;animation-delay:0.6s">${fe[2]}</span>`; })()}
                     <div class="absolute top-2.5 left-3 flex items-center gap-1.5">
                         <span class="text-white font-black text-[15px] drop-shadow-sm">${b.emoji} ${b.text}</span>
                         ${d.isNew ? '<span class="bg-white text-blue-600 text-[9px] font-black px-1.5 py-0.5 rounded">NEW</span>' : ''}
