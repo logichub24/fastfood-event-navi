@@ -72,17 +72,17 @@
                     </button>
                 </div>
 
-                <!-- 브랜드 필터 -->
+                <!-- 브랜드 필터 2줄. 유입의 90%가 브랜드 의도 검색이라, 예전 카테고리 칩 줄을
+                     브랜드 2번째 줄로 바꿔 같은 높이에서 브랜드 노출을 3개→6개로 늘렸다.
+                     칩이 shrink-0이라 라벨이 길어지면 옆 버튼을 덮으므로 두 줄 모두 가로 스크롤을 준다.
+                     카테고리는 칩 대신 버튼 하나로 유지하고, 선택 중인 값은 버튼 라벨에 표시한다. -->
                 <div class="flex items-center gap-1.5 pl-3 pr-2">
-                    <!-- 칩이 shrink-0이라 라벨이 길어지면(건수 표시) 넘쳐서 옆 버튼을 덮는다.
-                         1행과 같은 방식으로 가로 스크롤을 준다. -->
                     <div class="flex gap-1.5 pb-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer"></div>
                     <button onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>브랜드</button>
                 </div>
-                <!-- 카테고리 필터 -->
                 <div class="flex items-center gap-1.5 pl-3 pr-2">
-                    <div class="flex gap-1.5 pb-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="categoryContainer"></div>
-                    <button onclick="openCategoryModal()" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>카테고리</button>
+                    <div class="flex gap-1.5 pb-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer2"></div>
+                    <button id="categoryBtn" onclick="openCategoryModal()" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i><span id="categoryBtnText">카테고리</span></button>
                 </div>
             </div>
 

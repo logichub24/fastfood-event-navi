@@ -253,34 +253,33 @@
             // 행사가 많은 브랜드를 앞에 두면 데이터가 매일 바뀌어도 자동으로 맞는다.
             const counts = {};
             ALL_DEALS.forEach((d) => { counts[d.brand] = (counts[d.brand] || 0) + 1; });
-            let inline = EVENT_BRANDS.filter((b) => counts[b]).sort((a, b) => counts[b] - counts[a]).slice(0, 3);
-            if (inline.length === 0) inline = EVENT_BRANDS.slice(0, 3); // 로드 실패 등으로 건수를 모를 때
+            let inline = EVENT_BRANDS.filter((b) => counts[b]).sort((a, b) => counts[b] - counts[a]).slice(0, 6);
+            if (inline.length === 0) inline = EVENT_BRANDS.slice(0, 6); // 로드 실패 등으로 건수를 모를 때
             // 모달에서 인라인 밖의 브랜드를 선택하면 마지막 칩을 교체해 선택 상태가 보이게 한다.
             if (activeBrand !== 'ALL' && !inline.includes(activeBrand)) {
-                inline = [...inline.slice(0, 2), activeBrand];
+                inline = [...inline.slice(0, inline.length - 1), activeBrand];
             }
-            container.innerHTML = inline.map((b) => {
+            const chipHtml = (b) => {
                 const active = activeBrand === b ? 'active' : 'bg-white border-gray-200 text-gray-600';
                 // 건수를 함께 보여주면 어디에 볼 게 많은지 스캔 없이 바로 판단된다.
                 const n = counts[b] || 0;
                 const label = `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}${n ? ` <span class="opacity-60">${n}</span>` : ''}`;
                 return `<button onclick="setBrand('${b}')" class="brand-btn ${active} px-2.5 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${label}</button>`;
-            }).join('');
+            };
+            // 두 줄에 3개씩. 각 줄이 '브랜드'/'카테고리' 버튼과 폭을 나눠 쓰므로 3개가 상한이다.
+            container.innerHTML = inline.slice(0, 3).map(chipHtml).join('');
+            document.getElementById('brandContainer2').innerHTML = inline.slice(3, 6).map(chipHtml).join('');
         }
 
+        // 카테고리는 칩 줄을 브랜드 2번째 줄에 내주고 버튼 하나로 줄었다.
+        // 대신 선택 중인 카테고리를 버튼 라벨과 색으로 드러내야 지금 무엇으로 걸러져 있는지 알 수 있다.
         function renderCategories() {
-            const container = document.getElementById('categoryContainer');
-            // 인라인에는 대표 3개만 노출하고 나머지는 '카테고리' 모달에서 고른다.
-            // 모달에서 대표 3개 밖을 선택하면 마지막 칩을 교체해 선택 상태가 보이게 한다.
-            const cats = CATEGORIES.filter((cat) => cat !== 'ALL');
-            let inline = cats.slice(0, 4);
-            if (activeCategory !== 'ALL' && !inline.includes(activeCategory)) {
-                inline = [...inline.slice(0, 3), activeCategory];
-            }
-            container.innerHTML = inline.map((cat) => {
-                const active = activeCategory === cat ? 'active' : 'bg-white border-gray-200 text-gray-500';
-                return `<button onclick="setCategory('${cat}')" class="category-btn ${active} px-2 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${cat}</button>`;
-            }).join('');
+            const btn = document.getElementById('categoryBtn');
+            const text = document.getElementById('categoryBtnText');
+            const on = activeCategory !== 'ALL';
+            text.textContent = on ? activeCategory : '카테고리';
+            btn.className = `shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border text-[12px] font-bold ${on ? 'bg-orange-500 border-orange-500 text-white' : 'border-gray-200 bg-gray-50 text-gray-600'}`;
+            btn.setAttribute('aria-label', on ? `카테고리 필터: ${activeCategory}. 눌러서 변경` : '카테고리 선택');
         }
 
         // '전체' 칩을 없앤 대신, 활성 칩을 다시 누르면 전체(ALL)로 돌아가는 토글로 동작한다.
@@ -471,15 +470,50 @@
 
         // 뷰포트에 들어온 카드만 .in-view를 붙여 애니메이션을 돌린다 (오프스크린 카드는 일시정지).
         let cardObserver = null;
+        // 스크롤 깊이 계측. 체류 34초가 "못 찾고 이탈"인지 "빠르게 훑고 찾음"인지 지금은 구분할 수 없다.
+        // 몇 번째 카드까지 봤는지를 구간으로 남기면 카드 크기·첫 화면·재방문 중 무엇이 병목인지 갈린다.
+        // 값을 파라미터로만 보내면 콘솔이 파라미터 분포를 못 보여줄 때 무용지물이라 이벤트 이름에 구간을 넣는다.
+        // 구간에 처음 도달할 때 한 번씩만 보내므로 세션당 최대 4건이고, 종료 시점 이벤트에 의존하지 않는다.
+        let maxCardSeen = 0;
+        const sentDepthBuckets = new Set();
+
+        // 스크롤 없이도 카드 3장이 보이므로, 4장째부터가 "실제로 스크롤했다"는 신호다.
+        function depthBucket(n) {
+            if (n <= 3) return '1_3';   // 첫 화면에서 멈춤
+            if (n <= 8) return '4_8';
+            if (n <= 20) return '9_20';
+            return '21up';              // 끝까지 탐색
+        }
+
+        function noteCardSeen(index) {
+            if (index <= maxCardSeen) return;
+            maxCardSeen = index;
+            const bucket = depthBucket(index);
+            if (sentDepthBuckets.has(bucket)) return;
+            sentDepthBuckets.add(bucket);
+            window.tossLog?.('impression', { log_name: `scroll_depth_${bucket}`, max_card: index });
+        }
+
         function observeCards() {
             if (!cardObserver) {
                 cardObserver = new IntersectionObserver((entries) => {
-                    for (const e of entries) e.target.classList.toggle('in-view', e.isIntersecting);
+                    // 애니메이션용 rootMargin(120px)은 화면 밖 카드까지 잡으므로 계측에 그대로 쓰면
+                    // 스크롤을 안 해도 깊이가 부풀려진다. 실제 목록 영역 하단을 기준으로 한 번 더 거른다.
+                    const foldBottom = document.getElementById('dealListArea').getBoundingClientRect().bottom;
+                    for (const e of entries) {
+                        e.target.classList.toggle('in-view', e.isIntersecting);
+                        if (e.isIntersecting && e.boundingClientRect.top < foldBottom) {
+                            noteCardSeen(Number(e.target.dataset.i) + 1);
+                        }
+                    }
                 }, { rootMargin: '120px 0px' });
             } else {
                 cardObserver.disconnect();
             }
-            document.querySelectorAll('#dealList .deal-card').forEach((c) => cardObserver.observe(c));
+            document.querySelectorAll('#dealList .deal-card').forEach((c, i) => {
+                c.dataset.i = i;
+                cardObserver.observe(c);
+            });
         }
 
         function toggleLike(key) {
