@@ -4,3 +4,5 @@ dist/
 *.ait
 .granite/
 .claude/
+# Added by code-review-graph
+.code-review-graph/
