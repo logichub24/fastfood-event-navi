@@ -5,37 +5,35 @@
 ## 1. KFC 매장 위치 "미지원" 표기 정정
 실제로는 카카오 로컬 API로 186건 수집 중. 코드가 아니라 주석·문서만 낡음.
 
-- [ ] `scripts/storeLocations.js` 헤더 주석에서 KFC 미지원 서술 수정
-- [ ] `.github/workflows/crawl.yml` 스텝 이름에서 "KFC는 아직 미지원" 제거
-- [ ] `public/index.html` EVENT_BRANDS 주석 수정 (버거킹/노브랜드버거 크롤러는 실재함)
+- [x] `scripts/storeLocations.js` 헤더 주석에서 KFC 미지원 서술 수정
+- [x] `.github/workflows/crawl.yml` 스텝 이름에서 "KFC는 아직 미지원" 제거
+- [x] `public/index.html` EVENT_BRANDS 주석 수정 (버거킹/노브랜드버거 크롤러는 실재함)
 
 ## 2. 광고 트리거 튜닝 (수익화 ↔ 경험 균형)
-현재 전역 상한이 없어 길찾기를 연달아 누르면 전면광고가 매번 뜰 수 있음.
-
-- [ ] 앱 시작 후 유예 시간(첫 진입 직후 노출 차단)
-- [ ] 전역 쿨다운(직전 노출 이후 최소 간격)
-- [ ] 세션당 노출 상한
-- [ ] navigation 빈도 재조정
-- [ ] 일반 브라우저에서 조용히 no-op 유지 확인
+- [x] 앱 시작 후 유예 45초
+- [x] 전역 쿨다운 90초
+- [x] 세션당 노출 상한 5회
+- [x] navigation 빈도 매번 → 2회당 1회
+- [x] 일반 브라우저에서 조용히 no-op 유지 확인 (콘솔 에러 0)
 
 ## 3. 재방문 동기 — "지난 방문 이후 새 행사"
-`isNew`는 크롤 시점(전날 대비) 기준이라 3일 만에 온 사용자는 그동안의 신규를 놓침.
+- [x] 마지막 방문 시점의 행사 키 집합을 localStorage에 저장
+- [x] 저장본과 비교해 개인화 신규 산출
+- [x] 배너 추가 + 탭하면 해당 행사만 필터
+- [x] 첫 방문자는 배너 미노출
+- [x] 저장 실패·로드 실패에도 앱이 깨지지 않도록 방어
 
-- [ ] 마지막 방문 시점의 행사 키 집합을 localStorage에 저장
-- [ ] 저장본과 비교해 개인화 신규 산출
-- [ ] 배너 추가 + 탭하면 해당 행사만 필터
-- [ ] 첫 방문자는 배너 미노출(전부 신규로 보이는 문제 방지)
-- [ ] 저장 실패(용량 초과/프라이빗 모드)에도 앱이 깨지지 않도록 방어
-
-## 4. index.html 분리 (1547줄)
-- [ ] `<style>` → `public/app.css`
-- [ ] 인라인 `<script>` → `public/app.js`
-- [ ] `scripts/build-toss.js` 복사 목록 갱신
-- [ ] `public/sw.js` PRECACHE 목록 갱신
-- [ ] onclick 인라인 핸들러가 전역 함수를 계속 찾도록 유지(모듈 아님)
+## 4. index.html 분리 (1547줄 → 299줄)
+- [x] `<style>` → `public/app.css` (144줄)
+- [x] 인라인 `<script>` → `public/app.js` (1168줄)
+- [x] `scripts/build-toss.js` 복사 목록 갱신
+- [x] `public/sw.js` PRECACHE 갱신 + 캐시 버전 v1→v2
+- [x] onclick 인라인 핸들러 유지 위해 `type="module"` 미사용
 
 ## 검증
-- [ ] 프리뷰에서 행사 탭·지도 탭·상세·검색·찜 동작 확인
-- [ ] 콘솔 에러 0
-- [ ] `node scripts/build-toss.js` 성공 + dist 산출물 확인
-- [ ] 항목별 커밋 분리
+- [x] 행사 목록 74건 렌더 / 상세 시트 / 검색 39건 / 찜 토글
+- [x] 지도 타일·마커 (매장 5,243건, 반경 내 마커 7개) — rAF 우회 직접 호출로 확인
+- [x] 콘솔 에러 0
+- [x] `node scripts/build-toss.js` 성공, dist에 app.css·app.js 포함 확인
+- [x] 항목별 커밋 분리
+- [ ] 실기기(토스 인앱)에서 광고 가드 실제 동작 확인 — 프리뷰에서는 SDK가 no-op이라 미검증
