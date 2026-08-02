@@ -1,30 +1,17 @@
 [
   {
-    "brand": "SHAKESHACK",
-    "id": "260603",
-    "title": "쉐이크쉑 수지점 GRAND OPENING!",
-    "image": "http://www.shakeshack.kr/resources/images/news/blog_list_260603.jpg",
-    "link": "http://www.shakeshack.kr/sub/blog/newsnevent_260603.jsp",
-    "startDate": "2026-06-03",
-    "endDate": "2026-08-01",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 0,
-    "isNew": false
-  },
-  {
     "brand": "BURGERKING",
-    "id": "1516",
-    "title": "26년 7월 와주 2900원 프로모션",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/14/edb50b51-d969-4b7b-a273-c1bb74367283.jpg",
+    "id": "1554",
+    "title": "26년 8월 딜리버리 메뉴 할인",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/23/faf1e9da-b6aa-4e64-9597-a7f9b4c8eb80.png",
     "link": "https://www.burgerking.co.kr/event/ongoing",
-    "startDate": "2026-07-20",
-    "endDate": "2026-08-02",
+    "startDate": "2026-08-03",
+    "endDate": "2026-08-09",
     "isOngoingText": "진행중",
-    "category": "메뉴소식",
+    "category": "배달",
     "ongoing": true,
-    "daysLeft": 1,
-    "isNew": false
+    "daysLeft": 7,
+    "isNew": true
   },
   {
     "brand": "NOBRANDBURGER",
@@ -37,8 +24,22 @@
     "isOngoingText": "진행중",
     "category": "세트･콤보",
     "ongoing": true,
-    "daysLeft": 9,
+    "daysLeft": 8,
     "isNew": false
+  },
+  {
+    "brand": "BURGERKING",
+    "id": "1574",
+    "title": "26년 8월 3일(월) ~ 26년 8월 11일(화) 2FOR6000+2FOR7000 프로모션",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/27/c62e5ed9-c57c-4d84-9f7a-dbd55278ca24.jpg",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-08-03",
+    "endDate": "2026-08-11",
+    "isOngoingText": "진행중",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 9,
+    "isNew": true
   },
   {
     "brand": "MCDONALDS",
@@ -50,7 +51,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 11,
+    "daysLeft": 10,
     "isNew": false
   },
   {
@@ -63,7 +64,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 11,
+    "daysLeft": 10,
     "isNew": false
   },
   {
@@ -76,7 +77,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 11,
+    "daysLeft": 10,
     "isNew": false
   },
   {
@@ -90,7 +91,7 @@
     "isOngoingText": "진행종료",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 16,
+    "daysLeft": 15,
     "isNew": false
   },
   {
@@ -103,8 +104,22 @@
     "endDate": "2026-08-22",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 21,
+    "daysLeft": 20,
     "isNew": false
+  },
+  {
+    "brand": "BURGERKING",
+    "id": "1575",
+    "title": "26년 8월 킹퓨전 2900원 프로모션",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/31/c2e95338-5425-4d77-bd85-85dc79eac144.png",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-08-03",
+    "endDate": "2026-08-23",
+    "isOngoingText": "진행중",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 21,
+    "isNew": true
   },
   {
     "brand": "BURGERKING",
@@ -117,7 +132,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 25,
+    "daysLeft": 24,
     "isNew": false
   },
   {
@@ -131,7 +146,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 29,
+    "daysLeft": 28,
     "isNew": false
   },
   {
@@ -144,7 +159,7 @@
     "endDate": "2026-08-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -157,7 +172,7 @@
     "endDate": "2026-08-31",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -170,7 +185,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -183,7 +198,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -196,7 +211,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -210,7 +225,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -224,7 +239,7 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -238,7 +253,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -252,7 +267,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -266,7 +281,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -280,7 +295,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 30,
+    "daysLeft": 29,
     "isNew": false
   },
   {
@@ -294,7 +309,7 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 43,
+    "daysLeft": 42,
     "isNew": false
   },
   {
@@ -308,7 +323,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 46,
+    "daysLeft": 45,
     "isNew": false
   },
   {
@@ -322,7 +337,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 46,
+    "daysLeft": 45,
     "isNew": false
   },
   {
@@ -336,7 +351,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 60,
+    "daysLeft": 59,
     "isNew": false
   },
   {
@@ -350,7 +365,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 60,
+    "daysLeft": 59,
     "isNew": false
   },
   {
@@ -364,7 +379,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 60,
+    "daysLeft": 59,
     "isNew": false
   },
   {
@@ -378,7 +393,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 60,
+    "daysLeft": 59,
     "isNew": false
   },
   {
@@ -392,7 +407,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 80,
+    "daysLeft": 79,
     "isNew": false
   },
   {
@@ -406,7 +421,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 91,
+    "daysLeft": 90,
     "isNew": false
   },
   {
@@ -420,7 +435,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 91,
+    "daysLeft": 90,
     "isNew": false
   },
   {
@@ -434,7 +449,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 91,
+    "daysLeft": 90,
     "isNew": false
   },
   {
@@ -448,7 +463,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 116,
+    "daysLeft": 115,
     "isNew": false
   },
   {
@@ -462,7 +477,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 136,
+    "daysLeft": 135,
     "isNew": false
   },
   {
@@ -475,7 +490,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 152,
+    "daysLeft": 151,
     "isNew": false
   },
   {
@@ -488,7 +503,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 152,
+    "daysLeft": 151,
     "isNew": false
   },
   {
@@ -501,7 +516,7 @@
     "endDate": "2026-12-31",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 152,
+    "daysLeft": 151,
     "isNew": false
   },
   {
@@ -515,7 +530,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 152,
+    "daysLeft": 151,
     "isNew": false
   },
   {
@@ -529,7 +544,7 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 183,
+    "daysLeft": 182,
     "isNew": false
   },
   {
@@ -543,7 +558,7 @@
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 517,
+    "daysLeft": 516,
     "isNew": false
   },
   {
@@ -557,7 +572,7 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 8826,
+    "daysLeft": 8825,
     "isNew": false
   },
   {
@@ -571,7 +586,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26815,
+    "daysLeft": 26814,
     "isNew": false
   },
   {
@@ -585,7 +600,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26815,
+    "daysLeft": 26814,
     "isNew": false
   },
   {
@@ -599,7 +614,7 @@
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 26815,
+    "daysLeft": 26814,
     "isNew": false
   },
   {
@@ -612,7 +627,7 @@
     "endDate": "9999-04-01",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2911956,
+    "daysLeft": 2911955,
     "isNew": false
   },
   {
@@ -625,7 +640,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -638,7 +653,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -651,7 +666,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -664,7 +679,7 @@
     "endDate": "9999-12-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -677,7 +692,7 @@
     "endDate": "9999-12-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -691,7 +706,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -705,7 +720,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -719,7 +734,7 @@
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -733,7 +748,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -747,7 +762,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -761,7 +776,7 @@
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -775,7 +790,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
@@ -789,7 +804,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912230,
+    "daysLeft": 2912229,
     "isNew": false
   },
   {
