@@ -1,7 +1,10 @@
-const CACHE = 'fastfood-v1';
+// index.html에서 분리한 app.css/app.js가 추가되어 캐시 버전을 올림 (구버전 캐시는 activate에서 삭제)
+const CACHE = 'fastfood-v2';
 const PRECACHE = [
   './',
   './index.html',
+  './app.css',
+  './app.js',
   './ads.js',
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',

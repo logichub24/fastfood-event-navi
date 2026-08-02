@@ -1,0 +1,145 @@
+/* 앱 전역 스타일 - 모바일 컨테이너, 카드/배지 모션, 지도·시트 레이아웃 */
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #e5e7eb; display: flex; justify-content: center; align-items: center; }
+
+        #app-container {
+            width: 100%; height: 100%; margin: 0 auto;
+            background-color: #f9fafb; position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        /* PC 환경 모바일 뷰어 시뮬레이션 */
+        @media (min-width: 431px) {
+            #app-container {
+                width: 390px; height: 844px; max-height: 92vh; border-radius: 40px;
+                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            }
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .category-btn.active, .brand-btn.active { background-color: #111827; color: white; border-color: #111827; }
+        /* 토스 앱 안에서는 토스 자체 헤더와 중복되는 타이틀 캡슐을 숨겨서 위쪽 공간을 확보 */
+        body.in-toss-app #titlePill { display: none; }
+
+        .bottom-sheet {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 80vh;
+            background: white; border-top-left-radius: 24px; border-top-right-radius: 24px;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.15);
+            transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5000; display: flex; flex-direction: column;
+            visibility: hidden; pointer-events: none;
+        }
+        .bottom-sheet.active { transform: translateY(0); visibility: visible; pointer-events: auto; }
+        .sheet-bg {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px);
+            opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 4999;
+        }
+        .sheet-bg.active { opacity: 1; pointer-events: auto; }
+
+        /* 온보딩/설정처럼 화면 중앙에 뜨는 다이얼로그 (하단에서 올라오는 bottom-sheet와 구분) */
+        .modal-bg {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 5999; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+            display: flex; align-items: center; justify-content: center; padding: 24px;
+        }
+        .modal-bg.active { opacity: 1; pointer-events: auto; }
+        .modal-card {
+            background: white; border-radius: 24px; width: 100%; max-width: 300px;
+            max-height: 85%; overflow-y: auto;
+            transform: scale(0.95); opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .modal-bg.active .modal-card { transform: scale(1); opacity: 1; }
+
+        .deal-card { transition: transform 0.15s ease; }
+        .deal-card:active { transform: scale(0.98); }
+        .heart-btn.liked i { color: #ef4444; font-weight: 900; }
+        .skeleton { background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%); background-size: 400% 100%; animation: skeleton-loading 1.4s ease infinite; }
+        @keyframes skeleton-loading { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+        .nav-tab-btn.active { color: #ea580c; }
+        .nav-tab-btn.active .nav-tab-icon { transform: translateY(-1px); }
+
+        #map { width: 100%; height: 100%; z-index: 10; background: #e5e7eb; }
+        .store-marker {
+            display: flex; align-items: center; justify-content: center; font-size: 15px;
+            width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(45deg);
+            border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.35); color: white;
+        }
+        .store-marker span { transform: rotate(-45deg); }
+        /* 드라이브스루 매장 마커에 붙는 자동차 배지 (회전 영향 안 받게 래퍼 기준 배치) */
+        @keyframes float-up {
+            0%   { transform: translateY(0) translateX(0) scale(1) rotate(0deg);   opacity: 0.7; }
+            30%  { transform: translateY(-16px) translateX(6px) scale(0.92) rotate(6deg); }
+            60%  { transform: translateY(-32px) translateX(-6px) scale(0.8) rotate(-6deg); opacity: 0.4; }
+            100% { transform: translateY(-52px) translateX(2px) scale(0.6) rotate(12deg); opacity: 0; }
+        }
+        .banner-float { position: absolute; pointer-events: none; user-select: none; animation: float-up linear infinite; }
+        /* 밴드 그라데이션이 은은하게 흐른다 */
+        @keyframes grad-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .band-flow { background-size: 200% 200%; animation: grad-flow 6s ease-in-out infinite; }
+        /* 빛이 대각선으로 한 번씩 쓸고 지나간다 */
+        @keyframes shimmer-sweep { 0% { transform: translateX(-160%) skewX(-20deg); } 100% { transform: translateX(260%) skewX(-20deg); } }
+        .band-shimmer { position: absolute; top: 0; left: 0; width: 45%; height: 100%; pointer-events: none;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+            animation: shimmer-sweep 3.8s ease-in-out infinite; }
+        /* 배달 씬: 스쿠터가 세로 중앙에서 오른쪽으로 달린다 (도로 점선도 흐름) */
+        @keyframes ride { 0% { transform: translateX(-46px); } 100% { transform: translateX(320px); } }
+        @keyframes road-dash { to { stroke-dashoffset: -24px; } }
+        .scene-road { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 100%; pointer-events: none; }
+        .scene-road line { animation: road-dash 0.6s linear infinite; }
+        .scene-scooter { position: absolute; left: 0; top: 50%; margin-top: -15px; pointer-events: none; animation: ride linear infinite; }
+        .scene-scooter > span { display: inline-block; transform: scaleX(-1); } /* 🛵가 진행 방향(오른쪽)을 보게 뒤집음 */
+        /* 행사 강조: 딜 배지(할인/NEW/1+1)가 맥동하며 시선을 끈다 */
+        @keyframes deal-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .deal-pop { transform-origin: center; animation: deal-pulse 1.6s ease-in-out infinite; }
+        /* 반짝임 */
+        @keyframes spark-tw { 0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); } 45% { opacity: 1; transform: scale(1.15) rotate(15deg); } }
+        .spark { position: absolute; pointer-events: none; animation: spark-tw 1.5s ease-in-out infinite; }
+        /* 히어로(상단) 카드: 등장 모션 + 딜 배지 탄성 등장 */
+        @keyframes hero-in { 0% { opacity: 0; transform: translateY(10px) scale(0.985); } 60% { transform: translateY(0) scale(1.008); } 100% { opacity: 1; transform: none; } }
+        .hero-card { animation: hero-in 0.7s cubic-bezier(0.22,1,0.36,1) both; box-shadow: 0 12px 28px -10px rgba(0,0,0,0.32); }
+        /* 히어로 강한 광원: 좌상단에서 비추는 빛 + 은은한 맥동 (텍스트 뒤에 깔림) */
+        @keyframes hero-glow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+        .hero-glow { position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(140px 95px at 26% 24%, rgba(255,255,255,0.45), transparent 72%);
+            animation: hero-glow 3s ease-in-out infinite; }
+        @keyframes deal-pop-in { 0% { opacity: 0; transform: scale(0.2) rotate(-14deg); } 55% { opacity: 1; transform: scale(1.22) rotate(5deg); } 100% { transform: scale(1) rotate(0deg); } }
+        .hero-card .deal-pop { animation: deal-pop-in 0.75s cubic-bezier(0.34,1.56,0.64,1) 0.15s both, deal-pulse 1.6s ease-in-out 0.9s infinite; }
+        /* 큰 딜 문구: 시선 초점. 히어로 카드에선 탄성 등장한다 */
+        .deal-headline { transform-origin: left center; }
+        .hero-card .deal-headline { animation: deal-pop-in 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.15s both; }
+        .detail-pop { animation: deal-pop-in 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.1s both; }
+        /* 브랜드별 대표 모션 요소 1개 (불꽃/빛/흔들림/펑) */
+        .brand-sig { position: absolute; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)); }
+        @keyframes sig-flicker { 0%, 100% { opacity: 0.85; transform: scale(1) rotate(-4deg); } 30% { opacity: 1; transform: scale(1.15) rotate(4deg); } 60% { opacity: 0.7; transform: scale(0.94) rotate(-3deg); } }
+        .sig-flicker { animation: sig-flicker 0.85s ease-in-out infinite; }
+        @keyframes sig-twinkle { 0%, 100% { opacity: 0.35; transform: scale(0.8) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(18deg); } }
+        .sig-twinkle { animation: sig-twinkle 1.8s ease-in-out infinite; }
+        @keyframes sig-sway { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+        .sig-sway { animation: sig-sway 2.2s ease-in-out infinite; transform-origin: bottom center; }
+        @keyframes sig-pop { 0%, 100% { transform: scale(1) rotate(0deg); } 45% { transform: scale(1.22) rotate(-6deg); } }
+        .sig-pop { animation: sig-pop 1.6s ease-in-out infinite; }
+        /* 성능: 화면에 보이는 카드만 애니메이션을 돌린다 (나머지는 일시정지) */
+        .deal-card :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line, .deal-pop, .spark, .brand-sig) { animation-play-state: paused; }
+        .deal-card.in-view :is(.band-flow, .band-shimmer, .banner-float, .scene-scooter, .scene-road line, .deal-pop, .spark, .brand-sig) { animation-play-state: running; }
+        .marker-wrap { position: relative; width: 30px; height: 30px; }
+        .dt-badge {
+            position: absolute; right: -7px; bottom: -3px; width: 17px; height: 17px;
+            background: #fff; border-radius: 50%; font-size: 9px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4); z-index: 1;
+        }
+        .marker-mcdonalds { background: #d97706; }
+        .marker-lotteria { background: #ea580c; }
+        .marker-momstouch { background: #e11d48; }
+        .marker-frankburger { background: #ca8a04; }
+        .marker-shakeshack { background: #16a34a; }
+        .marker-burgerking { background: #1d4ed8; }
+        .marker-nobrandburger { background: #475569; }
+
+        .radius-btn.active { color: #2563eb; background: #eff6ff; }
+        #satelliteToggleBtn.active { color: #2563eb; background: #eff6ff; }
+        #locateBtn.loading i { animation: spin 0.8s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
