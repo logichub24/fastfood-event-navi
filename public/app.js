@@ -51,6 +51,7 @@
         // 이번 방문에 없던 키를 "내 기준 새 행사"로 계산해 별도 배너로 보여준다.
         const SEEN_STORAGE_KEY = 'ff_seen';
         let sinceLastVisitKeys = new Set();
+        let sinceImpressionLogged = false; // 배너 노출은 방문당 1회만 계측
 
         // 프라이빗 모드·용량 초과 등으로 localStorage가 막혀도 앱은 그대로 동작해야 하므로
         // 실패 시 "첫 방문"으로 취급해 배너만 접는다.
@@ -84,6 +85,32 @@
             writeSeenKeys(currentKeys);
         }
 
+        // 계측의 핵심 질문: "매일 오는 30~50명이 같은 사람인가, 매번 새 사람인가."
+        // 방문 시각을 남겨두고 다음 방문 때의 간격을 함께 보내면 신규/재방문을 구분할 수 있다.
+        const LAST_VISIT_KEY = 'ff_last_visit';
+        function logVisit() {
+            let daysSince = -1;   // -1 = 첫 방문(비교할 이전 방문 없음)
+            let visitType = 'new';
+            try {
+                const prev = parseInt(localStorage.getItem(LAST_VISIT_KEY) || '', 10);
+                if (Number.isFinite(prev)) {
+                    daysSince = Math.floor((Date.now() - prev) / 86400000);
+                    visitType = 'returning';
+                }
+                localStorage.setItem(LAST_VISIT_KEY, String(Date.now()));
+            } catch (e) {
+                // localStorage가 막힌 환경 - 방문 구분 없이 화면 진입만 기록한다.
+            }
+            window.tossLog?.('screen', {
+                log_name: 'app_open',
+                visit_type: visitType,
+                days_since_last_visit: daysSince,
+                deal_count: ALL_DEALS.length,
+                liked_count: likedIds.size,
+                since_last_visit_new: sinceLastVisitKeys.size,
+            });
+        }
+
         function saveLiked() {
             localStorage.setItem('ff_liked', JSON.stringify([...likedIds]));
             updateLikedBadge();
@@ -105,6 +132,7 @@
             }
             document.getElementById('eventCountText').textContent = `${ALL_DEALS.length}건`;
             updateSinceLastVisit();
+            logVisit();
             renderBrands();
             renderCategories();
             renderDeals();
@@ -142,6 +170,12 @@
                     ? `지난 방문 이후 ${sinceLastVisitKeys.size}개 · 전체보기`
                     : `지난 방문 이후 새 행사 ${sinceLastVisitKeys.size}개`;
                 sinceBanner.className = `flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold border ${sinceOnly ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`;
+                // 노출을 클릭과 함께 재야 이 배너가 실제로 재방문에 기여하는지(CTR) 판단할 수 있다.
+                // updateAlertBanners는 필터를 켤 때마다 다시 도므로 방문당 1회만 기록한다.
+                if (!sinceImpressionLogged) {
+                    sinceImpressionLogged = true;
+                    window.tossLog?.('impression', { log_name: 'since_visit_banner', count: sinceLastVisitKeys.size });
+                }
             } else {
                 sinceBanner.className = 'hidden';
                 if (sinceOnly) { sinceOnly = false; renderDeals(); }
@@ -194,6 +228,7 @@
         }
 
         function toggleSinceOnly() {
+            window.tossLog?.('click', { log_name: 'since_visit_banner', count: sinceLastVisitKeys.size, turning_on: !sinceOnly });
             sinceOnly = !sinceOnly;
             if (sinceOnly) { newOnly = false; endingOnly = false; }
             renderDeals();
@@ -442,6 +477,8 @@
 
         function toggleLike(key) {
             const wasLiked = likedIds.has(key);
+            // 찜은 재방문 의사의 가장 강한 신호라 추가/해제를 나눠 본다.
+            window.tossLog?.('click', { log_name: 'deal_like', brand: key.split(':')[0], liked: !wasLiked });
             if (wasLiked) likedIds.delete(key); else likedIds.add(key);
             saveLiked();
             renderDeals();
@@ -469,6 +506,7 @@
         function openDetail(key) {
             const d = findDeal(key);
             if (!d) return;
+            window.tossLog?.('click', { log_name: 'deal_detail', brand: d.brand, category: d.category, is_new: !!d.isNew });
             window.onAdTrigger?.('detail'); // 행사 상세보기 - 빈도 낮게 제한
             const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
             const dday = ddayText(d.daysLeft);
@@ -637,6 +675,8 @@
             const d = findDeal(key);
             if (!d) return;
             const message = shareText(d);
+            // 공유는 유일한 유기적 유입 경로라 별도로 본다.
+            window.tossLog?.('click', { log_name: 'deal_share', brand: d.brand });
             if (document.body.classList.contains('in-toss-app') && window.tossShare) {
                 window.tossShare(message).catch(() => {});
             } else if (navigator.share) {
@@ -675,6 +715,7 @@
             document.getElementById('navBtnEvents').classList.toggle('active', isEvents);
             document.getElementById('navBtnMap').classList.toggle('active', !isEvents);
             if (!isEvents) {
+                window.tossLog?.('click', { log_name: 'tab_map' });
                 window.onAdTrigger?.('map'); // "지도 보기" 진입 - 광고 우선순위 1순위
                 // 탭 전환 직후엔 flex 레이아웃이 아직 최종 크기로 반영되기 전이라
                 // Leaflet이 실제보다 작은 크기로 타일을 그리는 문제가 생김.
@@ -969,7 +1010,7 @@
                 <div class="grid ${s.phone ? 'grid-cols-3' : 'grid-cols-2'} gap-2 mt-3">
                     ${s.phone ? `<a href="tel:${s.phone}" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600 text-center"><i class="fa-solid fa-phone mr-1 text-green-500"></i>전화</a>` : ''}
                     <button onclick="viewBrandEvents('${s.brand}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-fire mr-1 text-orange-500"></i>행사 ${eventCount}건</button>
-                    <a href="${mapUrl}" target="_blank" rel="noopener" onclick="window.onAdTrigger?.('navigation')" class="py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow text-center"><i class="fa-solid fa-diamond-turn-right mr-1"></i>길찾기</a>
+                    <a href="${mapUrl}" target="_blank" rel="noopener" onclick="window.tossLog?.('click', { log_name: 'store_navigate', brand: '${s.brand}' }); window.onAdTrigger?.('navigation')" class="py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow text-center"><i class="fa-solid fa-diamond-turn-right mr-1"></i>길찾기</a>
                 </div>`;
             document.getElementById('storeSheetBg').classList.add('active');
             document.getElementById('storeSheet').classList.add('active');

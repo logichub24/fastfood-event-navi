@@ -37,3 +37,20 @@
 - [x] `node scripts/build-toss.js` 성공, dist에 app.css·app.js 포함 확인
 - [x] 항목별 커밋 분리
 - [ ] 실기기(토스 인앱)에서 광고 가드 실제 동작 확인 — 프리뷰에서는 SDK가 no-op이라 미검증
+
+---
+
+# 계측 도입 (출시 후 DAU 30~50)
+
+목표: "매일 오는 30~50명이 같은 사람인가"에 답할 근거를 만든다. 답이 나오기 전엔 기능을 더 얹지 않는다.
+
+- [x] 토스 자체 `@apps-in-toss/web-analytics` 사용 (새 의존성 없음)
+- [x] 계측 실패가 앱을 깨지 않도록 동적 import로 격리 + `window.tossLog` 가드
+- [x] `ff_last_visit` 저장 → 신규/재방문·방문 간격 계산
+- [x] `screen: app_open` (visit_type·days_since_last_visit·liked_count·since_last_visit_new)
+- [x] `since_visit_banner` 노출/클릭 짝으로 계측 (노출은 방문당 1회)
+- [x] `deal_detail` / `deal_like` / `deal_share` / `tab_map` / `store_navigate` 클릭
+- [x] 스텁으로 첫 방문·3일 만의 재방문 시뮬레이션 검증, 콘솔 에러 0
+- [ ] **토스 콘솔에서 기존 지표 먼저 확인** (DAU·유입경로가 이미 있으면 중복 계측 정리)
+- [ ] 실기기에서 이벤트가 실제 콘솔에 적재되는지 확인
+- [ ] 1~2주 지표 관찰 후 다음 작업 결정 (그 전엔 기능 추가 보류)

@@ -2,6 +2,48 @@
 
 ---
 
+# 2026-08-02 — 계측 도입 (출시 후 DAU 30~50 상황)
+
+## 배경
+- 앱은 이미 출시 상태이고 **일 방문자 30~50명이 꾸준히** 있음. 그런데 계측 코드가 **전무**했다.
+- 이 규모에서 광고 수익은 월 수천 원대라 광고 조정은 손익에 거의 영향이 없다. 반면
+  **"매일 오는 30~50명이 같은 사람인가, 매번 새 사람인가"**를 모르면 다음 할 일을 정할 수 없다.
+  전자면 유입만 늘리면 되고, 후자면 유입을 늘려도 밑 빠진 독이다. → 계측을 최우선으로 결정.
+
+## 왜 토스 Analytics인가 (새 의존성 추가 안 함)
+- `@apps-in-toss/web-framework`가 `@apps-in-toss/web-analytics`를 재수출한다. 이미 있는 SDK다.
+- `Analytics.screen / impression / click` 세 가지뿐이고, 토스 콘솔 지표로 바로 집계된다.
+- GA4 등 외부 도구를 붙이지 않은 이유: 백엔드가 없고, 외부 스크립트는 토스 웹뷰에서
+  차단 리스크가 있으며, 사용자 데이터를 제3자로 보내지 않는 편이 낫다.
+- **동적 import로 격리했다.** ads.js는 module이라 정적 import가 실패하면 광고·공유·위치까지
+  전부 죽는다. 계측은 실패해도 앱이 멀쩡해야 하므로 `import().catch(() => {})`로 분리하고
+  `window.tossLog`는 로드 실패 시 조용히 무시한다.
+
+## 무엇을 재는가 (8지점)
+- `screen: app_open` — **핵심.** `visit_type`(new/returning), `days_since_last_visit`,
+  `liked_count`, `since_last_visit_new`를 함께 보낸다. 이 하나로 재방문 여부와 주기가 나온다.
+  - `ff_last_visit`(타임스탬프)를 새로 저장. 없으면 `days_since_last_visit: -1` = 첫 방문.
+- `impression/click: since_visit_banner` — 어제 넣은 '지난 방문 이후' 배너가 실제로
+  재방문에 기여하는지 CTR로 판정하려고 노출과 클릭을 짝지어 잰다.
+  노출은 `sinceImpressionLogged`로 **방문당 1회**만 (updateAlertBanners가 필터 토글마다 돌기 때문).
+- `click`: `deal_detail`, `deal_like`(찜=재방문 의사 최강 신호, 추가/해제 구분),
+  `deal_share`(유일한 유기적 유입 경로), `tab_map`, `store_navigate`(전환 최종 지점).
+
+## 검증 방법
+- `window.tossLog`를 배열에 쌓는 스텁으로 갈아끼우고 `ff_last_visit`·`ff_seen`을 조작해
+  첫 방문 / 3일 만의 재방문을 시뮬레이션 → `visit_type`·`days_since_last_visit`·
+  `since_last_visit_new` 값이 의도대로 나오는 것을 확인.
+- 길찾기는 `href`를 떼고 click해서 새 탭 이동 없이 onclick만 실행시켜 확인.
+
+## 한계 (중요)
+- **토스 앱 밖에서는 아무것도 집계되지 않는다.** 광고와 동일하게 SDK가 no-op이다.
+  프리뷰에서 검증한 것은 "어떤 이벤트가 어떤 값으로 호출되는가"까지이고,
+  실제 콘솔 적재 여부는 실기기에서 확인해야 한다.
+- 지표가 쌓이려면 최소 1~2주는 기다려야 판단이 가능하다. 그 전에 기능을 더 얹으면
+  무엇이 효과였는지 다시 알 수 없게 된다.
+
+---
+
 # 2026-08-02 — 4개 항목 작업 (KFC 표기 / 광고 튜닝 / 재방문 동기 / 파일 분리)
 
 ## 1. KFC 매장 "미지원"은 이미 해결된 상태였음

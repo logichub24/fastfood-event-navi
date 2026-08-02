@@ -90,6 +90,24 @@ window.tossRequestNotificationAgreement = function tossRequestNotificationAgreem
   });
 };
 
+// 계측: 토스가 제공하는 1st-party 애널리틱스(콘솔 지표로 바로 집계됨).
+// 광고·공유·위치와 달리 계측은 실패해도 앱 기능에 영향이 없어야 하므로,
+// 정적 import로 묶지 않고 동적 import로 격리한다. 로드 실패 시 tossLog는 조용히 무시된다.
+let analyticsApi = null;
+import('https://esm.sh/@apps-in-toss/web-analytics@2.10.4')
+  .then((m) => { analyticsApi = m.Analytics; })
+  .catch(() => {}); // 토스 앱 밖이거나 네트워크 실패 - 계측만 비활성
+
+// type: 'screen' | 'impression' | 'click'
+window.tossLog = function tossLog(type, params) {
+  try {
+    const result = analyticsApi?.[type]?.(params);
+    if (result && typeof result.catch === 'function') result.catch(() => {});
+  } catch (e) {
+    // 계측 실패가 사용자 동작을 막지 않도록 삼킨다.
+  }
+};
+
 // 토스 앱 안에서는 navigator.share 대신 SDK 네이티브 공유 시트를 써야 함.
 window.tossShare = function tossShare(message) {
   return share({ message });
