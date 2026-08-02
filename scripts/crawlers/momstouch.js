@@ -7,8 +7,15 @@ const SITE = 'https://momstouch.co.kr';
 
 async function crawlMomstouch() {
   const { data } = await axios.get(URL, {
-    headers: { 'User-Agent': 'Mozilla/5.0' },
-    timeout: 15000,
+    // GitHub Actions에서 15초로는 매번 타임아웃이 나 전날 데이터로 대체되고 있었다.
+    // 응답이 느린 사이트라 여유를 주고, 브라우저 헤더를 갖춰 차단 가능성도 줄인다.
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8',
+    },
+    timeout: 30000,
   });
   const $ = cheerio.load(data);
   const items = [];
