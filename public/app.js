@@ -248,15 +248,22 @@
 
         function renderBrands() {
             const container = document.getElementById('brandContainer');
-            // 인라인에는 대표 3개 브랜드만 노출하고, 나머지는 '브랜드' 모달에서 고른다.
-            // 단 모달에서 대표 3개 밖의 브랜드를 선택하면 마지막 칩을 그 브랜드로 교체해 선택 상태가 보이게 한다.
-            let inline = EVENT_BRANDS.slice(0, 3);
+            // 인라인에는 3개만 노출하고 나머지는 '브랜드' 모달에서 고른다.
+            // 고정 순서였을 때 행사 20건인 버거킹이 모달에 숨고 5건인 KFC가 노출되는 손해가 있었다.
+            // 행사가 많은 브랜드를 앞에 두면 데이터가 매일 바뀌어도 자동으로 맞는다.
+            const counts = {};
+            ALL_DEALS.forEach((d) => { counts[d.brand] = (counts[d.brand] || 0) + 1; });
+            let inline = EVENT_BRANDS.filter((b) => counts[b]).sort((a, b) => counts[b] - counts[a]).slice(0, 3);
+            if (inline.length === 0) inline = EVENT_BRANDS.slice(0, 3); // 로드 실패 등으로 건수를 모를 때
+            // 모달에서 인라인 밖의 브랜드를 선택하면 마지막 칩을 교체해 선택 상태가 보이게 한다.
             if (activeBrand !== 'ALL' && !inline.includes(activeBrand)) {
                 inline = [...inline.slice(0, 2), activeBrand];
             }
             container.innerHTML = inline.map((b) => {
                 const active = activeBrand === b ? 'active' : 'bg-white border-gray-200 text-gray-600';
-                const label = `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}`;
+                // 건수를 함께 보여주면 어디에 볼 게 많은지 스캔 없이 바로 판단된다.
+                const n = counts[b] || 0;
+                const label = `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}${n ? ` <span class="opacity-60">${n}</span>` : ''}`;
                 return `<button onclick="setBrand('${b}')" class="brand-btn ${active} px-2.5 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${label}</button>`;
             }).join('');
         }
@@ -499,6 +506,20 @@
                 .catch(() => {});
         }
 
+        // 1,324명 중 첫 주에 돌아온 사람이 최대 82명뿐이라, 다시 열 이유를 만들 장치가 필요하다.
+        // 다만 첫 세션을 다시 방해하면 본전이므로 화면을 막지 않는 토스트로, 찜이 하나도 없을 때 딱 한 번만 띄운다.
+        const LIKE_HINT_KEY = 'ff_like_hint';
+        function maybeHintLike() {
+            if (likedIds.size > 0) return;
+            try {
+                if (localStorage.getItem(LIKE_HINT_KEY)) return;
+                localStorage.setItem(LIKE_HINT_KEY, '1');
+            } catch (e) {
+                return; // 저장이 안 되면 매번 뜨게 되므로 아예 띄우지 않는다.
+            }
+            showToast('하트를 누르면 찜 목록에 모아둘 수 있어요');
+        }
+
         function findDeal(key) {
             return ALL_DEALS.find((d) => dealKey(d) === key);
         }
@@ -507,6 +528,7 @@
             const d = findDeal(key);
             if (!d) return;
             window.tossLog?.('click', { log_name: 'deal_detail', brand: d.brand, category: d.category, is_new: !!d.isNew });
+            maybeHintLike();
             window.onAdTrigger?.('detail'); // 행사 상세보기 - 빈도 낮게 제한
             const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
             const dday = ddayText(d.daysLeft);
@@ -1086,7 +1108,48 @@
 
             if ([path, hash, screen].some((v) => /map/i.test(v))) {
                 switchTab('map');
+                return;
             }
+
+            applySearchIntent(params, hash);
+        }
+
+        // 유입의 90%가 토스 '검색'이다. 검색어가 넘어온다면 그 브랜드를 미리 골라줘야
+        // 34초짜리 세션에서 사용자가 필터를 다시 찾는 비용이 사라진다.
+        // 토스가 어떤 파라미터로 넘기는지(혹은 넘기긴 하는지) 확인되지 않아 흔한 이름을 모두 훑고,
+        // 아무것도 안 오면 조용히 아무 일도 하지 않는다.
+        const BRAND_QUERY_ALIASES = [
+            ['MCDONALDS', /맥도날드|맥날|mcdonald/i],
+            ['BURGERKING', /버거킹|burger\s?king/i],
+            ['NOBRANDBURGER', /노브랜드/i],
+            ['LOTTERIA', /롯데리아|lotteria/i],
+            ['MOMSTOUCH', /맘스터치|moms/i],
+            ['KFC', /\bkfc\b|케이에프씨/i],
+            ['SUBWAY', /서브웨이|subway/i],
+            ['SHAKESHACK', /쉐이크쉑|쉑쉑|shake\s?shack/i],
+            ['FRANKBURGER', /프랭크\s?버거|frank/i],
+        ];
+
+        function applySearchIntent(params, hash) {
+            const raw = ['q', 'query', 'keyword', 'kw', 'search', 'term']
+                .map((k) => params.get(k))
+                .find(Boolean) || (hash.match(/(?:q|query|keyword)=([^&]+)/) || [])[1];
+            if (!raw) return;
+
+            let text;
+            try {
+                text = decodeURIComponent(raw);
+            } catch (e) {
+                text = raw; // 잘못 인코딩된 값이 와도 원문으로 한 번 더 시도한다.
+            }
+
+            const hit = BRAND_QUERY_ALIASES.find(([brand, pattern]) => pattern.test(text) && EVENT_BRANDS.includes(brand));
+            if (!hit) return;
+
+            activeBrand = hit[0];
+            renderBrands();
+            renderDeals();
+            window.tossLog?.('screen', { log_name: 'search_intent_applied', brand: hit[0] });
         }
 
         // ===== 브랜드 선택 모달 =====
@@ -1175,8 +1238,24 @@
             document.getElementById('onboardingBg').classList.remove('active');
             localStorage.setItem(ONBOARDING_SEEN_KEY, '1');
         }
-        function maybeShowOnboardingOnFirstVisit() {
-            if (!localStorage.getItem(ONBOARDING_SEEN_KEY)) showOnboarding();
+        // 첫 방문자는 전체 트래픽의 91%이고 평균 체류가 34초뿐이라, 시작 안내를 화면을 막는
+        // 모달로 띄우면 사용자 가치가 0인 고지에 그 예산을 쓰게 된다. 목록 위 한 줄로 낮춘다.
+        function maybeShowFirstNotice() {
+            if (localStorage.getItem(ONBOARDING_SEEN_KEY)) return;
+            const el = document.getElementById('firstNotice');
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+        }
+
+        function dismissFirstNotice() {
+            const el = document.getElementById('firstNotice');
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+            try {
+                localStorage.setItem(ONBOARDING_SEEN_KEY, '1');
+            } catch (e) {
+                // 저장 실패 시 다음 방문에 한 번 더 보일 뿐이라 무시한다.
+            }
         }
         function reopenOnboarding() {
             closeSettings();
@@ -1206,5 +1285,5 @@
 
         updateLikedBadge();
         loadDeals().then(applyDeepLink); // 특정 행사로 바로 열기는 ALL_DEALS가 로드된 뒤에만 가능
-        maybeShowOnboardingOnFirstVisit();
+        maybeShowFirstNotice();
         fetchWeatherChip();
