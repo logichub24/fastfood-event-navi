@@ -82,6 +82,12 @@ const NOTIFICATION_TEMPLATE_CODE = 'PLACEHOLDER_TEMPLATE_CODE';
 window.tossRequestNotificationAgreement = function tossRequestNotificationAgreement() {
   return new Promise((resolve, reject) => {
     if (!requestNotificationAgreement) { reject(new Error('알림 동의 기능을 지원하지 않아요.')); return; }
+    // 템플릿 코드 미등록 상태로 호출하면 동의창이 안 뜨거나 에러가 난다.
+    // 등록 전까지는 SDK를 부르지 않고 안내만 하도록 여기서 끊는다.
+    if (NOTIFICATION_TEMPLATE_CODE === 'PLACEHOLDER_TEMPLATE_CODE') {
+      reject(new Error('알림 기능을 준비 중이에요.'));
+      return;
+    }
     requestNotificationAgreement({
       options: { templateCode: NOTIFICATION_TEMPLATE_CODE },
       onEvent: (event) => resolve(event),
