@@ -39,16 +39,36 @@ function showInterstitial() {
 // every=1이면 매번, every=3이면 1·4·7번째... 식으로 노출.
 const AD_TRIGGER_CONFIG = {
   map: { every: 2 },        // 매장찾기 탭 진입("지도 보기") - 자연스러운 전환 지점
-  navigation: { every: 1 }, // 길찾기 클릭 - 구매의사가 가장 높은 시점이라 거의 매번
+  navigation: { every: 2 }, // 길찾기 클릭 - 구매의사가 가장 높지만, 매장 비교 중 연타가 잦아 2회당 1회
   detail: { every: 4 },     // 행사 상세보기 - 탐색 중이라 빈도를 낮게 제한
 };
+
+// 트리거별 빈도만으로는 상한이 없다. 길찾기·지도를 오가며 여러 트리거를 번갈아 밟으면
+// 짧은 시간에 전면광고가 연달아 뜰 수 있어, 트리거와 무관한 전역 가드를 둔다.
+const AD_START_GRACE_MS = 45000;  // 첫 진입 직후엔 띄우지 않는다 (앱 가치를 먼저 보여줘야 재방문이 생김)
+const AD_COOLDOWN_MS = 90000;     // 직전 노출 이후 최소 간격
+const AD_SESSION_LIMIT = 5;       // 세션당 총 노출 상한
+
+const appStartedAt = Date.now();
+let lastAdShownAt = 0;
+let adShownCount = 0;
 const adTriggerCounts = {};
 
 window.onAdTrigger = function onAdTrigger(trigger) {
   const config = AD_TRIGGER_CONFIG[trigger];
   if (!config) return;
+
   adTriggerCounts[trigger] = (adTriggerCounts[trigger] || 0) + 1;
   if ((adTriggerCounts[trigger] - 1) % config.every !== 0) return;
+
+  const now = Date.now();
+  if (now - appStartedAt < AD_START_GRACE_MS) return;
+  if (now - lastAdShownAt < AD_COOLDOWN_MS) return;
+  if (adShownCount >= AD_SESSION_LIMIT) return;
+  if (!interstitialReady) return; // 미준비 상태를 소진으로 세지 않도록 카운터 증가 전에 확인
+
+  lastAdShownAt = now;
+  adShownCount++;
   showInterstitial();
 };
 
