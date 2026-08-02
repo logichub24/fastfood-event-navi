@@ -24,7 +24,7 @@ jobs:
       - name: 행사 정보 크롤링 (맥도날드/KFC/롯데리아/맘스터치)
         run: npm run crawl
 
-      - name: 매장 위치 동기화 (맥도날드/롯데리아/맘스터치, KFC는 아직 미지원)
+      - name: 매장 위치 동기화 (소상공인 API + 맥도날드/쉐이크쉑 자체 크롤 + 카카오 보완)
         env:
           SBIZ_API_KEY: ${{ secrets.SBIZ_API_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
