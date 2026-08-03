@@ -470,6 +470,39 @@
 
         // 뷰포트에 들어온 카드만 .in-view를 붙여 애니메이션을 돌린다 (오프스크린 카드는 일시정지).
         let cardObserver = null;
+        // 같은 사용자층(행사·할인을 찾는 사람)을 공유하는 자체 앱 안내.
+        // 회전 노출 대신 나란히 정적으로 둔다 - 원하는 앱을 기다릴 필요가 없고, 클릭 계측도 앱별로 깔끔하다.
+        const OTHER_APPS = [
+            { id: 'cvs-event-navi', name: '편의점 행사', desc: '편의점 1+1·2+1', icon: 'https://static.toss.im/appsintoss/32449/88cb5d09-28bb-4f89-b645-e81c622d8a8f.png' },
+            { id: 'cafe-event-map', name: '카페행사맵', desc: '카페 할인·쿠폰', icon: 'https://static.toss.im/appsintoss/32449/0bca3067-b954-439c-a16c-5f5c8ec2db6f.png' },
+        ];
+
+        function renderCrossPromo() {
+            const wrap = document.getElementById('crossPromo');
+            if (!wrap) return;
+            wrap.innerHTML = `
+                <p class="text-[11px] font-bold text-gray-400 mb-2 px-1">이런 행사도 찾고 계신가요?</p>
+                <div class="grid grid-cols-2 gap-2">
+                    ${OTHER_APPS.map((app) => `
+                    <a href="intoss://${app.id}" onclick="onCrossPromoClick('${app.id}')"
+                       class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-gray-100 shadow-sm active:scale-95 transition"
+                       aria-label="${app.name} 앱 열기">
+                        <img src="${app.icon}" alt="" width="36" height="36" loading="lazy"
+                             onerror="this.style.display='none'"
+                             class="w-9 h-9 rounded-lg shrink-0 bg-gray-100 object-cover">
+                        <span class="min-w-0">
+                            <span class="block text-[12px] font-black text-gray-800 truncate">${app.name}</span>
+                            <span class="block text-[10px] text-gray-400 truncate">${app.desc}</span>
+                        </span>
+                    </a>`).join('')}
+                </div>`;
+        }
+
+        // 어느 앱이 눌렸는지 이름으로 남긴다. 이동 자체는 a[href]의 intoss 스킴이 처리한다.
+        function onCrossPromoClick(appId) {
+            window.tossLog?.('click', { log_name: `cross_promo_${appId.replace(/-/g, '_')}`, max_card: maxCardSeen });
+        }
+
         // 스크롤 깊이 계측. 체류 34초가 "못 찾고 이탈"인지 "빠르게 훑고 찾음"인지 지금은 구분할 수 없다.
         // 몇 번째 카드까지 봤는지를 구간으로 남기면 카드 크기·첫 화면·재방문 중 무엇이 병목인지 갈린다.
         // 값을 파라미터로만 보내면 콘솔이 파라미터 분포를 못 보여줄 때 무용지물이라 이벤트 이름에 구간을 넣는다.
@@ -1318,6 +1351,7 @@
         }
 
         updateLikedBadge();
+        renderCrossPromo();
         loadDeals().then(applyDeepLink); // 특정 행사로 바로 열기는 ALL_DEALS가 로드된 뒤에만 가능
         maybeShowFirstNotice();
         fetchWeatherChip();
