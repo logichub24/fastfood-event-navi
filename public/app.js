@@ -525,7 +525,10 @@
             chip.setAttribute('aria-label', `${app.name} 앱 열기`);
             document.getElementById('promoChipName').textContent = app.name;
             const icon = document.getElementById('promoChipIcon');
-            if (icon.src !== app.icon) icon.src = app.icon;
+            if (icon.getAttribute('src') !== app.icon) {
+                icon.style.display = ''; // 이전 앱 아이콘이 실패해 숨겨졌더라도 새 아이콘은 다시 시도한다
+                icon.src = app.icon;
+            }
             if (!promoSeen.has(app.id)) {
                 promoSeen.add(app.id);
                 window.tossLog?.('impression', { log_name: `cross_promo_top_${app.id.replace(/-/g, '_')}` });

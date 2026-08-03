@@ -45,11 +45,15 @@
                         <!-- 자체 앱 회전 칩. 편의점 행사 앱과 같은 형태로 맞췄다.
                              누르려는 순간 회전으로 앱이 바뀌면 오탭이 되므로 손가락이 닿으면 회전을 멈춘다. -->
                         <a id="promoChip" href="#" onclick="onPromoChipClick()"
-                           class="hidden items-center gap-0.5 pl-1 pr-1.5 py-1 rounded-full bg-white border border-gray-100 shadow-sm shrink-0 active:scale-95 transition">
-                            <img id="promoChipIcon" src="" alt="" width="22" height="22" loading="lazy"
-                                 onerror="this.style.display='none'" class="w-[22px] h-[22px] rounded-full shrink-0 object-cover">
-                            <span id="promoChipName" class="text-[11px] font-black text-gray-700 whitespace-nowrap"></span>
-                            <i class="fa-solid fa-chevron-right text-[8px] text-gray-300"></i>
+                           class="hidden items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white border border-gray-100 shadow-sm shrink-0 active:scale-95 transition">
+                            <!-- src를 빈 값으로 두면 로드 실패로 onerror가 즉시 발동해 아이콘이 영구히 숨는다.
+                                 src는 JS(paintPromoChip)에서만 넣는다. -->
+                            <img id="promoChipIcon" alt="" width="26" height="26"
+                                 onerror="this.style.display='none'" class="w-[26px] h-[26px] rounded-full shrink-0 object-cover">
+                            <span class="leading-tight text-left">
+                                <span id="promoChipName" class="block text-[11px] font-black text-gray-800 whitespace-nowrap"></span>
+                                <span class="block text-[9px] text-gray-400 font-bold whitespace-nowrap">바로가기</span>
+                            </span>
                         </a>
                     </div>
                     <button onclick="openSearchSheet()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
