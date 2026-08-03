@@ -10,40 +10,12 @@ const AD_CONFIG = {
 
 let interstitialReady = false;
 
-// 전면광고가 안 뜰 때 원인이 넷(미지원/로드실패/가드차단/재고없음)인데 원격에서는 구분이 안 된다.
-// 실기기에서 설정 화면으로 바로 확인할 수 있도록 상태를 남긴다.
-window.__adState = {
-  supported: null,   // loadFullScreenAd 지원 여부
-  loaded: false,     // 광고 준비 완료
-  loadError: '',     // 로드 실패 사유
-  lastBlock: '',     // 마지막으로 노출이 막힌 이유
-  shown: 0,          // 이번 세션 노출 횟수
-  banner: false,     // 배너 부착 여부
-};
-
 function loadInterstitial() {
-  const supported = !!(loadFullScreenAd.isSupported && loadFullScreenAd.isSupported());
-  window.__adState.supported = supported;
-  if (!supported) {
-    window.tossLog?.('screen', { log_name: 'interstitial_unsupported' });
-    return;
-  }
+  if (!loadFullScreenAd.isSupported || !loadFullScreenAd.isSupported()) return;
   loadFullScreenAd({
     options: { adGroupId: AD_CONFIG.interstitial },
-    onEvent: (event) => {
-      if (event.type === 'loaded') {
-        interstitialReady = true;
-        window.__adState.loaded = true;
-        window.__adState.loadError = '';
-        window.tossLog?.('screen', { log_name: 'interstitial_loaded' });
-      }
-    },
-    onError: (err) => {
-      interstitialReady = false;
-      window.__adState.loaded = false;
-      window.__adState.loadError = String(err && err.message ? err.message : err).slice(0, 120);
-      window.tossLog?.('screen', { log_name: 'interstitial_load_error' });
-    },
+    onEvent: (event) => { if (event.type === 'loaded') interstitialReady = true; },
+    onError: () => { interstitialReady = false; },
   });
 }
 
@@ -61,61 +33,13 @@ function showInterstitial() {
   });
 }
 
-// 행동 기반 전면광고 트리거 엔진.
-// "사용자의 탐색을 방해하지 않고, 목적 행동 직전에 광고를 배치한다"는 원칙에 따라
-// 트리거마다 노출 빈도를 다르게 둔다 (구매의사가 높을수록 자주, 탐색 중일수록 드물게).
-// every=1이면 매번, every=3이면 1·4·7번째... 식으로 노출.
-const AD_TRIGGER_CONFIG = {
-  map: { every: 2 },        // 매장찾기 탭 진입("지도 보기") - 자연스러운 전환 지점
-  navigation: { every: 2 }, // 길찾기 클릭 - 구매의사가 가장 높지만, 매장 비교 중 연타가 잦아 2회당 1회
-  detail: { every: 4 },     // 행사 상세보기 - 탐색 중이라 빈도를 낮게 제한
-};
-
-// 트리거별 빈도만으로는 상한이 없다. 길찾기·지도를 오가며 여러 트리거를 번갈아 밟으면
-// 짧은 시간에 전면광고가 연달아 뜰 수 있어, 트리거와 무관한 전역 가드를 둔다.
-// 유예는 처음에 45초로 뒀는데, 실측 평균 체류가 34초(28일 중 최장 일평균도 48.5초)라
-// 대부분의 세션이 유예 안에 끝나 전면광고가 아예 뜨지 않았다. 20초로 낮춘다.
-// 20초면 첫 화면을 보고 카드를 한 번 눌러본 뒤라 "가치를 먼저 보여준다"는 취지는 유지된다.
-// 트리거(지도 진입·길찾기·상세)가 이미 사용자의 목적 행동이라 불쑥 튀어나오는 구조도 아니다.
-const AD_START_GRACE_MS = 20000;
-// 아래 둘은 34초 세션에서는 거의 걸리지 않지만, 오래 머무는 소수에게 광고가 연달아 뜨는
-// 최악의 경우만 막아주는 안전장치라 그대로 둔다.
-const AD_COOLDOWN_MS = 90000;     // 직전 노출 이후 최소 간격
-const AD_SESSION_LIMIT = 5;       // 세션당 총 노출 상한
-
-const appStartedAt = Date.now();
-let lastAdShownAt = 0;
-let adShownCount = 0;
-const adTriggerCounts = {};
+// 행동 기반 전면광고 트리거. 지도 진입 / 길찾기 클릭 / 행사 상세 열기 세 지점에서
+// 제한 없이 매번 노출한다. (유예·쿨다운·세션 상한·빈도 제한은 모두 제거했다.)
+const AD_TRIGGERS = ['map', 'navigation', 'detail'];
 
 window.onAdTrigger = function onAdTrigger(trigger) {
-  const config = AD_TRIGGER_CONFIG[trigger];
-  if (!config) return;
-
-  // 막힌 이유를 남겨야 "왜 안 뜨는지"를 실기기에서 알 수 있다.
-  const block = (reason) => { window.__adState.lastBlock = reason; };
-
-  adTriggerCounts[trigger] = (adTriggerCounts[trigger] || 0) + 1;
-  if ((adTriggerCounts[trigger] - 1) % config.every !== 0) { block(`빈도(${trigger} ${config.every}회당 1회)`); return; }
-
-  const now = Date.now();
-  const elapsed = Math.round((now - appStartedAt) / 1000);
-  if (now - appStartedAt < AD_START_GRACE_MS) { block(`시작 유예(${elapsed}s / ${AD_START_GRACE_MS / 1000}s)`); return; }
-  if (now - lastAdShownAt < AD_COOLDOWN_MS) { block('쿨다운'); return; }
-  if (adShownCount >= AD_SESSION_LIMIT) { block('세션 상한'); return; }
-  if (!interstitialReady) { block('광고 미준비'); return; } // 미준비를 소진으로 세지 않도록 마지막에 확인
-
-  block('');
-  lastAdShownAt = now;
-  adShownCount++;
-  window.__adState.shown = adShownCount;
-  // 유예를 낮춘 효과를 확인하려면 "실제로 떴는가"가 남아야 한다.
-  // 트리거를 이름에 넣어, 콘솔이 파라미터 분포를 못 보여줘도 어느 시점에서 떴는지 읽히게 한다.
-  window.tossLog?.('impression', {
-    log_name: `interstitial_${trigger}`,
-    seconds_since_start: Math.round((now - appStartedAt) / 1000),
-    nth_in_session: adShownCount,
-  });
+  if (!AD_TRIGGERS.includes(trigger)) return;
+  window.tossLog?.('impression', { log_name: `interstitial_${trigger}` });
   showInterstitial();
 };
 
@@ -181,15 +105,17 @@ function init() {
     callbacks: {
       onInitialized: () => {
         const slot = document.getElementById('adBannerSlot');
-        if (slot) { TossAds.attachBanner(AD_CONFIG.banner, slot); window.__adState.banner = true; }
+        if (slot) TossAds.attachBanner(AD_CONFIG.banner, slot);
         loadInterstitial();
-      },
-      onInitializationFailed: (error) => {
-        window.__adState.loadError = 'SDK 초기화 실패: ' + String(error && error.message ? error.message : error).slice(0, 100);
-        window.tossLog?.('screen', { log_name: 'ads_init_failed' });
       },
     },
   });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// 이 파일은 type="module"이고 esm.sh에서 SDK를 받아온다. 그 네트워크 요청이 늦어지면
+// 모듈 본문이 DOMContentLoaded 이후에 실행될 수 있는데, 그때 리스너만 걸어두면 init이 영영 안 돈다.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
