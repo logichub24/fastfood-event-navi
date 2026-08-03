@@ -45,7 +45,13 @@ const AD_TRIGGER_CONFIG = {
 
 // 트리거별 빈도만으로는 상한이 없다. 길찾기·지도를 오가며 여러 트리거를 번갈아 밟으면
 // 짧은 시간에 전면광고가 연달아 뜰 수 있어, 트리거와 무관한 전역 가드를 둔다.
-const AD_START_GRACE_MS = 45000;  // 첫 진입 직후엔 띄우지 않는다 (앱 가치를 먼저 보여줘야 재방문이 생김)
+// 유예는 처음에 45초로 뒀는데, 실측 평균 체류가 34초(28일 중 최장 일평균도 48.5초)라
+// 대부분의 세션이 유예 안에 끝나 전면광고가 아예 뜨지 않았다. 20초로 낮춘다.
+// 20초면 첫 화면을 보고 카드를 한 번 눌러본 뒤라 "가치를 먼저 보여준다"는 취지는 유지된다.
+// 트리거(지도 진입·길찾기·상세)가 이미 사용자의 목적 행동이라 불쑥 튀어나오는 구조도 아니다.
+const AD_START_GRACE_MS = 20000;
+// 아래 둘은 34초 세션에서는 거의 걸리지 않지만, 오래 머무는 소수에게 광고가 연달아 뜨는
+// 최악의 경우만 막아주는 안전장치라 그대로 둔다.
 const AD_COOLDOWN_MS = 90000;     // 직전 노출 이후 최소 간격
 const AD_SESSION_LIMIT = 5;       // 세션당 총 노출 상한
 
@@ -69,6 +75,13 @@ window.onAdTrigger = function onAdTrigger(trigger) {
 
   lastAdShownAt = now;
   adShownCount++;
+  // 유예를 낮춘 효과를 확인하려면 "실제로 떴는가"가 남아야 한다.
+  // 트리거를 이름에 넣어, 콘솔이 파라미터 분포를 못 보여줘도 어느 시점에서 떴는지 읽히게 한다.
+  window.tossLog?.('impression', {
+    log_name: `interstitial_${trigger}`,
+    seconds_since_start: Math.round((now - appStartedAt) / 1000),
+    nth_in_session: adShownCount,
+  });
   showInterstitial();
 };
 
