@@ -146,7 +146,7 @@
             const newBanner = document.getElementById('newDealsBanner');
             if (newCount > 0) {
                 document.getElementById('newDealsBannerText').textContent = newOnly ? `새 행사 ${newCount} · 전체보기` : `새 행사 ${newCount}`;
-                newBanner.className = `flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0 ${newOnly ? 'bg-blue-600 border-blue-600 text-white' : 'bg-blue-50 border-blue-200 text-blue-700'}`;
+                newBanner.className = `flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0 ${newOnly ? 'bg-blue-600 border-blue-600 text-white' : 'bg-blue-50 border-blue-200 text-blue-700'}`;
             } else {
                 newBanner.className = 'hidden';
                 if (newOnly) { newOnly = false; renderDeals(); } // 신규가 없어졌으면 필터 해제
@@ -157,7 +157,7 @@
             const endBanner = document.getElementById('endingTodayBanner');
             if (endCount > 0) {
                 document.getElementById('endingTodayBannerText').textContent = endingOnly ? `오늘 종료 ${endCount} · 전체보기` : `오늘 종료 ${endCount}`;
-                endBanner.className = `flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0 ${endingOnly ? 'bg-red-600 border-red-600 text-white' : 'bg-red-50 border-red-200 text-red-600'}`;
+                endBanner.className = `flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0 ${endingOnly ? 'bg-red-600 border-red-600 text-white' : 'bg-red-50 border-red-200 text-red-600'}`;
             } else {
                 endBanner.className = 'hidden';
                 if (endingOnly) { endingOnly = false; renderDeals(); }
@@ -499,8 +499,62 @@
         }
 
         // 어느 앱이 눌렸는지 이름으로 남긴다. 이동 자체는 a[href]의 intoss 스킴이 처리한다.
+        // 상단 칩과 하단 안내를 나눠서 기록해야 어느 자리가 실제로 유입을 만드는지 판가름난다.
+        function logPromo(kind, appId, extra) {
+            window.tossLog?.('click', {
+                log_name: `cross_promo_${kind}_${appId.replace(/-/g, '_')}`,
+                max_card: maxCardSeen,
+                ...extra,
+            });
+        }
+
         function onCrossPromoClick(appId) {
-            window.tossLog?.('click', { log_name: `cross_promo_${appId.replace(/-/g, '_')}`, max_card: maxCardSeen });
+            logPromo('bottom', appId);
+        }
+
+        // ===== 상단 회전 칩 =====
+        const PROMO_ROTATE_MS = 4000;
+        let promoIndex = 0;
+        let promoTimer = null;
+        const promoSeen = new Set(); // 노출은 앱당 1회만 기록 (회전할 때마다 쌓이면 클릭률이 무의미해진다)
+
+        function paintPromoChip() {
+            const app = OTHER_APPS[promoIndex];
+            const chip = document.getElementById('promoChip');
+            chip.href = `intoss://${app.id}`;
+            chip.setAttribute('aria-label', `${app.name} 앱 열기`);
+            document.getElementById('promoChipName').textContent = app.name;
+            const icon = document.getElementById('promoChipIcon');
+            if (icon.src !== app.icon) icon.src = app.icon;
+            if (!promoSeen.has(app.id)) {
+                promoSeen.add(app.id);
+                window.tossLog?.('impression', { log_name: `cross_promo_top_${app.id.replace(/-/g, '_')}` });
+            }
+        }
+
+        function stopPromoRotation() {
+            if (promoTimer) { clearInterval(promoTimer); promoTimer = null; }
+        }
+
+        function startPromoChip() {
+            const chip = document.getElementById('promoChip');
+            if (!chip || OTHER_APPS.length === 0) return;
+            chip.classList.remove('hidden');
+            chip.classList.add('flex');
+            paintPromoChip();
+            if (OTHER_APPS.length < 2) return; // 회전할 게 없으면 타이머를 걸지 않는다
+            promoTimer = setInterval(() => {
+                if (document.visibilityState !== 'visible') return; // 백그라운드에서는 헛돌지 않게
+                promoIndex = (promoIndex + 1) % OTHER_APPS.length;
+                paintPromoChip();
+            }, PROMO_ROTATE_MS);
+            // 손가락이 닿는 순간 멈춰 누르려던 앱이 바뀌지 않게 한다.
+            chip.addEventListener('pointerdown', stopPromoRotation);
+        }
+
+        function onPromoChipClick() {
+            stopPromoRotation();
+            logPromo('top', OTHER_APPS[promoIndex].id, { shown_seconds: PROMO_ROTATE_MS / 1000 });
         }
 
         // 스크롤 깊이 계측. 체류 34초가 "못 찾고 이탈"인지 "빠르게 훑고 찾음"인지 지금은 구분할 수 없다.
@@ -1352,6 +1406,7 @@
 
         updateLikedBadge();
         renderCrossPromo();
+        startPromoChip();
         loadDeals().then(applyDeepLink); // 특정 행사로 바로 열기는 ALL_DEALS가 로드된 뒤에만 가능
         maybeShowFirstNotice();
         fetchWeatherChip();

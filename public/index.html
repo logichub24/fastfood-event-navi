@@ -23,23 +23,34 @@
         <div id="panel-events" class="flex-1 min-h-0 flex flex-col overflow-hidden">
             <!-- 상단 헤더 -->
             <div class="flex-none pt-3 z-[100]">
-                <div class="px-3 pb-2 flex items-center gap-1.5">
-                    <div class="flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto hide-scrollbar">
+                <!-- 칩이 늘어나 첫 줄이 빡빡하므로 간격을 줄인다(gap-1.5 -> gap-1, 아이콘 버튼 사이도 축소).
+                     터치 영역 확보를 위해 아이콘 버튼 크기(w-9)는 유지한다. -->
+                <div class="px-2.5 pb-2 flex items-center gap-1">
+                    <div class="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar">
                         <!-- 진행중 행사 수 -->
-                        <div class="bg-white px-3 py-2 rounded-full shadow-sm border border-gray-100 flex items-center gap-1.5 shrink-0">
+                        <div class="bg-white px-2.5 py-2 rounded-full shadow-sm border border-gray-100 flex items-center gap-1 shrink-0">
                             <span class="text-[10px] text-gray-500 font-bold leading-none">진행중</span>
                             <span id="eventCountText" class="text-[13px] font-black text-gray-900 leading-none">-</span>
                         </div>
                         <!-- 오늘 새 행사 (있을 때만, 탭하면 신규만 필터) -->
-                        <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                        <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                             <span id="newDealsBannerText"></span>
                         </button>
                         <!-- 오늘 종료 (있을 때만, 탭하면 오늘마감만 필터) -->
-                        <button id="endingTodayBanner" onclick="toggleEndingToday()" class="hidden items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                        <button id="endingTodayBanner" onclick="toggleEndingToday()" class="hidden items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
                             <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                             <span id="endingTodayBannerText"></span>
                         </button>
+                        <!-- 자체 앱 회전 칩. 편의점 행사 앱과 같은 형태로 맞췄다.
+                             누르려는 순간 회전으로 앱이 바뀌면 오탭이 되므로 손가락이 닿으면 회전을 멈춘다. -->
+                        <a id="promoChip" href="#" onclick="onPromoChipClick()"
+                           class="hidden items-center gap-0.5 pl-1 pr-1.5 py-1 rounded-full bg-white border border-gray-100 shadow-sm shrink-0 active:scale-95 transition">
+                            <img id="promoChipIcon" src="" alt="" width="22" height="22" loading="lazy"
+                                 onerror="this.style.display='none'" class="w-[22px] h-[22px] rounded-full shrink-0 object-cover">
+                            <span id="promoChipName" class="text-[11px] font-black text-gray-700 whitespace-nowrap"></span>
+                            <i class="fa-solid fa-chevron-right text-[8px] text-gray-300"></i>
+                        </a>
                     </div>
                     <button onclick="openSearchSheet()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
                         <i class="fa-solid fa-magnifying-glass text-sm"></i>
@@ -47,9 +58,6 @@
                     <button onclick="openLikedSheet()" class="relative w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
                         <i class="fa-solid fa-heart text-sm"></i>
                         <span id="likedBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
-                    </button>
-                    <button onclick="openSettings()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
-                        <i class="fa-solid fa-gear text-sm"></i>
                     </button>
                 </div>
 
@@ -168,6 +176,11 @@
             </button>
             <button onclick="switchTab('map')" id="navBtnMap" class="nav-tab-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
                 <i class="nav-tab-icon fa-solid fa-map-location-dot text-base transition-transform"></i>매장찾기
+            </button>
+            <!-- 설정은 자주 쓰지 않는데 상단 첫 줄의 폭을 차지하고 있었다.
+                 하단으로 내려 그 자리를 행사 정보에 돌려준다. 탭이 아니라 시트를 여는 버튼이다. -->
+            <button onclick="openSettings()" class="nav-tab-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors" aria-label="설정 열기">
+                <i class="nav-tab-icon fa-solid fa-gear text-base transition-transform"></i>설정
             </button>
         </div>
 
