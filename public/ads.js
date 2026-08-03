@@ -33,12 +33,31 @@ function showInterstitial() {
   });
 }
 
-// 행동 기반 전면광고 트리거. 지도 진입 / 길찾기 클릭 / 행사 상세 열기 세 지점에서
-// 제한 없이 매번 노출한다. (유예·쿨다운·세션 상한·빈도 제한은 모두 제거했다.)
-const AD_TRIGGERS = ['map', 'navigation', 'detail'];
+// 행동 기반 전면광고 트리거.
+// skipFirst: 처음 N번은 건너뛴다(그 기능을 처음 써보는 순간을 보호).
+// every: 건너뛴 뒤로 몇 번당 한 번 띄울지.
+//
+// 시작 유예는 두지 않는다. 평균 체류가 34초라 유예를 걸면 광고가 사실상 꺼진다(45초로 뒀다가 겪음).
+// 쿨다운·세션 상한도 두지 않는다. 광고를 띄우면 닫힌 뒤 다음 광고를 다시 받아야 하는데,
+// 그 로딩 시간이 자연스러운 쿨다운 역할을 한다(준비 안 됐으면 그 회차는 건너뜀).
+const AD_RULES = {
+  // 길찾기 - 이미 카카오맵으로 나가는 시점이라 탐색을 끊지 않는다. 매번.
+  navigation: { skipFirst: 0, every: 1 },
+  // 지도 진입 - 처음 써보는 순간은 보호하고, 두 번째 진입부터 매번.
+  map: { skipFirst: 1, every: 1 },
+  // 행사 상세 - 카드를 열고 닫는 게 이 앱의 기본 탐색이라 가장 보수적으로. 2·4·6번째.
+  detail: { skipFirst: 1, every: 2 },
+};
+const adTriggerCounts = {};
 
 window.onAdTrigger = function onAdTrigger(trigger) {
-  if (!AD_TRIGGERS.includes(trigger)) return;
+  const rule = AD_RULES[trigger];
+  if (!rule) return;
+
+  const count = (adTriggerCounts[trigger] = (adTriggerCounts[trigger] || 0) + 1);
+  if (count <= rule.skipFirst) return;
+  if ((count - rule.skipFirst - 1) % rule.every !== 0) return;
+
   window.tossLog?.('impression', { log_name: `interstitial_${trigger}` });
   showInterstitial();
 };
