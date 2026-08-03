@@ -1317,7 +1317,30 @@
         const ONBOARDING_SEEN_KEY = 'ff_onboarding_seen';
 
         function openSettings() {
+            renderAdDiagnostics();
             document.getElementById('settingsBg').classList.add('active');
+        }
+
+        // 전면광고 미노출 원인을 실기기에서 읽기 위한 진단. 토스 앱 안에서만 노출한다.
+        function renderAdDiagnostics() {
+            const el = document.getElementById('adDiag');
+            if (!el) return;
+            const s = window.__adState;
+            if (!s || !document.body.classList.contains('in-toss-app')) {
+                el.classList.add('hidden');
+                return;
+            }
+            const yn = (v) => (v === null ? '확인 전' : v ? '예' : '아니오');
+            el.classList.remove('hidden');
+            el.innerHTML = [
+                `광고 진단 (경과 ${Math.round((Date.now() - performance.timeOrigin) / 1000)}초)`,
+                `· 배너 부착: ${yn(s.banner)}`,
+                `· 전면광고 지원: ${yn(s.supported)}`,
+                `· 전면광고 준비됨: ${yn(s.loaded)}`,
+                `· 이번 세션 노출: ${s.shown}회`,
+                s.lastBlock ? `· 마지막 차단 사유: ${s.lastBlock}` : '',
+                s.loadError ? `· 오류: ${s.loadError}` : '',
+            ].filter(Boolean).join('<br>');
         }
         function closeSettings() {
             document.getElementById('settingsBg').classList.remove('active');

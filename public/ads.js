@@ -10,12 +10,40 @@ const AD_CONFIG = {
 
 let interstitialReady = false;
 
+// 전면광고가 안 뜰 때 원인이 넷(미지원/로드실패/가드차단/재고없음)인데 원격에서는 구분이 안 된다.
+// 실기기에서 설정 화면으로 바로 확인할 수 있도록 상태를 남긴다.
+window.__adState = {
+  supported: null,   // loadFullScreenAd 지원 여부
+  loaded: false,     // 광고 준비 완료
+  loadError: '',     // 로드 실패 사유
+  lastBlock: '',     // 마지막으로 노출이 막힌 이유
+  shown: 0,          // 이번 세션 노출 횟수
+  banner: false,     // 배너 부착 여부
+};
+
 function loadInterstitial() {
-  if (!loadFullScreenAd.isSupported || !loadFullScreenAd.isSupported()) return;
+  const supported = !!(loadFullScreenAd.isSupported && loadFullScreenAd.isSupported());
+  window.__adState.supported = supported;
+  if (!supported) {
+    window.tossLog?.('screen', { log_name: 'interstitial_unsupported' });
+    return;
+  }
   loadFullScreenAd({
     options: { adGroupId: AD_CONFIG.interstitial },
-    onEvent: (event) => { if (event.type === 'loaded') interstitialReady = true; },
-    onError: () => { interstitialReady = false; },
+    onEvent: (event) => {
+      if (event.type === 'loaded') {
+        interstitialReady = true;
+        window.__adState.loaded = true;
+        window.__adState.loadError = '';
+        window.tossLog?.('screen', { log_name: 'interstitial_loaded' });
+      }
+    },
+    onError: (err) => {
+      interstitialReady = false;
+      window.__adState.loaded = false;
+      window.__adState.loadError = String(err && err.message ? err.message : err).slice(0, 120);
+      window.tossLog?.('screen', { log_name: 'interstitial_load_error' });
+    },
   });
 }
 
@@ -64,17 +92,23 @@ window.onAdTrigger = function onAdTrigger(trigger) {
   const config = AD_TRIGGER_CONFIG[trigger];
   if (!config) return;
 
+  // 막힌 이유를 남겨야 "왜 안 뜨는지"를 실기기에서 알 수 있다.
+  const block = (reason) => { window.__adState.lastBlock = reason; };
+
   adTriggerCounts[trigger] = (adTriggerCounts[trigger] || 0) + 1;
-  if ((adTriggerCounts[trigger] - 1) % config.every !== 0) return;
+  if ((adTriggerCounts[trigger] - 1) % config.every !== 0) { block(`빈도(${trigger} ${config.every}회당 1회)`); return; }
 
   const now = Date.now();
-  if (now - appStartedAt < AD_START_GRACE_MS) return;
-  if (now - lastAdShownAt < AD_COOLDOWN_MS) return;
-  if (adShownCount >= AD_SESSION_LIMIT) return;
-  if (!interstitialReady) return; // 미준비 상태를 소진으로 세지 않도록 카운터 증가 전에 확인
+  const elapsed = Math.round((now - appStartedAt) / 1000);
+  if (now - appStartedAt < AD_START_GRACE_MS) { block(`시작 유예(${elapsed}s / ${AD_START_GRACE_MS / 1000}s)`); return; }
+  if (now - lastAdShownAt < AD_COOLDOWN_MS) { block('쿨다운'); return; }
+  if (adShownCount >= AD_SESSION_LIMIT) { block('세션 상한'); return; }
+  if (!interstitialReady) { block('광고 미준비'); return; } // 미준비를 소진으로 세지 않도록 마지막에 확인
 
+  block('');
   lastAdShownAt = now;
   adShownCount++;
+  window.__adState.shown = adShownCount;
   // 유예를 낮춘 효과를 확인하려면 "실제로 떴는가"가 남아야 한다.
   // 트리거를 이름에 넣어, 콘솔이 파라미터 분포를 못 보여줘도 어느 시점에서 떴는지 읽히게 한다.
   window.tossLog?.('impression', {
@@ -147,8 +181,12 @@ function init() {
     callbacks: {
       onInitialized: () => {
         const slot = document.getElementById('adBannerSlot');
-        if (slot) TossAds.attachBanner(AD_CONFIG.banner, slot);
+        if (slot) { TossAds.attachBanner(AD_CONFIG.banner, slot); window.__adState.banner = true; }
         loadInterstitial();
+      },
+      onInitializationFailed: (error) => {
+        window.__adState.loadError = 'SDK 초기화 실패: ' + String(error && error.message ? error.message : error).slice(0, 100);
+        window.tossLog?.('screen', { log_name: 'ads_init_failed' });
       },
     },
   });

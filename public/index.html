@@ -283,6 +283,9 @@
                         <button onclick="requestNotifications()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600"><i class="fa-regular fa-bell mr-1"></i>새 행사 알림 받기</button>
                     </div>
                     <button onclick="reopenOnboarding()" class="w-full py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600">시작 안내 다시 보기</button>
+                    <!-- 전면광고가 안 뜰 때 원인을 실기기에서 바로 확인하기 위한 진단.
+                         토스 앱 안(in-toss-app)에서만 보이고 일반 사용자 화면에는 나타나지 않는다. -->
+                    <div id="adDiag" class="hidden text-[10px] leading-relaxed text-gray-400 border border-dashed border-gray-200 rounded-xl p-2.5"></div>
                     <button onclick="closeSettings()" class="w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm">확인</button>
                 </div>
             </div>
