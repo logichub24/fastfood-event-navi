@@ -63,7 +63,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 5,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -131,7 +131,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 14,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -158,7 +158,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 19,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -985,7 +985,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": null,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SUBWAY",
@@ -998,7 +998,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": null,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SUBWAY",
