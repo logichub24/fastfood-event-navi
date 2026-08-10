@@ -6,3 +6,7 @@ dist/
 .claude/
 # Added by code-review-graph
 .code-review-graph/
+
+# 로컬 크롤 로그
+daily-crawl.log
+daily-crawl.state
