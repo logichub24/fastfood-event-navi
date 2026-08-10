@@ -1,19 +1,5 @@
 [
   {
-    "brand": "NOBRANDBURGER",
-    "id": "2026070429",
-    "title": "버크셔K 세트업",
-    "image": "https://order.nobrandburger.com/upload/imbo/up/2026/07//20260724161125159749732469253409.png",
-    "link": "https://order.nobrandburger.com/event/",
-    "startDate": "2026-07-28",
-    "endDate": "2026-08-10",
-    "isOngoingText": "진행중",
-    "category": "세트･콤보",
-    "ongoing": true,
-    "daysLeft": 1,
-    "isNew": false
-  },
-  {
     "brand": "BURGERKING",
     "id": "1574",
     "title": "26년 8월 3일(월) ~ 26년 8월 11일(화) 2FOR6000+2FOR7000 프로모션",
@@ -24,7 +10,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2,
+    "daysLeft": 1,
     "isNew": false
   },
   {
@@ -37,7 +23,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 3,
+    "daysLeft": 2,
     "isNew": false
   },
   {
@@ -50,7 +36,7 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 3,
+    "daysLeft": 2,
     "isNew": false
   },
   {
@@ -63,8 +49,22 @@
     "endDate": "2026-08-12",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 3,
+    "daysLeft": 2,
     "isNew": false
+  },
+  {
+    "brand": "BURGERKING",
+    "id": "1594",
+    "title": "복날엔 골라 먹는 닭",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/10/ade16d57-248d-4f96-b14b-85a09fffdc84.png",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-08-10",
+    "endDate": "2026-08-16",
+    "isOngoingText": "진행중",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 6,
+    "isNew": true
   },
   {
     "brand": "KFC",
@@ -77,7 +77,7 @@
     "isOngoingText": "진행종료",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 8,
+    "daysLeft": 7,
     "isNew": false
   },
   {
@@ -91,7 +91,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 9,
+    "daysLeft": 8,
     "isNew": false
   },
   {
@@ -104,7 +104,7 @@
     "endDate": "2026-08-22",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 13,
+    "daysLeft": 12,
     "isNew": false
   },
   {
@@ -118,7 +118,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 17,
+    "daysLeft": 16,
     "isNew": false
   },
   {
@@ -132,7 +132,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 21,
+    "daysLeft": 20,
     "isNew": false
   },
   {
@@ -145,7 +145,7 @@
     "endDate": "2026-08-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -158,7 +158,7 @@
     "endDate": "2026-08-31",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -171,7 +171,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -184,7 +184,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -197,21 +197,7 @@
     "endDate": "2026-08-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 22,
-    "isNew": false
-  },
-  {
-    "brand": "BURGERKING",
-    "id": "1475",
-    "title": "친구 초대하고 맥북 받자!",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/app/list/2026/06/24/b4bd4179-bc99-4f20-a358-8019998d2d59.png",
-    "link": "https://www.burgerking.co.kr/event/ongoing",
-    "startDate": "2026-07-01",
-    "endDate": "2026-08-31",
-    "isOngoingText": "진행중",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -225,7 +211,7 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -239,7 +225,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -253,7 +239,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -267,7 +253,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -281,7 +267,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 22,
+    "daysLeft": 21,
     "isNew": false
   },
   {
@@ -295,7 +281,7 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 35,
+    "daysLeft": 34,
     "isNew": false
   },
   {
@@ -308,7 +294,7 @@
     "endDate": "2026-09-16",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 38,
+    "daysLeft": 37,
     "isNew": false
   },
   {
@@ -322,7 +308,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 38,
+    "daysLeft": 37,
     "isNew": false
   },
   {
@@ -336,21 +322,21 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 38,
+    "daysLeft": 37,
     "isNew": false
   },
   {
     "brand": "BURGERKING",
     "id": "1295",
     "title": "토스프로모션",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/30/bacec561-21e1-48cb-98a8-b18513212a64.png",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/10/aa575f10-de7e-4807-b414-a7cb0cef2e82.png",
     "link": "https://www.burgerking.co.kr/event/ongoing",
     "startDate": "2026-04-29",
     "endDate": "2026-09-30",
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 52,
+    "daysLeft": 51,
     "isNew": false
   },
   {
@@ -364,7 +350,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 52,
+    "daysLeft": 51,
     "isNew": false
   },
   {
@@ -378,7 +364,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 52,
+    "daysLeft": 51,
     "isNew": false
   },
   {
@@ -392,7 +378,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 52,
+    "daysLeft": 51,
     "isNew": false
   },
   {
@@ -406,7 +392,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 72,
+    "daysLeft": 71,
     "isNew": false
   },
   {
@@ -420,7 +406,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 83,
+    "daysLeft": 82,
     "isNew": false
   },
   {
@@ -434,7 +420,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 83,
+    "daysLeft": 82,
     "isNew": false
   },
   {
@@ -448,7 +434,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 83,
+    "daysLeft": 82,
     "isNew": false
   },
   {
@@ -462,7 +448,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 108,
+    "daysLeft": 107,
     "isNew": false
   },
   {
@@ -476,7 +462,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 128,
+    "daysLeft": 127,
     "isNew": false
   },
   {
@@ -489,7 +475,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 144,
+    "daysLeft": 143,
     "isNew": false
   },
   {
@@ -502,7 +488,7 @@
     "endDate": "2026-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 144,
+    "daysLeft": 143,
     "isNew": false
   },
   {
@@ -515,7 +501,7 @@
     "endDate": "2026-12-31",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 144,
+    "daysLeft": 143,
     "isNew": false
   },
   {
@@ -529,7 +515,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 144,
+    "daysLeft": 143,
     "isNew": false
   },
   {
@@ -543,22 +529,22 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 175,
+    "daysLeft": 174,
     "isNew": false
   },
   {
     "brand": "KFC",
-    "id": "949",
-    "title": "매일 밤 9시~밤 10시까지 치킨 1+1!",
-    "image": "https://www.kfckorea.com/nas/event/2024/02/02/5lrZKKgj6hLk.png",
+    "id": "955",
+    "title": "매월 11일은? 치킨올데이! 하루종일 치킨이 1+1~",
+    "image": "https://www.kfckorea.com/nas/event/2023/08/09/z4rVjCPLglb3.jpg",
     "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
-    "startDate": "2026-01-12",
+    "startDate": "2026-01-11",
     "endDate": "2027-12-31",
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 509,
-    "isNew": false
+    "daysLeft": 508,
+    "isNew": true
   },
   {
     "brand": "BURGERKING",
@@ -571,7 +557,7 @@
     "isOngoingText": "진행중",
     "category": "쿠폰･할인",
     "ongoing": true,
-    "daysLeft": 8818,
+    "daysLeft": 8817,
     "isNew": false
   },
   {
@@ -585,7 +571,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26807,
+    "daysLeft": 26806,
     "isNew": false
   },
   {
@@ -599,7 +585,7 @@
     "isOngoingText": "진행중",
     "category": "멤버십･앱",
     "ongoing": true,
-    "daysLeft": 26807,
+    "daysLeft": 26806,
     "isNew": false
   },
   {
@@ -613,7 +599,7 @@
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 26807,
+    "daysLeft": 26806,
     "isNew": false
   },
   {
@@ -626,7 +612,7 @@
     "endDate": "9999-04-01",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2911948,
+    "daysLeft": 2911947,
     "isNew": false
   },
   {
@@ -639,7 +625,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -652,7 +638,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -665,7 +651,7 @@
     "endDate": "9999-12-31",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -678,7 +664,7 @@
     "endDate": "9999-12-31",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -691,7 +677,7 @@
     "endDate": "9999-12-31",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -705,7 +691,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -719,35 +705,35 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
     "brand": "BURGERKING",
     "id": "72",
     "title": "24시간 딜리버리",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2025/01/21/a7574554-8a83-4705-9cce-23695dc9c059.png",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/10/c2394722-a520-4afb-a240-add6dcf1e75e.png",
     "link": "https://www.burgerking.co.kr/event/ongoing",
     "startDate": "2020-07-10",
     "endDate": "9999-12-31",
     "isOngoingText": "진행중",
     "category": "배달",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
     "brand": "BURGERKING",
     "id": "876",
     "title": "GRAND OPEN!",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2025/11/19/f371d0b4-6aa8-47c3-9e55-823039fe3c2e.png",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/10/dcd795e5-6490-48d4-af4f-91704886b1e3.png",
     "link": "https://www.burgerking.co.kr/event/ongoing",
     "startDate": "2025-12-10",
     "endDate": "9999-12-31",
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -761,21 +747,21 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
     "brand": "BURGERKING",
     "id": "1394",
     "title": "세트메뉴가 하루종일 5900원 부터! 올데이킹!",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/06/29/fd3b8103-1eb9-45bc-a7c2-672a02052765.jpg",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/10/c3b0635d-47e7-4bfa-9fed-6299b26b3492.png",
     "link": "https://www.burgerking.co.kr/event/ongoing",
     "startDate": "2026-06-04",
     "endDate": "9999-12-31",
     "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -789,7 +775,7 @@
     "isOngoingText": "진행중",
     "category": "신메뉴",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
@@ -803,7 +789,7 @@
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2912222,
+    "daysLeft": 2912221,
     "isNew": false
   },
   {
