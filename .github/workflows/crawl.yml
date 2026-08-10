@@ -24,7 +24,12 @@ jobs:
       - name: 행사 정보 크롤링 (맥도날드/KFC/롯데리아/맘스터치)
         run: npm run crawl
 
+      # 매장 위치는 외부 API(소상공인)가 간헐적으로 타임아웃 난다.
+      # 여기서 실패하면 워크플로우가 멈춰 아래 커밋 단계까지 건너뛰게 되고,
+      # 그 결과 정상 수집된 행사 데이터마저 갱신되지 않는다(8/07·8/08·8/10 실제 발생).
+      # 매장 데이터는 하루 못 받아도 기존 파일이 그대로 남으므로 실패해도 계속 진행한다.
       - name: 매장 위치 동기화 (소상공인 API + 맥도날드/쉐이크쉑 자체 크롤 + 카카오 보완)
+        continue-on-error: true
         env:
           SBIZ_API_KEY: ${{ secrets.SBIZ_API_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
@@ -35,5 +40,24 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/deals.json public/stores.json
-          git diff --cached --quiet || git commit -m "chore: 행사/매장 데이터 자동 갱신 $(date -u +%Y-%m-%d)"
-          git push
+
+          if git diff --cached --quiet; then
+            echo "변경 없음 - 커밋 생략"
+            exit 0
+          fi
+
+          git commit -m "chore: 행사/매장 데이터 자동 갱신 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+
+          # 워크플로우가 도는 사이 누군가 푸시하면 non-fast-forward로 거부된다(8/03 실제 발생).
+          # 데이터 파일만 건드리므로 리베이스 후 재시도하면 안전하게 올라간다.
+          for i in 1 2 3; do
+            if git push; then
+              echo "푸시 완료"
+              exit 0
+            fi
+            echo "푸시 거부됨 - 원격 변경을 받아 재시도 ($i/3)"
+            git pull --rebase origin main
+          done
+
+          echo "3회 재시도 후에도 푸시 실패"
+          exit 1

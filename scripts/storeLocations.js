@@ -86,16 +86,33 @@ function classifyBrand(name) {
   return null;
 }
 
+// 한 페이지를 재시도하며 가져온다. 마지막 시도까지 실패하면 그대로 던져서
+// 워크플로우 로그에 원인이 남게 한다(호출부에서 이어서 처리).
+async function fetchPageWithRetry(serviceKey, code, pageNo, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const { data } = await axios.get(`${BASE}/storeListInUpjong`, {
+        params: { serviceKey, type: 'json', divId: 'indsSclsCd', key: code, numOfRows: PAGE_SIZE, pageNo },
+        timeout: 45000,
+      });
+      return data;
+    } catch (err) {
+      console.error(`[${code}] page ${pageNo} 시도 ${attempt}/${maxRetries} 실패 - ${err.message}`);
+      if (attempt === maxRetries) throw err;
+      await new Promise((r) => setTimeout(r, 3000 * attempt));
+    }
+  }
+}
+
 async function fetchUpjong(serviceKey, code) {
   const stores = [];
   let pageNo = 1;
   let totalCount = Infinity;
 
   while ((pageNo - 1) * PAGE_SIZE < totalCount) {
-    const { data } = await axios.get(`${BASE}/storeListInUpjong`, {
-      params: { serviceKey, type: 'json', divId: 'indsSclsCd', key: code, numOfRows: PAGE_SIZE, pageNo },
-      timeout: 20000,
-    });
+    // 이 API는 간헐적으로 응답이 20초를 넘겨 워크플로우 전체를 실패시켰다(8/07·8/08·8/10).
+    // 한 페이지가 실패했다고 전체를 버리면 손해가 크니, 여유를 두고 재시도한다.
+    const data = await fetchPageWithRetry(serviceKey, code, pageNo);
 
     const body = data && data.body;
     const items = (body && body.items) || [];
