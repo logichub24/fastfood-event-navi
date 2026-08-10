@@ -7,7 +7,7 @@
 // 매장 위치(stores.json)는 Actions가 매일 처리하므로 여기서는 건드리지 않는다.
 // 실행: node scripts/daily-crawl.js  (Windows 작업 스케줄러에 등록)
 
-const { execFileSync } = require('child_process');
+const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -48,18 +48,16 @@ function log(message) {
 }
 
 // 실패해도 스크립트가 계속 판단할 수 있도록 예외 대신 결과 객체를 돌려준다.
-function run(command, args) {
-  try {
-    const out = execFileSync(command, args, { cwd: ROOT, encoding: 'utf-8', shell: true });
-    return { ok: true, out };
-  } catch (err) {
-    return { ok: false, out: (err.stdout || '') + (err.stderr || err.message || '') };
-  }
+// 크롤러는 진행 상황을 stderr로 찍으므로 두 스트림을 모두 모아야 로그가 쓸모 있다.
+function run(command) {
+  const res = spawnSync(command, { cwd: ROOT, encoding: 'utf-8', shell: true });
+  const out = (res.stdout || '') + (res.stderr || '');
+  return { ok: res.status === 0, out };
 }
 
 function hasStagedChanges() {
   // git diff --cached --quiet 는 변경이 있으면 exit 1 - 그걸 그대로 이용한다.
-  return !run('git', ['diff', '--cached', '--quiet']).ok;
+  return !run('git diff --cached --quiet').ok;
 }
 
 function main() {
@@ -71,13 +69,13 @@ function main() {
   log('===== 로컬 크롤 시작 =====');
 
   // Actions가 먼저 올린 커밋이 있을 수 있으니 먼저 받아온다.
-  const pulled = run('git', ['pull', '--rebase', 'origin', 'main']);
+  const pulled = run('git pull --rebase origin main');
   if (!pulled.ok) {
     log('중단: git pull 실패 - 수동 확인 필요\n' + pulled.out.trim());
     process.exit(1);
   }
 
-  const crawled = run('npm', ['run', 'crawl']);
+  const crawled = run('npm run crawl');
   // 크롤러 일부가 실패해도 runAll.js가 폴백으로 채우고 0이 아니면 성공으로 끝난다.
   // 전부 실패하면 exit 1이므로 deals.json은 건드려지지 않는다.
   if (!crawled.ok) {
@@ -88,7 +86,7 @@ function main() {
   const summary = crawled.out.split('\n').filter((l) => /수집 완료|대체합니다|작성 완료/.test(l));
   log('수집 결과\n' + summary.join('\n'));
 
-  run('git', ['add', 'public/deals.json']);
+  run('git add public/deals.json');
   if (!hasStagedChanges()) {
     log('변경 없음 - 커밋 생략');
     markSucceeded();
@@ -96,7 +94,7 @@ function main() {
   }
 
   const today = new Date().toLocaleDateString('ko-KR');
-  const committed = run('git', ['commit', '-m', `"chore: 행사 데이터 자동 갱신(로컬) ${today}"`]);
+  const committed = run(`git commit -m "chore: 행사 데이터 자동 갱신(로컬) ${today}"`);
   if (!committed.ok) {
     log('중단: 커밋 실패\n' + committed.out.trim());
     process.exit(1);
@@ -104,13 +102,13 @@ function main() {
 
   // 푸시가 거부되면(Actions와 경합) 원격 변경을 받아 최대 3회 재시도한다.
   for (let attempt = 1; attempt <= 3; attempt++) {
-    if (run('git', ['push']).ok) {
+    if (run('git push').ok) {
       log('푸시 완료');
       markSucceeded();
       return;
     }
     log(`푸시 거부됨 - 원격 변경을 받아 재시도 (${attempt}/3)`);
-    run('git', ['pull', '--rebase', 'origin', 'main']);
+    run('git pull --rebase origin main');
   }
 
   log('실패: 3회 재시도 후에도 푸시하지 못했습니다.');
