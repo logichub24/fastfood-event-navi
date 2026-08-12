@@ -104,7 +104,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 7,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "FRANKBURGER",
@@ -449,6 +449,34 @@
   },
   {
     "brand": "NOBRANDBURGER",
+    "id": "2026080433",
+    "title": "아보카도 새우 샐러드 출시",
+    "image": "https://order.nobrandburger.com/upload/imbo/up/2026/08//20260812173317161396243565507738.png",
+    "link": "https://order.nobrandburger.com/event/",
+    "startDate": "2026-08-13",
+    "endDate": "2026-10-31",
+    "isOngoingText": "진행중",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 80,
+    "isNew": true
+  },
+  {
+    "brand": "NOBRANDBURGER",
+    "id": "2026080432",
+    "title": "풀드포크샐러드 출시",
+    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/08//20260812173111161396117702432864.png",
+    "link": "https://order.nobrandburger.com/event/",
+    "startDate": "2026-08-13",
+    "endDate": "2026-10-31",
+    "isOngoingText": "진행중",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 80,
+    "isNew": true
+  },
+  {
+    "brand": "NOBRANDBURGER",
     "id": "2026070427",
     "title": "데일리 치킨 출시",
     "image": "https://order.nobrandburger.com/upload/imbo/up/2026/07//20260723163722159664888570745095.png",
@@ -504,6 +532,19 @@
     "isNew": false
   },
   {
+    "brand": "MCDONALDS",
+    "id": "1021",
+    "title": "맥도날드가 찾은 한국의 맛,<br>제주 풋귤의 상콤함이 팡팡!",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/08/JejuMcFizz_corpsite_thumbnail_860x704.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-08-13",
+    "endDate": "2026-11-25",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 105,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1354",
     "title": "오리지널스 엘파소 치폴레 출시",
@@ -555,7 +596,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 141,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "LOTTERIA",
@@ -732,6 +773,19 @@
     "ongoing": true,
     "daysLeft": 2912219,
     "isNew": false
+  },
+  {
+    "brand": "MCDONALDS",
+    "id": "1023",
+    "title": "우바산 홍차로 만나는<br>향긋 달콤 피치 아이스티!",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/08/IcedTea_corpsite_thumbnail_860x704.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-08-13",
+    "endDate": "9999-12-31",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 2912219,
+    "isNew": true
   },
   {
     "brand": "MCDONALDS",
