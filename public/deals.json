@@ -14,20 +14,6 @@
   },
   {
     "brand": "BURGERKING",
-    "id": "1594",
-    "title": "복날엔 골라 먹는 닭",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/10/ade16d57-248d-4f96-b14b-85a09fffdc84.png",
-    "link": "https://www.burgerking.co.kr/event/ongoing",
-    "startDate": "2026-08-10",
-    "endDate": "2026-08-16",
-    "isOngoingText": "진행중",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 0,
-    "isNew": false
-  },
-  {
-    "brand": "BURGERKING",
     "id": "1575",
     "title": "26년 8월 킹퓨전 2900원 프로모션",
     "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/31/c2e95338-5425-4d77-bd85-85dc79eac144.png",
@@ -92,6 +78,20 @@
     "ongoing": true,
     "daysLeft": 7,
     "isNew": false
+  },
+  {
+    "brand": "BURGERKING",
+    "id": "1553",
+    "title": "26년 8월 딜리버리 21,000원 이상 주문 시 4,000원 할인",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/21/cc6a9bda-eb8a-489b-89dc-d3688d8d9825.png",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-08-17",
+    "endDate": "2026-08-23",
+    "isOngoingText": "진행중",
+    "category": "배달",
+    "ongoing": true,
+    "daysLeft": 7,
+    "isNew": true
   },
   {
     "brand": "MOMSTOUCH",
