@@ -49,9 +49,22 @@ function log(message) {
 
 // 실패해도 스크립트가 계속 판단할 수 있도록 예외 대신 결과 객체를 돌려준다.
 // 크롤러는 진행 상황을 stderr로 찍으므로 두 스트림을 모두 모아야 로그가 쓸모 있다.
-function run(command) {
-  const res = spawnSync(command, { cwd: ROOT, encoding: 'utf-8', shell: true });
+//
+// 타임아웃이 없으면 git이 자격증명 입력을 기다리며 멈출 때 프로세스가 영원히 살아남고,
+// 예약 작업이 IgnoreNew라 다음 실행까지 통째로 건너뛴다(8/14·8/15 실제 발생).
+// GIT_TERMINAL_PROMPT=0으로 입력 대기 자체를 막고, 타임아웃으로 이중 방어한다.
+function run(command, timeoutMs = 120000) {
+  const res = spawnSync(command, {
+    cwd: ROOT,
+    encoding: 'utf-8',
+    shell: true,
+    timeout: timeoutMs,
+    env: { ...process.env, GIT_TERMINAL_PROMPT: '0', GCM_INTERACTIVE: 'never' },
+  });
   const out = (res.stdout || '') + (res.stderr || '');
+  if (res.error && res.error.code === 'ETIMEDOUT') {
+    return { ok: false, out: `${timeoutMs / 1000}초 초과로 중단: ${command}\n${out}` };
+  }
   return { ok: res.status === 0, out };
 }
 
@@ -75,7 +88,7 @@ function main() {
     process.exit(1);
   }
 
-  const crawled = run('npm run crawl');
+  const crawled = run('npm run crawl', 600000); // 크롤러 9개 + 재시도라 넉넉히
   // 크롤러 일부가 실패해도 runAll.js가 폴백으로 채우고 0이 아니면 성공으로 끝난다.
   // 전부 실패하면 exit 1이므로 deals.json은 건드려지지 않는다.
   if (!crawled.ok) {
