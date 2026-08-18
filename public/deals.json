@@ -1,19 +1,5 @@
 [
   {
-    "brand": "BURGERKING",
-    "id": "1575",
-    "title": "26년 8월 킹퓨전 2900원 프로모션",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/31/c2e95338-5425-4d77-bd85-85dc79eac144.png",
-    "link": "https://www.burgerking.co.kr/event/ongoing",
-    "startDate": "2026-08-03",
-    "endDate": "2026-08-18",
-    "isOngoingText": "진행중",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 0,
-    "isNew": false
-  },
-  {
     "brand": "LOTTERIA",
     "id": "17788",
     "title": "[롯데리아]VVIP 신제품 시식회 초청",
@@ -50,7 +36,7 @@
     "category": "시간대 특가",
     "ongoing": true,
     "daysLeft": 3,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "FRANKBURGER",
@@ -76,7 +62,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 5,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -172,7 +158,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 13,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "LOTTERIA",
@@ -335,6 +321,20 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 27,
+    "isNew": false
+  },
+  {
+    "brand": "BURGERKING",
+    "id": "1613",
+    "title": "26년 8월 킹퓨전 2500원 프로모션",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/12/d7b81ec7-a53c-4d73-a994-cff512962fe9.jpg",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-08-19",
+    "endDate": "2026-09-15",
+    "isOngoingText": "진행중",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 28,
     "isNew": true
   },
   {
@@ -654,6 +654,20 @@
     "isNew": false
   },
   {
+    "brand": "BURGERKING",
+    "id": "1595",
+    "title": "몬스터 맥시멈 출시",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/08/14/da8c3cf9-a97d-43d6-adc0-0208dac80d6f.png",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-08-19",
+    "endDate": "2027-02-23",
+    "isOngoingText": "진행중",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 189,
+    "isNew": true
+  },
+  {
     "brand": "KFC",
     "id": "949",
     "title": "매일 밤 9시~밤 10시까지 치킨 1+1!",
@@ -707,7 +721,7 @@
     "category": "시간대 특가",
     "ongoing": true,
     "daysLeft": 26798,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
