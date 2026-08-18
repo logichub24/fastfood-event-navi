@@ -105,7 +105,16 @@ window.tossGetCurrentLocation = function tossGetCurrentLocation() {
 };
 
 function init() {
-  if (!TossAds.initialize.isSupported || !TossAds.initialize.isSupported()) return; // 토스 앱이 아니면 전부 스킵
+  // 토스 앱 밖에서는 isSupported()가 false를 주지 않고 예외를 던지는 경우가 있다
+  // (esm.sh가 주는 SDK 빌드에 따라 다름). 예외가 새면 아래 배너·전면광고 등록이
+  // 통째로 건너뛰어지므로 여기서 잡는다. 토스 앱 안에서의 동작은 그대로다.
+  let supported = false;
+  try {
+    supported = !!(TossAds.initialize.isSupported && TossAds.initialize.isSupported());
+  } catch (e) {
+    return;
+  }
+  if (!supported) return;
 
   document.body.classList.add('in-toss-app');
 

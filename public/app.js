@@ -872,11 +872,9 @@
 
         function renderMapBrandChips() {
             const container = document.getElementById('mapBrandContainer');
-            // 인라인에는 대표 3개 브랜드만 노출하고, 나머지는 '브랜드' 모달에서 고른다.
-            let inline = MAP_BRANDS.slice(0, 3);
-            if (mapBrand !== 'ALL' && !inline.includes(mapBrand)) {
-                inline = [...inline.slice(0, 2), mapBrand];
-            }
+            // 가로 스크롤이 있으므로 3개로 줄일 이유가 없다. 전 브랜드를 노출해
+            // 모달을 열지 않고도 바로 고를 수 있게 한다(행사 탭과 같은 방향).
+            const inline = MAP_BRANDS;
             container.innerHTML = inline.map((b) => {
                 const active = mapBrand === b ? 'active' : 'bg-white border-gray-200 text-gray-600';
                 const label = `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}`;
