@@ -1,7 +1,9 @@
 // 토스인앱(Apps in Toss) 광고 SDK 연동.
-// 일반 브라우저에서는 isSupported()가 false라 전부 조용히 no-op되고,
+// SDK 3.x부터 web-bridge/web-analytics가 web-framework 하나로 합쳐졌다.
+// 3.x의 isSupported()는 토스 밖에서 false를 주지 않고 TypeError를 던지므로
+// 호출부를 반드시 try/catch로 감싼다(2.x는 조용히 false였다).
 // 토스 앱 WebView 안에서 열렸을 때만 실제 광고가 붙는다.
-import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy, requestNotificationAgreement } from 'https://esm.sh/@apps-in-toss/web-bridge@2.9.2';
+import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy, requestNotificationAgreement, Analytics } from 'https://esm.sh/@apps-in-toss/web-framework@3.0.4';
 
 const AD_CONFIG = {
   banner: 'ait.v2.live.2d12e1c821d44d97',
@@ -11,7 +13,12 @@ const AD_CONFIG = {
 let interstitialReady = false;
 
 function loadInterstitial() {
-  if (!loadFullScreenAd.isSupported || !loadFullScreenAd.isSupported()) return;
+  // 3.x의 isSupported()는 토스 밖에서 window.__appsInTossConstants가 없어 TypeError를 던진다.
+  try {
+    if (!loadFullScreenAd.isSupported || !loadFullScreenAd.isSupported()) return;
+  } catch (e) {
+    return;
+  }
   loadFullScreenAd({
     options: { adGroupId: AD_CONFIG.interstitial },
     onEvent: (event) => { if (event.type === 'loaded') interstitialReady = true; },
@@ -86,12 +93,18 @@ window.tossRequestNotificationAgreement = function tossRequestNotificationAgreem
   });
 };
 
-// 계측(@apps-in-toss/web-analytics)은 제거했다.
-// 이 패키지는 @apps-in-toss/web-bridge를 peerDependency로 갖는데, esm.sh에서 동적 import하면
-// 브릿지 SDK가 두 번째 사본으로 또 로드된다. 네이티브 통신 채널이 충돌해 광고가 전부 죽었다.
-// (출시본은 정상, 계측을 넣은 빌드만 광고 미노출 → 이 import가 원인)
-// 다시 넣으려면 esm.sh 런타임 로드가 아니라 브릿지와 같은 인스턴스를 쓰는 방식이어야 한다.
-// 호출부는 모두 window.tossLog?.(...) 형태라 이 함수가 없어도 조용히 넘어간다.
+// 계측. 2.x에서는 web-analytics가 web-bridge를 peerDependency로 갖는 탓에 esm.sh에서
+// 브릿지 SDK가 두 번째 사본으로 로드돼 네이티브 채널이 충돌했고 광고가 전부 죽었다.
+// 3.x에서는 web-framework 하나로 합쳐져 같은 인스턴스를 쓰므로 그 문제가 없다.
+// 그래도 계측 실패가 앱을 막지는 않도록 호출은 전부 삼킨다.
+window.tossLog = function tossLog(type, params) {
+  try {
+    const result = Analytics?.[type]?.(params);
+    if (result && typeof result.catch === 'function') result.catch(() => {});
+  } catch (e) {
+    // 계측 실패가 사용자 동작을 막지 않도록 삼킨다.
+  }
+};
 
 // 토스 앱 안에서는 navigator.share 대신 SDK 네이티브 공유 시트를 써야 함.
 window.tossShare = function tossShare(message) {
@@ -105,9 +118,9 @@ window.tossGetCurrentLocation = function tossGetCurrentLocation() {
 };
 
 function init() {
-  // 토스 앱 밖에서는 isSupported()가 false를 주지 않고 예외를 던지는 경우가 있다
-  // (esm.sh가 주는 SDK 빌드에 따라 다름). 예외가 새면 아래 배너·전면광고 등록이
-  // 통째로 건너뛰어지므로 여기서 잡는다. 토스 앱 안에서의 동작은 그대로다.
+  // 3.x는 토스 밖에서 isSupported()가 false가 아니라 TypeError를 던진다
+  // (window.__appsInTossConstants가 undefined). 예외가 새면 아래 배너·전면광고
+  // 등록이 통째로 건너뛰어지므로 여기서 잡는다. 토스 앱 안 동작은 그대로다.
   let supported = false;
   try {
     supported = !!(TossAds.initialize.isSupported && TossAds.initialize.isSupported());
