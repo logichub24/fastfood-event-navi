@@ -172,7 +172,9 @@
         <div id="adBannerSlot" class="flex-none min-h-[55px]"></div>
 
         <!-- 하단 탭 바 -->
-        <div class="flex-none border-t border-gray-100 bg-white flex z-[100]">
+        <!-- 탭바가 플로팅이라 흐름에서 자리를 비워 둔다(높이 계산은 app.css의 #navSpacer) -->
+        <div id="navSpacer" class="flex-none"></div>
+        <div id="bottomNav">
             <button onclick="switchTab('events')" id="navBtnEvents" class="nav-tab-btn active flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
                 <i class="nav-tab-icon fa-solid fa-fire text-base transition-transform"></i>행사
             </button>
