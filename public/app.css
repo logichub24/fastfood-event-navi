@@ -10,6 +10,10 @@
                브라우저가 컨테이너를 442px 밀어 올려 레이아웃이 영구히 깨졌다(검색 시트에서 재현).
                overflow:clip은 스크롤 컨테이너를 만들지 않아 그 스크롤 자체가 불가능하다. */
             overflow: hidden; overflow: clip;
+            /* viewport-fit=cover라 콘텐츠가 노치·상태바 영역까지 올라간다.
+               특히 지도 탭 헤더는 상단 0px에서 시작해 노치에 가렸다. 상단 안전영역을 확보한다.
+               토스가 자체 헤더로 이미 가려주는 환경에서는 env()가 0이라 변화가 없다. */
+            padding-top: var(--sat);
         }
 
         /* PC 환경 모바일 뷰어 시뮬레이션 */
@@ -22,7 +26,11 @@
 
         /* 토스 브랜딩 가이드: 하단 탭바는 화면 전체 폭을 채우는 고정 바가 아니라
            좌우·하단 여백을 둔 플로팅 형태여야 한다(전폭 고정 바는 토스 메인 하단 탭과 겹쳐 반려됨). */
-        :root { --sab: env(safe-area-inset-bottom, 0px); --nav-h: 62px; --nav-gap: 12px; }
+        :root {
+            --sab: env(safe-area-inset-bottom, 0px);
+            --sat: env(safe-area-inset-top, 0px);
+            --nav-h: 62px; --nav-gap: 12px;
+        }
 
         #bottomNav {
             position: absolute; left: 12px; right: 12px;

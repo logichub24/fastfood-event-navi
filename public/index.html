@@ -241,7 +241,7 @@
         </div>
 
         <!-- 시작 안내(온보딩) 모달 -->
-        <div class="modal-bg" id="onboardingBg">
+        <div class="modal-bg" id="onboardingBg" onclick="if (event.target === this) closeOnboarding()">
             <div class="modal-card">
                 <div class="bg-gradient-to-br from-orange-500 to-red-600 pt-8 pb-6 flex flex-col items-center text-white">
                     <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl mb-2">🍔</div>
@@ -264,7 +264,7 @@
         </div>
 
         <!-- 설정 모달 -->
-        <div class="modal-bg" id="settingsBg">
+        <div class="modal-bg" id="settingsBg" onclick="if (event.target === this) closeSettings()">
             <div class="modal-card">
                 <div class="p-4 border-b border-gray-100 flex items-center justify-between">
                     <h2 class="font-black text-base"><i class="fa-solid fa-gear mr-1.5 text-gray-400"></i>설정</h2>
@@ -293,7 +293,7 @@
         </div>
 
         <!-- 브랜드 선택 모달 -->
-        <div class="modal-bg" id="brandModalBg">
+        <div class="modal-bg" id="brandModalBg" onclick="if (event.target === this) closeBrandModal()">
             <div class="modal-card">
                 <div class="p-4 border-b border-gray-100 flex items-center justify-between">
                     <h2 class="font-black text-base">🍔 브랜드 선택</h2>
@@ -308,7 +308,7 @@
         </div>
 
         <!-- 카테고리 선택 모달 -->
-        <div class="modal-bg" id="categoryModalBg">
+        <div class="modal-bg" id="categoryModalBg" onclick="if (event.target === this) closeCategoryModal()">
             <div class="modal-card">
                 <div class="p-4 border-b border-gray-100 flex items-center justify-between">
                     <h2 class="font-black text-base">🏷️ 카테고리 선택</h2>
