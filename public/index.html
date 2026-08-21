@@ -109,6 +109,20 @@
                     <button onclick="dismissFirstNotice()" aria-label="안내 닫기" class="shrink-0 w-6 h-6 -my-0.5 flex items-center justify-center text-amber-500 text-sm">✕</button>
                 </div>
                 <div id="dealList" class="flex flex-col gap-3"></div>
+                <!-- 로딩 상태. 데이터를 받는 동안 빈 화면을 보여주지 않는다. -->
+                <div id="loadingState" class="hidden flex-col gap-3">
+                    <div class="skeleton h-[188px] rounded-2xl"></div>
+                    <div class="skeleton h-[188px] rounded-2xl"></div>
+                    <div class="skeleton h-[188px] rounded-2xl"></div>
+                </div>
+                <!-- 오류 상태. 네트워크 실패를 "행사가 없음"으로 오해하지 않도록 분리하고,
+                     다시 시도할 방법을 제공한다. -->
+                <div id="errorState" class="hidden flex-col items-center justify-center text-center py-20 text-gray-400">
+                    <span class="text-5xl mb-3">📡</span>
+                    <p class="text-sm font-bold text-gray-600">행사 정보를 불러오지 못했어요</p>
+                    <p class="text-xs mt-1">네트워크 상태를 확인해주세요</p>
+                    <button onclick="retryLoadDeals()" class="mt-4 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-xs font-bold active:scale-95 transition">다시 시도</button>
+                </div>
                 <div id="emptyState" class="hidden flex-col items-center justify-center text-center py-20 text-gray-400">
                     <span class="text-5xl mb-3">🔍</span>
                     <p class="text-sm font-bold">조건에 맞는 행사가 없어요</p>

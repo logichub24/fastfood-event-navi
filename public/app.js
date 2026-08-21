@@ -122,12 +122,37 @@
             else { badge.classList.add('hidden'); }
         }
 
+        // 네트워크 실패를 "행사가 없음"으로 보여주면 사용자가 오해하고 다시 시도할 방법도 없다.
+        // 로드 실패 여부를 따로 들고 있다가 renderDeals에서 Empty와 다른 화면을 보여준다.
+        let dealsLoadFailed = false;
+
+        function setListState(state) {
+            const map = { loading: 'loadingState', error: 'errorState', empty: 'emptyState' };
+            for (const [key, id] of Object.entries(map)) {
+                const el = document.getElementById(id);
+                if (!el) continue;
+                el.classList.toggle('hidden', key !== state);
+                el.classList.toggle('flex', key === state);
+            }
+            document.getElementById('dealList').classList.toggle('hidden', state !== null);
+        }
+
+        function retryLoadDeals() {
+            loadDeals();
+        }
+
         async function loadDeals() {
+            dealsLoadFailed = false;
+            if (ALL_DEALS.length === 0) setListState('loading'); // 첫 로드에만 스켈레톤을 보여준다
             try {
                 const res = await fetch(`${DATA_BASE_URL}deals.json?_=${Date.now()}`);
-                ALL_DEALS = await res.json();
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                if (!Array.isArray(data)) throw new Error('예상과 다른 응답 형식');
+                ALL_DEALS = data;
             } catch (e) {
-                ALL_DEALS = [];
+                // 이전에 받아둔 목록이 있으면 그대로 두고, 없을 때만 오류 화면으로 넘긴다.
+                if (ALL_DEALS.length === 0) dealsLoadFailed = true;
                 console.error('deals.json 로드 실패', e);
             }
             document.getElementById('eventCountText').textContent = `${ALL_DEALS.length}건`;
@@ -453,16 +478,14 @@
 
         function renderDeals() {
             const list = document.getElementById('dealList');
-            const empty = document.getElementById('emptyState');
             const filtered = getFiltered();
             if (filtered.length === 0) {
                 list.innerHTML = '';
-                empty.classList.remove('hidden');
-                empty.classList.add('flex');
+                // 불러오기 자체가 실패한 것과, 필터에 걸리는 행사가 없는 것은 다른 상황이다.
+                setListState(dealsLoadFailed ? 'error' : 'empty');
                 return;
             }
-            empty.classList.add('hidden');
-            empty.classList.remove('flex');
+            setListState(null);
             // 맨 앞(상단 대표) 카드를 히어로로: 광원·반짝임·등장 모션으로 시선을 먼저 잡는다.
             list.innerHTML = filtered.map((d, i) => dealCardHtml(d, i === 0)).join('');
             observeCards();
