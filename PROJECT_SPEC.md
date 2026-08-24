@@ -51,6 +51,11 @@
 | GitHub Actions (`crawl.yml`) | 매일 03시 KST | 7개 브랜드 + 매장 좌표 |
 | 로컬 PC 예약 작업 (`daily-crawl.js`) | 매일 20시 / 실패 시 21시 | 서브웨이·맘스터치 포함 전 브랜드 |
 
+로컬 크롤은 **`E:APPastfood-crawl-main` 전용 git worktree**(main 전용)에서 실행됩니다.
+개발용 브랜치를 체크아웃해 두어도 크롤에 영향이 없고, 매 실행마다 `origin/main`으로
+hard reset하므로 **충돌이 발생할 수 없습니다.** worktree에는 `node_modules`를 두지 않고
+주 저장소의 것을 `NODE_PATH`로 빌려 씁니다.
+
 **서브웨이·맘스터치**는 GitHub Actions(해외 IP)에서 403·타임아웃으로 차단됩니다.
 **롯데리아는 정반대로** 로컬에서 0건, Actions에서 정상 수집됩니다.
 
