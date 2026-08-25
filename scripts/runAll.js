@@ -31,12 +31,13 @@ function guessCategory(title) {
   return '메뉴소식';
 }
 
+// 크롤은 GitHub Actions(UTC)와 이 PC(KST) 양쪽에서 도는데 사용자는 모두 한국에 있다.
+// 실행 환경의 로컬 시각을 쓰면 UTC 러너에서 하루 늦게 계산돼,
+// 어제 끝난 행사가 "오늘 마감"으로 하루 더 노출된다(실제로 발생함).
+// daysBetween()이 이미 +09:00 기준이므로 여기도 KST로 맞춘다.
 function todayStr() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
+  const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+  return new Date(Date.now() + KST_OFFSET_MS).toISOString().slice(0, 10);
 }
 
 function daysBetween(fromIso, toIso) {
