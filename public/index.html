@@ -56,13 +56,6 @@
                             </span>
                         </a>
                     </div>
-                    <button onclick="openSearchSheet()" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
-                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
-                    </button>
-                    <button onclick="openLikedSheet()" class="relative w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition shrink-0">
-                        <i class="fa-solid fa-heart text-sm"></i>
-                        <span id="likedBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
-                    </button>
                 </div>
 
                 <!-- 알림 배너: 찜 마감 임박 / 찜 브랜드 새 행사 / 날씨 추천 (해당 시에만 노출) -->
@@ -71,7 +64,7 @@
                         <i class="fa-solid fa-arrow-rotate-left text-[10px]"></i>
                         <span id="sinceVisitBannerText"></span>
                     </button>
-                    <button id="expiringLikedBanner" onclick="openLikedSheet()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600">
+                    <button id="expiringLikedBanner" onclick="switchTab('liked')" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600">
                         <i class="fa-solid fa-heart text-[10px]"></i>
                         <span id="expiringLikedBannerText"></span>
                     </button>
@@ -179,6 +172,31 @@
             </div>
         </div>
 
+        <!-- 탭3: 검색 (예전에는 헤더 아이콘으로 여는 바텀시트였다.
+             유입의 90%가 검색 의도라 독립 화면으로 올렸다.) -->
+        <div id="panel-search" class="hidden flex-1 min-h-0 flex-col overflow-hidden">
+            <div class="flex-none px-3 pt-3 pb-2">
+                <div class="flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2.5">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+                    <input id="searchInput" oninput="performSearch()" placeholder="행사명·브랜드·카테고리 검색" class="flex-1 bg-transparent outline-none text-sm font-medium min-w-0" />
+                    <button onclick="clearSearch()" aria-label="검색어 지우기" class="w-6 h-6 flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-xmark text-xs"></i></button>
+                </div>
+                <div class="flex flex-wrap gap-1.5 mt-2.5" id="quickSearchChips"></div>
+            </div>
+            <div id="searchResults" class="flex-1 overflow-y-auto hide-scrollbar px-3 pb-6 flex flex-col gap-3"></div>
+        </div>
+
+        <!-- 탭4: 찜한 행사 -->
+        <div id="panel-liked" class="hidden flex-1 min-h-0 flex-col overflow-hidden">
+            <div class="flex-none px-3 pt-3 pb-2 flex items-center justify-between">
+                <h1 class="text-sm font-black text-gray-900">❤️ 찜한 행사</h1>
+                <button onclick="shareWishlist()" aria-label="찜 목록 공유" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition">
+                    <i class="fa-solid fa-share-nodes text-sm"></i>
+                </button>
+            </div>
+            <div id="likedList" class="flex-1 overflow-y-auto hide-scrollbar px-3 pb-6 flex flex-col gap-3"></div>
+        </div>
+
         <!-- 토스트 알림 -->
         <div id="toast" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900/90 backdrop-blur-md text-white px-5 py-3 rounded-2xl text-sm font-medium shadow-2xl z-[6000] opacity-0 pointer-events-none transition-all duration-300 max-w-[80%] text-center"></div>
 
@@ -195,6 +213,13 @@
             <button onclick="switchTab('map')" id="navBtnMap" class="nav-tab-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
                 <i class="nav-tab-icon fa-solid fa-map-location-dot text-base transition-transform"></i>매장찾기
             </button>
+            <button onclick="switchTab('search')" id="navBtnSearch" class="nav-tab-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
+                <i class="nav-tab-icon fa-solid fa-magnifying-glass text-base transition-transform"></i>검색
+            </button>
+            <button onclick="switchTab('liked')" id="navBtnLiked" class="nav-tab-btn relative flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
+                <i class="nav-tab-icon fa-solid fa-heart text-base transition-transform"></i>찜
+                <span id="likedBadge" class="hidden absolute top-1 right-1/2 translate-x-3 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
+            </button>
             <!-- 설정은 자주 쓰지 않는데 상단 첫 줄의 폭을 차지하고 있었다.
                  하단으로 내려 그 자리를 행사 정보에 돌려준다. 탭이 아니라 시트를 여는 버튼이다. -->
             <button onclick="openSettings()" class="nav-tab-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors" aria-label="설정 열기">
@@ -209,33 +234,8 @@
         </div>
 
         <!-- 찜 목록 바텀시트 -->
-        <div class="sheet-bg" id="likedSheetBg" onclick="closeLikedSheet()"></div>
-        <div class="bottom-sheet" id="likedSheet">
-            <div class="flex-none p-4 border-b border-gray-100 flex items-center justify-between">
-                <h2 class="font-black text-base">❤️ 찜한 행사</h2>
-                <div class="flex items-center gap-1">
-                    <button onclick="shareWishlist()" class="w-8 h-8 flex items-center justify-center text-gray-400" title="찜 목록 공유"><i class="fa-solid fa-share-nodes"></i></button>
-                    <button onclick="closeLikedSheet()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-            </div>
-            <div id="likedList" class="flex-1 overflow-y-auto hide-scrollbar p-4 flex flex-col gap-3"></div>
-        </div>
 
         <!-- 검색 바텀시트 (카페행사맵의 통합 검색 이식 - 초성 검색 지원) -->
-        <div class="sheet-bg" id="searchSheetBg" onclick="closeSearchSheet()"></div>
-        <div class="bottom-sheet" id="searchSheet">
-            <div class="flex-none p-4 border-b border-gray-100">
-                <div class="flex items-center gap-2">
-                    <div class="flex-1 flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2.5">
-                        <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
-                        <input id="searchInput" oninput="performSearch()" placeholder="행사명·브랜드·카테고리 검색" class="flex-1 bg-transparent outline-none text-sm font-medium min-w-0" />
-                    </div>
-                    <button onclick="closeSearchSheet()" class="w-8 h-8 flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div class="flex flex-wrap gap-1.5 mt-2.5" id="quickSearchChips"></div>
-            </div>
-            <div id="searchResults" class="flex-1 overflow-y-auto hide-scrollbar p-4 flex flex-col gap-3"></div>
-        </div>
 
         <!-- 상세 바텀시트 -->
         <div class="sheet-bg" id="detailSheetBg" onclick="closeDetailSheet()"></div>

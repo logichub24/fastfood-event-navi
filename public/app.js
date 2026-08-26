@@ -717,20 +717,23 @@
             return false;
         }
 
-        function openSearchSheet(prefill) {
+        // 검색은 바텀시트에서 하단 네비의 독립 탭으로 옮겼다.
+        // 빠른검색 칩은 탭에 들어올 때마다 다시 그린다(항목이 적어 비용이 무시할 수준).
+        function renderQuickSearchChips() {
             document.getElementById('quickSearchChips').innerHTML = QUICK_SEARCH.map((k) =>
                 `<button onclick="quickSearch('${k}')" class="px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-[11px] font-bold">${k}</button>`
             ).join('');
-            const input = document.getElementById('searchInput');
-            input.value = typeof prefill === 'string' ? prefill : '';
-            performSearch();
-            document.getElementById('searchSheetBg').classList.add('active');
-            document.getElementById('searchSheet').classList.add('active');
-            if (!input.value) setTimeout(() => input.focus(), 250);
         }
-        function closeSearchSheet() {
-            document.getElementById('searchSheetBg').classList.remove('active');
-            document.getElementById('searchSheet').classList.remove('active');
+        // 검색어를 미리 채운 채 검색 탭을 연다(날씨 추천 칩 등에서 사용).
+        function openSearch(prefill) {
+            if (typeof prefill === 'string') document.getElementById('searchInput').value = prefill;
+            switchTab('search');
+        }
+        function clearSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            performSearch();
+            input.focus();
         }
         function quickSearch(k) {
             document.getElementById('searchInput').value = k;
@@ -762,9 +765,9 @@
 
                 let rec = null;
                 if (prec > 0 || code >= 51) {
-                    rec = { label: '☔ 비 오는 날엔 배달 행사 어때요?', act: () => { activeCategory = '배달'; renderCategories(); renderDeals(); closeSearchSheet(); switchTab('events'); } };
+                    rec = { label: '☔ 비 오는 날엔 배달 행사 어때요?', act: () => { activeCategory = '배달'; renderCategories(); renderDeals(); switchTab('events'); } };
                 } else if (t >= 28) {
-                    rec = { label: `🥵 ${Math.round(t)}°C 무더위, 시원한 메뉴 찾기`, act: () => openSearchSheet('아이스') };
+                    rec = { label: `🥵 ${Math.round(t)}°C 무더위, 시원한 메뉴 찾기`, act: () => openSearch('아이스') };
                 } else if (t <= 5) {
                     rec = { label: `🥶 ${Math.round(t)}°C, 따뜻한 세트 어때요?`, act: () => { activeCategory = '세트･콤보'; renderCategories(); renderDeals(); switchTab('events'); } };
                 }
@@ -777,15 +780,6 @@
             } catch (e) { /* 날씨는 부가 기능 - 실패해도 아무것도 하지 않음 */ }
         }
 
-        function openLikedSheet() {
-            renderLikedList();
-            document.getElementById('likedSheetBg').classList.add('active');
-            document.getElementById('likedSheet').classList.add('active');
-        }
-        function closeLikedSheet() {
-            document.getElementById('likedSheetBg').classList.remove('active');
-            document.getElementById('likedSheet').classList.remove('active');
-        }
 
         function renderLikedList() {
             const container = document.getElementById('likedList');
@@ -843,15 +837,19 @@
         }
 
         // ===== 탭 전환 =====
+        // 탭은 행사/매장찾기/검색/찜 4개. 설정만 시트로 남는다.
+        const TAB_NAV_BTN = { events: 'navBtnEvents', map: 'navBtnMap', search: 'navBtnSearch', liked: 'navBtnLiked' };
         function switchTab(name) {
-            const isEvents = name === 'events';
-            document.getElementById('panel-events').classList.toggle('hidden', !isEvents);
-            document.getElementById('panel-map').classList.toggle('hidden', isEvents);
-            document.getElementById('panel-map').parentElement.scrollTop = 0;
-            document.getElementById('panel-map').classList.toggle('flex', !isEvents);
-            document.getElementById('navBtnEvents').classList.toggle('active', isEvents);
-            document.getElementById('navBtnMap').classList.toggle('active', !isEvents);
-            if (!isEvents) {
+            if (!TAB_NAV_BTN[name]) name = 'events';
+            for (const tab of Object.keys(TAB_NAV_BTN)) {
+                const on = tab === name;
+                const panel = document.getElementById('panel-' + tab);
+                panel.classList.toggle('hidden', !on);
+                panel.classList.toggle('flex', on);
+                document.getElementById(TAB_NAV_BTN[tab]).classList.toggle('active', on);
+            }
+            if (name === 'map') {
+                document.getElementById('panel-map').parentElement.scrollTop = 0;
                 window.tossLog?.('click', { log_name: 'tab_map' });
                 window.onAdTrigger?.('map'); // "지도 보기" 진입 - 광고 우선순위 1순위
                 // 탭 전환 직후엔 flex 레이아웃이 아직 최종 크기로 반영되기 전이라
@@ -863,6 +861,15 @@
                         if (leafletMap) leafletMap.invalidateSize();
                     });
                 });
+            } else if (name === 'search') {
+                renderQuickSearchChips();
+                performSearch();
+                window.tossLog?.('click', { log_name: 'tab_search' });
+                // 자동 포커스는 넣지 않는다. 탭을 누르자마자 키보드가 올라오면
+                // 화면이 절반으로 줄어 결과를 못 보고, 심사에서도 의도치 않은 노출로 읽힌다.
+            } else if (name === 'liked') {
+                renderLikedList();
+                window.tossLog?.('click', { log_name: 'tab_liked' });
             }
         }
 
