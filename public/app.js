@@ -155,7 +155,6 @@
                 if (ALL_DEALS.length === 0) dealsLoadFailed = true;
                 console.error('deals.json 로드 실패', e);
             }
-            document.getElementById('eventCountText').textContent = `${ALL_DEALS.length}건`;
             updateSinceLastVisit();
             logVisit();
             renderBrands();
@@ -166,27 +165,34 @@
 
         // 헤더의 '오늘 새 행사' 칩과 '찜한 행사 마감 임박' 배너를 상태에 맞춰 갱신한다.
         function updateAlertBanners() {
-            // 오늘 새 행사 칩 (헤더 안, 탭하면 신규만 필터)
-            const newCount = ALL_DEALS.filter((d) => d.isNew).length;
-            const newBanner = document.getElementById('newDealsBanner');
-            if (newCount > 0) {
-                document.getElementById('newDealsBannerText').textContent = newOnly ? `새 행사 ${newCount} · 전체보기` : `새 행사 ${newCount}`;
-                newBanner.className = `flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0 ${newOnly ? 'bg-blue-600 border-blue-600 text-white' : 'bg-blue-50 border-blue-200 text-blue-700'}`;
-            } else {
-                newBanner.className = 'hidden';
-                if (newOnly) { newOnly = false; renderDeals(); } // 신규가 없어졌으면 필터 해제
+            // 상단 요약 3칩. 건수가 0이어도 숨기지 않고 회색으로 두어 줄 구성이 흔들리지 않게 한다.
+            // (0건은 "없다"는 정보 자체라, 칩이 사라지는 것보다 0으로 보이는 편이 읽기 쉽다.)
+            const CHIP_BASE = 'flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0';
+            const CHIP_TONE = {
+                on:   { blue: 'bg-blue-600 border-blue-600 text-white',  red: 'bg-red-600 border-red-600 text-white',  gray: 'bg-gray-900 border-gray-900 text-white' },
+                off:  { blue: 'bg-blue-50 border-blue-200 text-blue-700', red: 'bg-red-50 border-red-200 text-red-600', gray: 'bg-white border-gray-100 text-gray-900 shadow-sm' },
+                zero: 'bg-gray-50 border-gray-100 text-gray-400',
+            };
+            function paintCountChip(id, textId, label, count, tone, active) {
+                document.getElementById(textId).textContent = active ? `${label} ${count} · 전체보기` : `${label} ${count}`;
+                const btn = document.getElementById(id);
+                btn.className = CHIP_BASE + ' ' + (count === 0 ? CHIP_TONE.zero : active ? CHIP_TONE.on[tone] : CHIP_TONE.off[tone]);
+                btn.disabled = count === 0;
             }
 
-            // 오늘 종료 칩 (헤더 안, 탭하면 오늘마감만 필터)
+            const anyFilter = newOnly || endingOnly || sinceOnly;
+            document.getElementById('eventCountText').textContent = `${ALL_DEALS.length}건`;
+            const allChip = document.getElementById('allCountBanner');
+            allChip.className = CHIP_BASE + ' ' + (anyFilter ? CHIP_TONE.off.gray : CHIP_TONE.on.gray);
+            allChip.disabled = !anyFilter;
+
+            const newCount = ALL_DEALS.filter((d) => d.isNew).length;
+            if (newCount === 0 && newOnly) { newOnly = false; renderDeals(); }
+            paintCountChip('newDealsBanner', 'newDealsBannerText', '새 행사', newCount, 'blue', newOnly);
+
             const endCount = ALL_DEALS.filter((d) => d.daysLeft !== null && d.daysLeft <= 0).length;
-            const endBanner = document.getElementById('endingTodayBanner');
-            if (endCount > 0) {
-                document.getElementById('endingTodayBannerText').textContent = endingOnly ? `오늘 종료 ${endCount} · 전체보기` : `오늘 종료 ${endCount}`;
-                endBanner.className = `flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0 ${endingOnly ? 'bg-red-600 border-red-600 text-white' : 'bg-red-50 border-red-200 text-red-600'}`;
-            } else {
-                endBanner.className = 'hidden';
-                if (endingOnly) { endingOnly = false; renderDeals(); }
-            }
+            if (endCount === 0 && endingOnly) { endingOnly = false; renderDeals(); }
+            paintCountChip('endingTodayBanner', 'endingTodayBannerText', '오늘 마감', endCount, 'red', endingOnly);
 
             // 지난 방문 이후 새로 올라온 행사 (탭하면 그 행사만 보기)
             const sinceBanner = document.getElementById('sinceVisitBanner');
@@ -238,6 +244,16 @@
         }
 
         // 새 행사/오늘 종료/지난 방문 이후 필터는 상호 배타 - 하나를 켜면 나머지는 끈다.
+        // 진행중 칩 = 필터 해제. 어떤 필터가 켜져 있든 전체 목록으로 돌아온다.
+        function showAllDeals() {
+            newOnly = false;
+            endingOnly = false;
+            sinceOnly = false;
+            renderDeals();
+            updateAlertBanners();
+            document.getElementById('dealListArea').scrollTop = 0;
+        }
+
         function toggleNewOnly() {
             newOnly = !newOnly;
             if (newOnly) { endingOnly = false; sinceOnly = false; }

@@ -27,18 +27,18 @@
                      터치 영역 확보를 위해 아이콘 버튼 크기(w-9)는 유지한다. -->
                 <div class="px-2.5 pb-2 flex items-center gap-1">
                     <div class="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar">
-                        <!-- 진행중 행사 수 -->
-                        <div class="bg-white px-2.5 py-2 rounded-full shadow-sm border border-gray-100 flex items-center gap-1 shrink-0">
-                            <span class="text-[10px] text-gray-500 font-bold leading-none">진행중</span>
-                            <span id="eventCountText" class="text-[13px] font-black text-gray-900 leading-none">-</span>
-                        </div>
-                        <!-- 오늘 새 행사 (있을 때만, 탭하면 신규만 필터) -->
-                        <button id="newDealsBanner" onclick="toggleNewOnly()" class="hidden items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                        <!-- 진행중 / 새 행사 / 오늘 마감 요약. 값이 0이어도 자리를 지켜
+                             매번 같은 위치에서 읽히게 한다(예전엔 0이면 칩이 사라져 줄이 흔들렸다).
+                             각 칩은 해당 조건만 보는 필터이고, '진행중'은 필터 해제다. -->
+                        <button id="allCountBanner" onclick="showAllDeals()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0" aria-label="진행중 행사 전체 보기">
+                            <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                            <span>진행중 <span id="eventCountText" class="font-black">-</span></span>
+                        </button>
+                        <button id="newDealsBanner" onclick="toggleNewOnly()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                             <span id="newDealsBannerText"></span>
                         </button>
-                        <!-- 오늘 종료 (있을 때만, 탭하면 오늘마감만 필터) -->
-                        <button id="endingTodayBanner" onclick="toggleEndingToday()" class="hidden items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                        <button id="endingTodayBanner" onclick="toggleEndingToday()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
                             <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                             <span id="endingTodayBannerText"></span>
                         </button>
