@@ -64,14 +64,6 @@
                         <i class="fa-solid fa-arrow-rotate-left text-[10px]"></i>
                         <span id="sinceVisitBannerText"></span>
                     </button>
-                    <button id="expiringLikedBanner" onclick="switchTab('liked')" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600">
-                        <i class="fa-solid fa-heart text-[10px]"></i>
-                        <span id="expiringLikedBannerText"></span>
-                    </button>
-                    <button id="likedNewBanner" onclick="viewLikedBrandNew()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-600">
-                        <i class="fa-solid fa-bell text-[10px]"></i>
-                        <span id="likedNewBannerText"></span>
-                    </button>
                     <button id="weatherBanner" onclick="window._weatherAct?.()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-[11px] font-bold text-sky-700">
                         <span id="weatherBannerText"></span>
                     </button>
@@ -192,6 +184,18 @@
                 <h1 class="text-sm font-black text-gray-900">❤️ 찜한 행사</h1>
                 <button onclick="shareWishlist()" aria-label="찜 목록 공유" class="w-9 h-9 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 active:scale-95 transition">
                     <i class="fa-solid fa-share-nodes text-sm"></i>
+                </button>
+            </div>
+            <!-- 찜 관련 알림은 행사 탭 상단이 아니라 여기서 마무리한다.
+                 행사 화면은 "지금 뭐가 있나"만 보여주고, 찜의 사정은 찜 화면에서 본다. -->
+            <div class="flex flex-wrap gap-1.5 px-3" id="likedBanners">
+                <div id="expiringLikedBanner" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600">
+                    <i class="fa-solid fa-clock text-[10px]"></i>
+                    <span id="expiringLikedBannerText"></span>
+                </div>
+                <button id="likedNewBanner" onclick="viewLikedBrandNew()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-600">
+                    <i class="fa-solid fa-bell text-[10px]"></i>
+                    <span id="likedNewBannerText"></span>
                 </button>
             </div>
             <div id="likedList" class="flex-1 overflow-y-auto hide-scrollbar px-3 pb-6 flex flex-col gap-3"></div>

@@ -212,27 +212,6 @@
                 if (sinceOnly) { sinceOnly = false; renderDeals(); }
             }
 
-            // 찜한 행사 중 오늘/내일 마감(daysLeft 0~1)인 것
-            const expiring = ALL_DEALS.filter((d) => likedIds.has(dealKey(d)) && d.daysLeft !== null && d.daysLeft >= 0 && d.daysLeft <= 1);
-            const expBanner = document.getElementById('expiringLikedBanner');
-            if (expiring.length > 0) {
-                document.getElementById('expiringLikedBannerText').textContent = `찜한 행사 ${expiring.length}개 곧 마감`;
-                expBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600';
-            } else {
-                expBanner.className = 'hidden';
-            }
-
-            // 찜한 브랜드에 새 행사가 뜬 경우 (카페행사맵의 '찜 변동 감지' 이식 - 찜의 효용을 완성)
-            const likedBrands = new Set([...likedIds].map((k) => k.split(':')[0]));
-            const likedNew = ALL_DEALS.filter((d) => d.isNew && likedBrands.has(d.brand) && !likedIds.has(dealKey(d)));
-            const likedNewBanner = document.getElementById('likedNewBanner');
-            if (likedNew.length > 0) {
-                document.getElementById('likedNewBannerText').textContent = `찜한 브랜드에 새 행사 ${likedNew.length}개`;
-                likedNewBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-600';
-            } else {
-                likedNewBanner.className = 'hidden';
-            }
-
             syncAlertBannersPad();
         }
 
@@ -797,7 +776,38 @@
         }
 
 
+        // 찜 화면 상단 알림. 예전에는 행사 탭 헤더에 있었는데,
+        // 행사 화면은 진행중/새 행사/오늘 마감만 보여주고 찜 사정은 찜 화면에서 마무리한다.
+        function updateLikedBanners() {
+            // 찜한 행사 중 오늘/내일 마감(daysLeft 0~1)인 것
+            const expiring = ALL_DEALS.filter((d) => likedIds.has(dealKey(d)) && d.daysLeft !== null && d.daysLeft >= 0 && d.daysLeft <= 1);
+            const expBanner = document.getElementById('expiringLikedBanner');
+            if (expiring.length > 0) {
+                document.getElementById('expiringLikedBannerText').textContent = `찜한 행사 ${expiring.length}개 곧 마감`;
+                expBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-600';
+            } else {
+                expBanner.className = 'hidden';
+            }
+
+            // 찜한 브랜드에 새 행사가 뜬 경우 (탭하면 행사 탭에서 신규만 보여준다)
+            const likedBrands = new Set([...likedIds].map((k) => k.split(':')[0]));
+            const likedNew = ALL_DEALS.filter((d) => d.isNew && likedBrands.has(d.brand) && !likedIds.has(dealKey(d)));
+            const likedNewBanner = document.getElementById('likedNewBanner');
+            if (likedNew.length > 0) {
+                document.getElementById('likedNewBannerText').textContent = `찜한 브랜드에 새 행사 ${likedNew.length}개`;
+                likedNewBanner.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-600';
+            } else {
+                likedNewBanner.className = 'hidden';
+            }
+
+            // 보이는 배너가 없으면 목록과의 간격을 없앤다.
+            const wrap = document.getElementById('likedBanners');
+            const anyShown = [...wrap.children].some((c) => !c.className.includes('hidden'));
+            wrap.className = anyShown ? 'flex flex-wrap gap-1.5 px-3 pb-2' : 'flex flex-wrap gap-1.5 px-3';
+        }
+
         function renderLikedList() {
+            updateLikedBanners();
             const container = document.getElementById('likedList');
             const items = ALL_DEALS.filter((d) => likedIds.has(dealKey(d)));
             if (items.length === 0) {
