@@ -295,7 +295,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 20,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -324,6 +324,32 @@
     "ongoing": true,
     "daysLeft": 20,
     "isNew": false
+  },
+  {
+    "brand": "LOTTERIA",
+    "id": "18099",
+    "title": "오후 2시부터 6시까지! 리아스낵타임",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/08/27/20260827173904240_8.jpg/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18099",
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-30",
+    "category": "시간대 특가",
+    "ongoing": true,
+    "daysLeft": 34,
+    "isNew": true
+  },
+  {
+    "brand": "LOTTERIA",
+    "id": "18098",
+    "title": "9월 롯데리아 이달의 쿠폰!",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/08/27/2026082717202749_0.jpg/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18098",
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-30",
+    "category": "쿠폰･할인",
+    "ongoing": true,
+    "daysLeft": 34,
+    "isNew": true
   },
   {
     "brand": "BURGERKING",
@@ -380,6 +406,19 @@
     "ongoing": true,
     "daysLeft": 34,
     "isNew": false
+  },
+  {
+    "brand": "MCDONALDS",
+    "id": "1029",
+    "title": "행복의 버거가 필요한 사연이 있다면<br>지금 접수해 주세요",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/08/KakaoTalk_20260825_185949193.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-08-27",
+    "endDate": "2026-10-07",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 41,
+    "isNew": true
   },
   {
     "brand": "MCDONALDS",
