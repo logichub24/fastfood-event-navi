@@ -1,5 +1,18 @@
 [
   {
+    "brand": "MCDONALDS",
+    "id": "1027",
+    "title": "오직 맥드라이브에서 만나요!",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/08/McDrive_corpsite_thumbnail_860x704.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-08-27",
+    "endDate": "2026-08-28",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 0,
+    "isNew": false
+  },
+  {
     "brand": "KFC",
     "id": "1124",
     "title": "KFC 더블 커넬 위크!",
@@ -148,20 +161,6 @@
   },
   {
     "brand": "NOBRANDBURGER",
-    "id": "2026070426",
-    "title": "버크셔K 출시 (50개 한정)",
-    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/07//20260723163405159664691817765623.png",
-    "link": "https://order.nobrandburger.com/event/",
-    "startDate": "2026-07-28",
-    "endDate": "2026-08-31",
-    "isOngoingText": "진행중",
-    "category": "신메뉴",
-    "ongoing": true,
-    "daysLeft": 3,
-    "isNew": false
-  },
-  {
-    "brand": "NOBRANDBURGER",
     "id": "2026060413",
     "title": "아보카도타코, 스모크바비큐 출시",
     "image": "https://order.nobrandburger.com/upload/imbo/up/2026/06//20260611133959160770842619662704.png",
@@ -285,19 +284,6 @@
     "isNew": false
   },
   {
-    "brand": "MCDONALDS",
-    "id": "1027",
-    "title": "오직 맥드라이브에서 만나요!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/08/McDrive_corpsite_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-08-27",
-    "endDate": "2026-09-16",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 19,
-    "isNew": false
-  },
-  {
     "brand": "BURGERKING",
     "id": "1434",
     "title": "씨푸드를 통째로! 보일링 씨푸드 버거 2종 출시",
@@ -324,6 +310,19 @@
     "ongoing": true,
     "daysLeft": 19,
     "isNew": false
+  },
+  {
+    "brand": "MOMSTOUCH",
+    "id": "347",
+    "title": "귀멸의 칼날: 무한성편 X 맘스터치 콜라보!",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1787818104-DZGPM.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=347",
+    "startDate": "2026-08-27",
+    "endDate": "2026-09-28",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 31,
+    "isNew": true
   },
   {
     "brand": "LOTTERIA",
@@ -361,6 +360,20 @@
     "endDate": "2026-09-30",
     "isOngoingText": "진행중",
     "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 33,
+    "isNew": false
+  },
+  {
+    "brand": "NOBRANDBURGER",
+    "id": "2026070426",
+    "title": "버크셔K 출시",
+    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/08//20260828140502167511545703887278.png",
+    "link": "https://order.nobrandburger.com/event/",
+    "startDate": "2026-07-28",
+    "endDate": "2026-09-30",
+    "isOngoingText": "진행중",
+    "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 33,
     "isNew": false
