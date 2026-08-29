@@ -21,40 +21,20 @@
 
         <!-- 탭1: 행사 피드 -->
         <div id="panel-events" class="flex-1 min-h-0 flex flex-col overflow-hidden">
-            <!-- 상단 헤더 -->
+            <!-- 상단 헤더: 행사 탐색에 필요한 요약·재방문·브랜드만 남긴다. -->
             <div class="flex-none pt-3 z-[100]">
-                <!-- 칩이 늘어나 첫 줄이 빡빡하므로 간격을 줄인다(gap-1.5 -> gap-1, 아이콘 버튼 사이도 축소).
-                     터치 영역 확보를 위해 아이콘 버튼 크기(w-9)는 유지한다. -->
-                <div class="px-2.5 pb-2 flex items-center gap-1">
-                    <div class="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar">
-                        <!-- 진행중 / 새 행사 / 오늘 마감 요약. 값이 0이어도 자리를 지켜
-                             매번 같은 위치에서 읽히게 한다(예전엔 0이면 칩이 사라져 줄이 흔들렸다).
-                             각 칩은 해당 조건만 보는 필터이고, '진행중'은 필터 해제다. -->
-                        <button id="allCountBanner" onclick="showAllDeals()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0" aria-label="진행중 행사 전체 보기">
-                            <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-                            <span>진행중 <span id="eventCountText" class="font-black">-</span></span>
-                        </button>
-                        <button id="newDealsBanner" onclick="toggleNewOnly()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                            <span id="newDealsBannerText"></span>
-                        </button>
-                        <button id="endingTodayBanner" onclick="toggleEndingToday()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
-                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                            <span id="endingTodayBannerText"></span>
-                        </button>
-                        <!-- 자체 앱 회전 칩. 편의점 행사 앱과 같은 형태로 맞췄다.
-                             누르려는 순간 회전으로 앱이 바뀌면 오탭이 되므로 손가락이 닿으면 회전을 멈춘다. -->
-                        <a id="promoChip" href="#" onclick="onPromoChipClick()"
-                           class="hidden items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white border border-gray-100 shadow-sm shrink-0 active:scale-95 transition">
-                            <!-- src를 빈 값으로 두면 로드 실패로 onerror가 즉시 발동해 아이콘이 영구히 숨는다.
-                                 src는 JS(paintPromoChip)에서만 넣는다. -->
-                            <img id="promoChipIcon" alt="" width="26" height="26"
-                                 onerror="this.style.display='none'" class="w-[26px] h-[26px] rounded-full shrink-0 object-cover">
-                            <span class="leading-tight text-left">
-                                <span id="promoChipName" class="block text-[11px] font-black text-gray-800 whitespace-nowrap"></span>
-                                <span class="block text-[9px] text-gray-400 font-bold whitespace-nowrap">바로가기</span>
-                            </span>
-                        </a>
+                <div class="px-3 pb-2 flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                        <h1 class="text-base font-black text-gray-900 leading-tight">패스트푸드 행사</h1>
+                        <div class="flex items-center gap-1 mt-1">
+                            <button id="allCountBanner" onclick="showAllDeals()" class="text-[11px] font-bold text-gray-600" aria-label="진행중 행사 전체 보기">진행중 <span id="eventCountText" class="font-black">-</span></button>
+                            <span class="text-gray-300">·</span>
+                            <button id="newDealsBanner" onclick="toggleNewOnly()" class="text-[11px] font-bold text-blue-600"><span id="newDealsBannerText"></span></button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button onclick="switchTab('search')" aria-label="행사 검색" class="w-9 h-9 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center active:scale-95"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button onclick="switchTab('liked')" aria-label="찜한 행사" class="w-9 h-9 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center active:scale-95"><i class="fa-solid fa-heart"></i></button>
                     </div>
                 </div>
 
@@ -69,17 +49,14 @@
                     </button>
                 </div>
 
-                <!-- 브랜드 필터 2줄. 유입의 90%가 브랜드 의도 검색이라, 예전 카테고리 칩 줄을
-                     브랜드 2번째 줄로 바꿔 같은 높이에서 브랜드 노출을 3개→6개로 늘렸다.
-                     칩이 shrink-0이라 라벨이 길어지면 옆 버튼을 덮으므로 두 줄 모두 가로 스크롤을 준다.
-                     카테고리는 칩 대신 버튼 하나로 유지하고, 선택 중인 값은 버튼 라벨에 표시한다. -->
-                <div class="flex items-center gap-1.5 pl-3 pr-2">
-                    <div class="flex gap-1.5 pb-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer"></div>
-                    <button onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>브랜드</button>
-                </div>
-                <div class="flex items-center gap-1.5 pl-3 pr-2">
-                    <div class="flex gap-1.5 pb-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer2"></div>
-                    <button id="categoryBtn" onclick="openCategoryModal()" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i><span id="categoryBtnText">카테고리</span></button>
+                <div class="flex items-center gap-1.5 px-3 pb-1">
+                    <div class="flex gap-1.5 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer"></div>
+                    <select id="dealSort" onchange="setDealSort(this.value)" aria-label="행사 정렬" class="shrink-0 rounded-full border border-gray-200 bg-gray-50 px-2 py-1.5 text-[11px] font-bold text-gray-600">
+                        <option value="recommend">추천순</option>
+                        <option value="ending">마감임박순</option>
+                        <option value="latest">최신순</option>
+                    </select>
+                    <button id="filterBtn" onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i><span>필터</span></button>
                 </div>
             </div>
 
@@ -314,13 +291,14 @@
         <div class="modal-bg" id="brandModalBg" onclick="if (event.target === this) closeBrandModal()">
             <div class="modal-card">
                 <div class="p-4 border-b border-gray-100 flex items-center justify-between">
-                    <h2 class="font-black text-base">🍔 브랜드 선택</h2>
+                    <h2 id="brandModalTitle" class="font-black text-base">🍔 브랜드 선택</h2>
                     <button onclick="closeBrandModal()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-4">
-                    <p class="text-xs text-gray-400 mb-3">원하는 브랜드를 선택해 필터링하세요.</p>
+                    <p id="brandModalHelp" class="text-xs text-gray-400 mb-3">원하는 브랜드를 선택해 필터링하세요.</p>
                     <button onclick="pickBrand('ALL')" id="brandModalAll" class="w-full py-3 rounded-xl font-bold text-sm mb-3">전체 브랜드</button>
                     <div class="grid grid-cols-3 gap-2" id="brandModalGrid"></div>
+                    <button id="categoryFromFilterBtn" onclick="openCategoryFromFilter()" class="hidden w-full mt-3 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold text-sm">카테고리 선택</button>
                 </div>
             </div>
         </div>
