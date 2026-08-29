@@ -26,7 +26,6 @@
         let newOnly = false; // '오늘 새 행사' 배너로 켜는 신규만 보기 필터
         let endingOnly = false; // '오늘 종료' 칩으로 켜는 오늘마감만 보기 필터
         let sinceOnly = false; // '지난 방문 이후 새 행사' 배너로 켜는 필터
-        let dealSort = 'recommend';
         let likedIds = new Set(JSON.parse(localStorage.getItem('ff_liked') || '[]'));
         // 행사 탭 필터에 노출할 브랜드. 9개 브랜드 모두 크롤러가 있고 실제 행사가 수집된다.
         const EVENT_BRANDS = ['MCDONALDS', 'KFC', 'LOTTERIA', 'MOMSTOUCH', 'BURGERKING', 'NOBRANDBURGER', 'FRANKBURGER', 'SHAKESHACK', 'SUBWAY'];
@@ -167,18 +166,32 @@
 
         // 헤더의 '오늘 새 행사' 칩과 '찜한 행사 마감 임박' 배너를 상태에 맞춰 갱신한다.
         function updateAlertBanners() {
-            const anyFilter = newOnly || sinceOnly;
+            const CHIP_BASE = 'flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0';
+            const CHIP_TONE = {
+                on: { blue: 'bg-blue-600 border-blue-600 text-white', red: 'bg-red-600 border-red-600 text-white', gray: 'bg-gray-900 border-gray-900 text-white' },
+                off: { blue: 'bg-blue-50 border-blue-200 text-blue-700', red: 'bg-red-50 border-red-200 text-red-600', gray: 'bg-white border-gray-100 text-gray-900 shadow-sm' },
+                zero: 'bg-gray-50 border-gray-100 text-gray-400',
+            };
+            function paintCountChip(id, textId, label, count, tone, active) {
+                document.getElementById(textId).textContent = active ? `${label} ${count} · 전체보기` : `${label} ${count}`;
+                const btn = document.getElementById(id);
+                btn.className = CHIP_BASE + ' ' + (count === 0 ? CHIP_TONE.zero : active ? CHIP_TONE.on[tone] : CHIP_TONE.off[tone]);
+                btn.disabled = count === 0;
+            }
+
+            const anyFilter = newOnly || endingOnly || sinceOnly;
             document.getElementById('eventCountText').textContent = `${ALL_DEALS.length}건`;
             const allChip = document.getElementById('allCountBanner');
-            allChip.className = `text-[11px] font-bold ${anyFilter ? 'text-gray-600 underline' : 'text-gray-600'}`;
+            allChip.className = CHIP_BASE + ' ' + (anyFilter ? CHIP_TONE.off.gray : CHIP_TONE.on.gray);
             allChip.disabled = !anyFilter;
 
             const newCount = ALL_DEALS.filter((d) => d.isNew).length;
             if (newCount === 0 && newOnly) { newOnly = false; renderDeals(); }
-            document.getElementById('newDealsBannerText').textContent = `새 행사 ${newCount}`;
-            const newChip = document.getElementById('newDealsBanner');
-            newChip.className = `inline-flex items-center gap-1 text-[11px] font-bold ${newOnly ? 'text-blue-700 underline' : 'text-blue-600'}`;
-            newChip.disabled = newCount === 0;
+            paintCountChip('newDealsBanner', 'newDealsBannerText', '새 행사', newCount, 'blue', newOnly);
+
+            const endCount = ALL_DEALS.filter((d) => d.daysLeft !== null && d.daysLeft <= 0).length;
+            if (endCount === 0 && endingOnly) { endingOnly = false; renderDeals(); }
+            paintCountChip('endingTodayBanner', 'endingTodayBannerText', '오늘 마감', endCount, 'red', endingOnly);
 
             // 지난 방문 이후 새로 올라온 행사 (탭하면 그 행사만 보기)
             const sinceBanner = document.getElementById('sinceVisitBanner');
@@ -259,8 +272,8 @@
             // 행사가 많은 브랜드를 앞에 두면 데이터가 매일 바뀌어도 자동으로 맞는다.
             const counts = {};
             ALL_DEALS.forEach((d) => { counts[d.brand] = (counts[d.brand] || 0) + 1; });
-            let inline = EVENT_BRANDS.filter((b) => counts[b]).sort((a, b) => counts[b] - counts[a]).slice(0, 2);
-            if (inline.length === 0) inline = EVENT_BRANDS.slice(0, 2);
+            let inline = EVENT_BRANDS.filter((b) => counts[b]).sort((a, b) => counts[b] - counts[a]).slice(0, 6);
+            if (inline.length === 0) inline = EVENT_BRANDS.slice(0, 6);
             // 모달에서 인라인 밖의 브랜드를 선택하면 마지막 칩을 교체해 선택 상태가 보이게 한다.
             if (activeBrand !== 'ALL' && !inline.includes(activeBrand)) {
                 inline = [...inline.slice(0, inline.length - 1), activeBrand];
@@ -272,24 +285,19 @@
                 const label = `${BRAND_INFO[b].emoji} ${BRAND_INFO[b].text}${n ? ` <span class="opacity-60">${n}</span>` : ''}`;
                 return `<button onclick="setBrand('${b}')" class="brand-btn ${active} px-2.5 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">${label}</button>`;
             };
-            const allActive = activeBrand === 'ALL' ? 'active' : 'bg-white border-gray-200 text-gray-600';
-            container.innerHTML = `<button onclick="setBrand('ALL')" class="brand-btn ${allActive} px-2.5 py-1.5 rounded-full border text-[12px] font-bold whitespace-nowrap shrink-0">전체 <span class="opacity-60">${ALL_DEALS.length}</span></button>` + inline.map(chipHtml).join('');
+            container.innerHTML = inline.slice(0, 3).map(chipHtml).join('');
+            document.getElementById('brandContainer2').innerHTML = inline.slice(3, 6).map(chipHtml).join('');
         }
 
         // 카테고리는 칩 줄을 브랜드 2번째 줄에 내주고 버튼 하나로 줄었다.
         // 대신 선택 중인 카테고리를 버튼 라벨과 색으로 드러내야 지금 무엇으로 걸러져 있는지 알 수 있다.
         function renderCategories() {
-            const btn = document.getElementById('filterBtn');
-            if (!btn) return;
-            const count = (activeBrand !== 'ALL' ? 1 : 0) + (activeCategory !== 'ALL' ? 1 : 0);
-            btn.className = `shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border text-[12px] font-bold ${count ? 'bg-orange-500 border-orange-500 text-white' : 'border-gray-200 bg-gray-50 text-gray-600'}`;
-            btn.querySelector('span').textContent = count ? `필터 ${count}` : '필터';
-        }
-
-        function setDealSort(value) {
-            dealSort = value;
-            window.tossLog?.('click', { log_name: 'deal_sort', sort: value });
-            renderDeals();
+            const btn = document.getElementById('categoryBtn');
+            const text = document.getElementById('categoryBtnText');
+            const on = activeCategory !== 'ALL';
+            text.textContent = on ? activeCategory : '카테고리';
+            btn.className = `shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border text-[12px] font-bold ${on ? 'bg-orange-500 border-orange-500 text-white' : 'border-gray-200 bg-gray-50 text-gray-600'}`;
+            btn.setAttribute('aria-label', on ? `카테고리 필터: ${activeCategory}. 눌러서 변경` : '카테고리 선택');
         }
 
         // '전체' 칩을 없앤 대신, 활성 칩을 다시 누르면 전체(ALL)로 돌아가는 토글로 동작한다.
@@ -297,7 +305,6 @@
             activeBrand = (activeBrand === b) ? 'ALL' : b;
             window.tossLog?.('click', { log_name: 'brand_select', brand: activeBrand });
             renderBrands();
-            renderCategories();
             renderDeals();
         }
         function setCategory(c) {
@@ -473,9 +480,7 @@
 
         function renderDeals() {
             const list = document.getElementById('dealList');
-            const filtered = [...getFiltered()];
-            if (dealSort === 'ending') filtered.sort((a, b) => (a.daysLeft ?? 9999) - (b.daysLeft ?? 9999));
-            if (dealSort === 'latest') filtered.sort((a, b) => String(b.startDate || '').localeCompare(String(a.startDate || '')));
+            const filtered = getFiltered();
             if (filtered.length === 0) {
                 list.innerHTML = '';
                 // 불러오기 자체가 실패한 것과, 필터에 걸리는 행사가 없는 것은 다른 상황이다.
@@ -524,7 +529,18 @@
         }
 
         function startPromoChip() {
-            // 첫 화면은 현재 앱의 행사 탐색을 우선한다. 다른 앱 유도는 이 화면에 노출하지 않는다.
+            const chip = document.getElementById('promoChip');
+            if (!chip || OTHER_APPS.length === 0) return;
+            chip.classList.remove('hidden');
+            chip.classList.add('flex');
+            paintPromoChip();
+            if (OTHER_APPS.length < 2) return;
+            promoTimer = setInterval(() => {
+                if (document.visibilityState !== 'visible') return;
+                promoIndex = (promoIndex + 1) % OTHER_APPS.length;
+                paintPromoChip();
+            }, PROMO_ROTATE_MS);
+            chip.addEventListener('pointerdown', stopPromoRotation);
         }
 
         function onPromoChipClick() {
@@ -762,11 +778,11 @@
 
                 let rec = null;
                 if (prec > 0 || code >= 51) {
-                    rec = { label: '☔ 비 · 배달 행사', act: () => { activeCategory = '배달'; renderCategories(); renderDeals(); switchTab('events'); } };
+                    rec = { label: '☔ 비 오는 날엔 배달 행사 어때요?', act: () => { activeCategory = '배달'; renderCategories(); renderDeals(); switchTab('events'); } };
                 } else if (t >= 28) {
-                    rec = { label: `🥵 ${Math.round(t)}° · 시원한 메뉴`, act: () => openSearch('아이스') };
+                    rec = { label: `🥵 ${Math.round(t)}°C 무더위, 시원한 메뉴 찾기`, act: () => openSearch('아이스') };
                 } else if (t <= 5) {
-                    rec = { label: `🥶 ${Math.round(t)}° · 따뜻한 세트`, act: () => { activeCategory = '세트･콤보'; renderCategories(); renderDeals(); switchTab('events'); } };
+                    rec = { label: `🥶 ${Math.round(t)}°C, 따뜻한 세트 어때요?`, act: () => { activeCategory = '세트･콤보'; renderCategories(); renderDeals(); switchTab('events'); } };
                 }
                 if (!rec) return;
 
@@ -1321,12 +1337,6 @@
 
         function openBrandModal(ctx) {
             brandModalContext = ctx;
-            const eventFilter = ctx === 'event';
-            document.getElementById('brandModalTitle').textContent = eventFilter ? '필터' : '🍔 브랜드 선택';
-            document.getElementById('brandModalHelp').textContent = eventFilter ? '브랜드 또는 카테고리로 행사를 좁혀보세요.' : '원하는 브랜드를 선택해 필터링하세요.';
-            document.getElementById('categoryFromFilterBtn').classList.toggle('hidden', !eventFilter);
-            document.getElementById('sortFromFilter').classList.toggle('hidden', !eventFilter);
-            if (eventFilter) document.getElementById('dealSort').value = dealSort;
             renderBrandModalGrid();
             document.getElementById('brandModalBg').classList.add('active');
         }
@@ -1358,11 +1368,6 @@
             if (brandModalContext === 'map') setMapBrand(b);
             else setBrand(b);
             closeBrandModal();
-        }
-
-        function openCategoryFromFilter() {
-            closeBrandModal();
-            openCategoryModal();
         }
 
         // ===== 카테고리 선택 모달 =====

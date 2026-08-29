@@ -21,20 +21,26 @@
 
         <!-- 탭1: 행사 피드 -->
         <div id="panel-events" class="flex-1 min-h-0 flex flex-col overflow-hidden">
-            <!-- 상단 헤더: 행사 탐색에 필요한 요약·재방문·브랜드만 남긴다. -->
+            <!-- 상단 헤더 -->
             <div class="flex-none pt-3 z-[100]">
-                <div class="px-3 pb-2 flex items-center justify-between gap-2">
-                    <div class="min-w-0">
-                        <h1 class="text-base font-black text-gray-900 leading-tight">패스트푸드 행사</h1>
-                        <div class="flex items-center gap-1 mt-1">
-                            <button id="allCountBanner" onclick="showAllDeals()" class="text-[11px] font-bold text-gray-600" aria-label="진행중 행사 전체 보기">진행중 <span id="eventCountText" class="font-black">-</span></button>
-                            <span class="text-gray-300">·</span>
-                            <button id="newDealsBanner" onclick="toggleNewOnly()" aria-label="새 행사만 보기" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span><span id="newDealsBannerText"></span></button>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-1 shrink-0">
-                        <button onclick="switchTab('search')" aria-label="행사 검색" class="w-9 h-9 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center active:scale-95"><i class="fa-solid fa-magnifying-glass"></i></button>
-                        <button onclick="switchTab('liked')" aria-label="찜한 행사" class="w-9 h-9 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center active:scale-95"><i class="fa-solid fa-heart"></i></button>
+                <div class="px-2.5 pb-2 flex items-center gap-1">
+                    <div class="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar">
+                        <button id="allCountBanner" onclick="showAllDeals()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0" aria-label="진행중 행사 전체 보기">
+                            <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                            <span>진행중 <span id="eventCountText" class="font-black">-</span></span>
+                        </button>
+                        <button id="newDealsBanner" onclick="toggleNewOnly()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                            <span id="newDealsBannerText"></span>
+                        </button>
+                        <button id="endingTodayBanner" onclick="toggleEndingToday()" class="flex items-center gap-1 px-2.5 py-2 rounded-full text-[11px] font-bold border shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                            <span id="endingTodayBannerText"></span>
+                        </button>
+                        <a id="promoChip" href="#" onclick="onPromoChipClick()" class="hidden items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white border border-gray-100 shadow-sm shrink-0 active:scale-95 transition">
+                            <img id="promoChipIcon" alt="" width="26" height="26" onerror="this.style.display='none'" class="w-[26px] h-[26px] rounded-full shrink-0 object-cover">
+                            <span class="leading-tight text-left"><span id="promoChipName" class="block text-[11px] font-black text-gray-800 whitespace-nowrap"></span><span class="block text-[9px] text-gray-400 font-bold whitespace-nowrap">바로가기</span></span>
+                        </a>
                     </div>
                 </div>
 
@@ -49,9 +55,13 @@
                     </button>
                 </div>
 
-                <div class="flex items-center gap-1.5 px-3 pb-1">
-                    <div class="flex gap-1.5 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer"></div>
-                    <button id="filterBtn" onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i><span>필터</span></button>
+                <div class="flex items-center gap-1.5 pl-3 pr-2">
+                    <div class="flex gap-1.5 pb-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer"></div>
+                    <button onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i>브랜드</button>
+                </div>
+                <div class="flex items-center gap-1.5 pl-3 pr-2">
+                    <div class="flex gap-1.5 pb-1 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer2"></div>
+                    <button id="categoryBtn" onclick="openCategoryModal()" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i><span id="categoryBtnText">카테고리</span></button>
                 </div>
             </div>
 
@@ -279,22 +289,13 @@
         <div class="modal-bg" id="brandModalBg" onclick="if (event.target === this) closeBrandModal()">
             <div class="modal-card">
                 <div class="p-4 border-b border-gray-100 flex items-center justify-between">
-                    <h2 id="brandModalTitle" class="font-black text-base">🍔 브랜드 선택</h2>
+                    <h2 class="font-black text-base">🍔 브랜드 선택</h2>
                     <button onclick="closeBrandModal()" class="w-8 h-8 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-4">
-                    <p id="brandModalHelp" class="text-xs text-gray-400 mb-3">원하는 브랜드를 선택해 필터링하세요.</p>
+                    <p class="text-xs text-gray-400 mb-3">원하는 브랜드를 선택해 필터링하세요.</p>
                     <button onclick="pickBrand('ALL')" id="brandModalAll" class="w-full py-3 rounded-xl font-bold text-sm mb-3">전체 브랜드</button>
                     <div class="grid grid-cols-3 gap-2" id="brandModalGrid"></div>
-                    <button id="categoryFromFilterBtn" onclick="openCategoryFromFilter()" class="hidden w-full mt-3 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold text-sm">카테고리 선택</button>
-                    <label id="sortFromFilter" class="hidden mt-3 text-xs font-bold text-gray-600">
-                        정렬
-                        <select id="dealSort" onchange="setDealSort(this.value)" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-bold text-gray-700">
-                            <option value="recommend">추천순</option>
-                            <option value="ending">마감임박순</option>
-                            <option value="latest">최신순</option>
-                        </select>
-                    </label>
                 </div>
             </div>
         </div>
