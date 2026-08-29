@@ -836,7 +836,19 @@
                 container.innerHTML = `<div class="text-center text-gray-400 text-xs py-16"><span class="text-4xl block mb-3">🤍</span>마음에 드는 행사를 찜해보세요</div>`;
                 return;
             }
-            container.innerHTML = items.map(dealCardHtml).join('');
+            const endingSoon = items
+                .filter((d) => d.daysLeft !== null && d.daysLeft >= 0 && d.daysLeft <= 2)
+                .sort((a, b) => a.daysLeft - b.daysLeft);
+            const remaining = items.filter((d) => !endingSoon.includes(d));
+            let html = '';
+            if (endingSoon.length > 0) {
+                html += '<p class="px-3 pt-2 pb-1 text-xs font-bold text-red-600">🔥 마감 임박 (D-2 이하)</p>';
+                html += endingSoon.map(dealCardHtml).join('');
+                if (remaining.length > 0) {
+                    html += '<p class="px-3 pt-3 pb-1 text-xs font-bold text-gray-500">나머지 찜 목록</p>';
+                }
+            }
+            container.innerHTML = html + remaining.map(dealCardHtml).join('');
         }
 
         // 공유 링크를 눌러 앱으로 돌아오면 이 특정 행사가 바로 열리도록(재방문 전환율 개선).
