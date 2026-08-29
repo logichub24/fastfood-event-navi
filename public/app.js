@@ -303,8 +303,18 @@
         }
 
         // '전체' 칩을 없앤 대신, 활성 칩을 다시 누르면 전체(ALL)로 돌아가는 토글로 동작한다.
-        function setBrand(b) { activeBrand = (activeBrand === b) ? 'ALL' : b; renderBrands(); renderDeals(); }
-        function setCategory(c) { activeCategory = (activeCategory === c) ? 'ALL' : c; renderCategories(); renderDeals(); }
+        function setBrand(b) {
+            activeBrand = (activeBrand === b) ? 'ALL' : b;
+            window.tossLog?.('click', { log_name: 'brand_select', brand: activeBrand });
+            renderBrands();
+            renderDeals();
+        }
+        function setCategory(c) {
+            activeCategory = (activeCategory === c) ? 'ALL' : c;
+            window.tossLog?.('click', { log_name: 'category_select', category: activeCategory });
+            renderCategories();
+            renderDeals();
+        }
 
         function ddayText(daysLeft) {
             // 종료일을 2099년 등으로 멀리 박아둔 "상시" 성격의 이벤트까지 포함하므로
@@ -689,6 +699,9 @@
 
         // ===== 통합 검색 (카페행사맵 이식 - 초성 검색 지원) =====
         const QUICK_SEARCH = ['1+1', '할인', '신메뉴', '버거', '치킨', '아이스', '배달', '세트'];
+        const SEARCH_RENDER_LIMIT = 50;
+        let searchTimer = null;
+        let lastLoggedSearch = '';
 
         // 한글 문자열을 초성 문자열로 변환 (예: '버거킹' -> 'ㅂㄱㅋ'). 비한글 문자는 그대로 둔다.
         const CHOSUNG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
@@ -734,6 +747,10 @@
             document.getElementById('searchInput').value = k;
             performSearch();
         }
+        function handleSearchInput() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(performSearch, 150);
+        }
         function performSearch() {
             const q = document.getElementById('searchInput').value.trim();
             const box = document.getElementById('searchResults');
@@ -742,8 +759,13 @@
                 return;
             }
             const hits = ALL_DEALS.filter((d) => matchSearch(d, q));
+            const shown = hits.slice(0, SEARCH_RENDER_LIMIT);
+            if (q !== lastLoggedSearch) {
+                lastLoggedSearch = q;
+                window.tossLog?.('click', { log_name: 'search', query_length: [...q].length, result_count: hits.length });
+            }
             box.innerHTML = hits.length
-                ? `<p class="text-[11px] font-bold text-gray-400">검색 결과 ${hits.length}건</p>` + hits.map(dealCardHtml).join('')
+                ? `<p class="text-[11px] font-bold text-gray-400">검색 결과 ${hits.length}건${hits.length > shown.length ? ` · 상위 ${shown.length}개만 표시` : ''}</p>` + shown.map(dealCardHtml).join('')
                 : `<div class="text-center text-gray-400 text-xs py-16"><span class="text-4xl block mb-3">🤔</span>'${q}' 검색 결과가 없어요</div>`;
         }
 
@@ -1362,6 +1384,7 @@
         }
         function pickCategory(c) {
             activeCategory = c; // 모달은 명시적 선택이므로 토글하지 않는다.
+            window.tossLog?.('click', { log_name: 'category_select', category: activeCategory });
             renderCategories();
             renderDeals();
             closeCategoryModal();

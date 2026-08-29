@@ -170,7 +170,7 @@
             <div class="flex-none px-3 pt-3 pb-2">
                 <div class="flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2.5">
                     <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
-                    <input id="searchInput" oninput="performSearch()" placeholder="행사명·브랜드·카테고리 검색" class="flex-1 bg-transparent outline-none text-sm font-medium min-w-0" />
+                    <input id="searchInput" oninput="handleSearchInput()" placeholder="행사명·브랜드·카테고리 검색" class="flex-1 bg-transparent outline-none text-sm font-medium min-w-0" />
                     <button onclick="clearSearch()" aria-label="검색어 지우기" class="w-6 h-6 flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-xmark text-xs"></i></button>
                 </div>
                 <div class="flex flex-wrap gap-1.5 mt-2.5" id="quickSearchChips"></div>
