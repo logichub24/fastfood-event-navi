@@ -258,8 +258,8 @@
             // 행사가 많은 브랜드를 앞에 두면 데이터가 매일 바뀌어도 자동으로 맞는다.
             const counts = {};
             ALL_DEALS.forEach((d) => { counts[d.brand] = (counts[d.brand] || 0) + 1; });
-            let inline = EVENT_BRANDS.filter((b) => counts[b]).sort((a, b) => counts[b] - counts[a]).slice(0, 3);
-            if (inline.length === 0) inline = EVENT_BRANDS.slice(0, 3);
+            let inline = EVENT_BRANDS.filter((b) => counts[b]).sort((a, b) => counts[b] - counts[a]).slice(0, 2);
+            if (inline.length === 0) inline = EVENT_BRANDS.slice(0, 2);
             // 모달에서 인라인 밖의 브랜드를 선택하면 마지막 칩을 교체해 선택 상태가 보이게 한다.
             if (activeBrand !== 'ALL' && !inline.includes(activeBrand)) {
                 inline = [...inline.slice(0, inline.length - 1), activeBrand];
@@ -1322,6 +1322,8 @@
             document.getElementById('brandModalTitle').textContent = eventFilter ? '필터' : '🍔 브랜드 선택';
             document.getElementById('brandModalHelp').textContent = eventFilter ? '브랜드 또는 카테고리로 행사를 좁혀보세요.' : '원하는 브랜드를 선택해 필터링하세요.';
             document.getElementById('categoryFromFilterBtn').classList.toggle('hidden', !eventFilter);
+            document.getElementById('sortFromFilter').classList.toggle('hidden', !eventFilter);
+            if (eventFilter) document.getElementById('dealSort').value = dealSort;
             renderBrandModalGrid();
             document.getElementById('brandModalBg').classList.add('active');
         }

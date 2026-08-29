@@ -51,11 +51,6 @@
 
                 <div class="flex items-center gap-1.5 px-3 pb-1">
                     <div class="flex gap-1.5 flex-1 min-w-0 overflow-x-auto hide-scrollbar" id="brandContainer"></div>
-                    <select id="dealSort" onchange="setDealSort(this.value)" aria-label="행사 정렬" class="shrink-0 rounded-full border border-gray-200 bg-gray-50 px-2 py-1.5 text-[11px] font-bold text-gray-600">
-                        <option value="recommend">추천순</option>
-                        <option value="ending">마감임박순</option>
-                        <option value="latest">최신순</option>
-                    </select>
                     <button id="filterBtn" onclick="openBrandModal('event')" class="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600"><i class="fa-solid fa-sliders text-[10px]"></i><span>필터</span></button>
                 </div>
             </div>
@@ -299,6 +294,14 @@
                     <button onclick="pickBrand('ALL')" id="brandModalAll" class="w-full py-3 rounded-xl font-bold text-sm mb-3">전체 브랜드</button>
                     <div class="grid grid-cols-3 gap-2" id="brandModalGrid"></div>
                     <button id="categoryFromFilterBtn" onclick="openCategoryFromFilter()" class="hidden w-full mt-3 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold text-sm">카테고리 선택</button>
+                    <label id="sortFromFilter" class="hidden mt-3 text-xs font-bold text-gray-600">
+                        정렬
+                        <select id="dealSort" onchange="setDealSort(this.value)" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-bold text-gray-700">
+                            <option value="recommend">추천순</option>
+                            <option value="ending">마감임박순</option>
+                            <option value="latest">최신순</option>
+                        </select>
+                    </label>
                 </div>
             </div>
         </div>
