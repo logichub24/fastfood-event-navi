@@ -29,7 +29,7 @@
                         <div class="flex items-center gap-1 mt-1">
                             <button id="allCountBanner" onclick="showAllDeals()" class="text-[11px] font-bold text-gray-600" aria-label="진행중 행사 전체 보기">진행중 <span id="eventCountText" class="font-black">-</span></button>
                             <span class="text-gray-300">·</span>
-                            <button id="newDealsBanner" onclick="toggleNewOnly()" class="text-[11px] font-bold text-blue-600"><span id="newDealsBannerText"></span></button>
+                            <button id="newDealsBanner" onclick="toggleNewOnly()" aria-label="새 행사만 보기" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span><span id="newDealsBannerText"></span></button>
                         </div>
                     </div>
                     <div class="flex items-center gap-1 shrink-0">
@@ -188,13 +188,6 @@
             </button>
             <button onclick="switchTab('map')" id="navBtnMap" class="nav-tab-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
                 <i class="nav-tab-icon fa-solid fa-map-location-dot text-base transition-transform"></i>매장찾기
-            </button>
-            <button onclick="switchTab('search')" id="navBtnSearch" class="nav-tab-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
-                <i class="nav-tab-icon fa-solid fa-magnifying-glass text-base transition-transform"></i>검색
-            </button>
-            <button onclick="switchTab('liked')" id="navBtnLiked" class="nav-tab-btn relative flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 text-[10px] font-bold transition-colors">
-                <i class="nav-tab-icon fa-solid fa-heart text-base transition-transform"></i>찜
-                <span id="likedBadge" class="hidden absolute top-1 right-1/2 translate-x-3 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center border border-white">0</span>
             </button>
             <!-- 설정은 자주 쓰지 않는데 상단 첫 줄의 폭을 차지하고 있었다.
                  하단으로 내려 그 자리를 행사 정보에 돌려준다. 탭이 아니라 시트를 여는 버튼이다. -->

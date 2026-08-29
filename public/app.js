@@ -119,6 +119,7 @@
 
         function updateLikedBadge() {
             const badge = document.getElementById('likedBadge');
+            if (!badge) return;
             if (likedIds.size > 0) { badge.textContent = likedIds.size; badge.classList.remove('hidden'); }
             else { badge.classList.add('hidden'); }
         }
@@ -176,7 +177,7 @@
             if (newCount === 0 && newOnly) { newOnly = false; renderDeals(); }
             document.getElementById('newDealsBannerText').textContent = `새 행사 ${newCount}`;
             const newChip = document.getElementById('newDealsBanner');
-            newChip.className = `text-[11px] font-bold ${newOnly ? 'text-blue-700 underline' : 'text-blue-600'}`;
+            newChip.className = `inline-flex items-center gap-1 text-[11px] font-bold ${newOnly ? 'text-blue-700 underline' : 'text-blue-600'}`;
             newChip.disabled = newCount === 0;
 
             // 지난 방문 이후 새로 올라온 행사 (탭하면 그 행사만 보기)
@@ -876,16 +877,18 @@
         }
 
         // ===== 탭 전환 =====
-        // 탭은 행사/매장찾기/검색/찜 4개. 설정만 시트로 남는다.
-        const TAB_NAV_BTN = { events: 'navBtnEvents', map: 'navBtnMap', search: 'navBtnSearch', liked: 'navBtnLiked' };
+        // 검색·찜은 상단 바로가기로 열고, 하단에는 핵심 3개 동선만 둔다.
+        const PANEL_TABS = ['events', 'map', 'search', 'liked'];
+        const TAB_NAV_BTN = { events: 'navBtnEvents', map: 'navBtnMap' };
         function switchTab(name) {
-            if (!TAB_NAV_BTN[name]) name = 'events';
-            for (const tab of Object.keys(TAB_NAV_BTN)) {
+            if (!PANEL_TABS.includes(name)) name = 'events';
+            for (const tab of PANEL_TABS) {
                 const on = tab === name;
                 const panel = document.getElementById('panel-' + tab);
                 panel.classList.toggle('hidden', !on);
                 panel.classList.toggle('flex', on);
-                document.getElementById(TAB_NAV_BTN[tab]).classList.toggle('active', on);
+                const nav = document.getElementById(TAB_NAV_BTN[tab]);
+                if (nav) nav.classList.toggle('active', on);
             }
             if (name === 'map') {
                 document.getElementById('panel-map').parentElement.scrollTop = 0;
