@@ -461,9 +461,9 @@
                     <span class="absolute top-2.5 right-2.5 text-[9px] font-bold px-1.5 py-0.5 rounded ${dday.cls} shadow-sm">${dday.text}</span>
                     <button onclick="event.stopPropagation(); toggleLike('${dealKey(d)}')" class="heart-btn ${liked ? 'liked' : ''} absolute bottom-2 right-2 w-7 h-7 bg-white/90 rounded-full flex items-center justify-center shadow"><i class="fa-regular fa-heart text-gray-400 text-xs"></i></button>
                 </div>
-                <div class="px-3.5 pt-3.5 pb-3">
+                <div class="px-3.5 pt-3 pb-2.5">
                     <p class="text-[15px] font-black text-gray-900 leading-normal line-clamp-2 tracking-tight">${d.title}</p>
-                    <div class="flex items-center justify-between mt-2.5">
+                    <div class="flex items-center justify-between mt-2">
                         <p class="text-[10px] text-gray-400 font-medium"><i class="fa-regular fa-clock mr-1"></i>${period}</p>
                         ${(() => { const s = dealStatusText(d); return s ? `<span class="text-[10px] font-bold ${s.cls}">⏰ ${s.t}</span>` : ''; })()}
                     </div>
