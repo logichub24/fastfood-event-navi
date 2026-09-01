@@ -6,10 +6,10 @@
     "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/08/20/20260820142724649_4.jpg/dims/resize/x200/optimize",
     "link": "https://www.lotteeatz.com/event/main/selectEvent/18068",
     "startDate": "2026-08-20",
-    "endDate": "2026-09-03",
+    "endDate": "2026-09-01",
     "category": "메뉴소식",
     "ongoing": true,
-    "daysLeft": 2,
+    "daysLeft": 0,
     "isNew": false
   },
   {
@@ -159,7 +159,7 @@
     "category": "쿠폰･할인",
     "ongoing": true,
     "daysLeft": 29,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -187,7 +187,7 @@
     "category": "쿠폰･할인",
     "ongoing": true,
     "daysLeft": 29,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
@@ -244,6 +244,32 @@
     "ongoing": true,
     "daysLeft": 29,
     "isNew": false
+  },
+  {
+    "brand": "LOTTERIA",
+    "id": "18060",
+    "title": "2026 리아는 배불런 티켓 구매 및 행사 안내",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/08/31/20260831183748485_7.jpg/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18060",
+    "startDate": "2026-09-01",
+    "endDate": "2026-10-04",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 33,
+    "isNew": true
+  },
+  {
+    "brand": "LOTTERIA",
+    "id": "18061",
+    "title": "리아는 배불런 응모 페이지",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/09/01/20260901155015526_2.jpg/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18061",
+    "startDate": "2026-09-01",
+    "endDate": "2026-10-04",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 33,
+    "isNew": true
   },
   {
     "brand": "MCDONALDS",
