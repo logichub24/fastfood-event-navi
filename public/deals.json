@@ -125,6 +125,32 @@
   },
   {
     "brand": "LOTTERIA",
+    "id": "18102",
+    "title": "매콤달콤의 최적 밸런스! 리아 불고기 레드",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/08/28/20260828091658954_2.png/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18102",
+    "startDate": "2026-09-03",
+    "endDate": "2026-09-30",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 27,
+    "isNew": true
+  },
+  {
+    "brand": "LOTTERIA",
+    "id": "18036",
+    "title": "2026 전국 떼닝왕 선발전!",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/09/02/2026090209542074_2.jpg/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18036",
+    "startDate": "2026-09-03",
+    "endDate": "2026-09-30",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 27,
+    "isNew": true
+  },
+  {
+    "brand": "LOTTERIA",
     "id": "18099",
     "title": "오후 2시부터 6시까지! 리아스낵타임",
     "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/08/27/20260827173904240_8.jpg/dims/resize/x200/optimize",
@@ -148,6 +174,19 @@
     "ongoing": true,
     "daysLeft": 27,
     "isNew": false
+  },
+  {
+    "brand": "MOMSTOUCH",
+    "id": "348",
+    "title": "선불카드 이벤트 조기종료",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1788429665-LIEZQ.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=348",
+    "startDate": "2026-09-03",
+    "endDate": "2026-09-30",
+    "category": "쿠폰･할인",
+    "ongoing": true,
+    "daysLeft": 27,
+    "isNew": true
   },
   {
     "brand": "FRANKBURGER",
