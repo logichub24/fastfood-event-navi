@@ -1,5 +1,18 @@
 [
   {
+    "brand": "MOMSTOUCH",
+    "id": "349",
+    "title": "쿠팡이츠 최대 7,000원 할인 프로모션",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1788744823-OATKE.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=349",
+    "startDate": "2026-09-07",
+    "endDate": "2026-09-13",
+    "category": "배달",
+    "ongoing": true,
+    "daysLeft": 6,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1555",
     "title": "아침 식사 스탬프 이벤트",
@@ -25,7 +38,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -39,7 +52,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
@@ -84,20 +97,6 @@
   },
   {
     "brand": "BURGERKING",
-    "id": "1434",
-    "title": "씨푸드를 통째로! 보일링 씨푸드 버거 2종 출시",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/26/f33c4e58-971a-4e19-bb7a-70b4b190b065.png",
-    "link": "https://www.burgerking.co.kr/event/ongoing",
-    "startDate": "2026-06-24",
-    "endDate": "2026-09-16",
-    "isOngoingText": "진행중",
-    "category": "신메뉴",
-    "ongoing": true,
-    "daysLeft": 9,
-    "isNew": false
-  },
-  {
-    "brand": "BURGERKING",
     "id": "1413",
     "title": "버거킹 X 골든피스 콜라보레이션 킹퓨전 2종",
     "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/06/05/e602e672-3cd6-4490-a758-b64903ee0178.png",
@@ -109,6 +108,19 @@
     "ongoing": true,
     "daysLeft": 9,
     "isNew": false
+  },
+  {
+    "brand": "FRANKBURGER",
+    "id": "179",
+    "title": "[프랭크치즈버거데이 이벤트] 치즈버거세트 4종 3,000원 할인!",
+    "image": "https://frankburger.co.kr/upload/event_01/2026_09_07/admin_MHYRH_2026_09_07_00_58_37.jpg",
+    "link": "https://frankburger.co.kr/board/index.php?board=event_01&tab=1&type=view&select=&search=&idx=179",
+    "startDate": "2026-09-07",
+    "endDate": "2026-09-18",
+    "category": "세트･콤보",
+    "ongoing": true,
+    "daysLeft": 11,
+    "isNew": true
   },
   {
     "brand": "LOTTERIA",
@@ -349,6 +361,20 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 43,
+    "isNew": false
+  },
+  {
+    "brand": "BURGERKING",
+    "id": "1434",
+    "title": "씨푸드를 통째로! 보일링 씨푸드 버거 2종 출시",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/07/26/f33c4e58-971a-4e19-bb7a-70b4b190b065.png",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-06-24",
+    "endDate": "2026-10-31",
+    "isOngoingText": "진행중",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 54,
     "isNew": false
   },
   {
