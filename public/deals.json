@@ -14,6 +14,20 @@
     "isNew": false
   },
   {
+    "brand": "BURGERKING",
+    "id": "1676",
+    "title": "👑크라운 등급 트머와 신메뉴 선공개!",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/app/list/2026/09/09/dafeb6c4-997f-41c1-a3a0-7a4d7738bd8e.png",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-09-14",
+    "endDate": "2026-09-15",
+    "isOngoingText": "진행중",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 1,
+    "isNew": true
+  },
+  {
     "brand": "MCDONALDS",
     "id": "1018",
     "title": "매콤 고소! 진주에서 찾은 한국의 맛",
@@ -41,17 +55,43 @@
     "isNew": false
   },
   {
+    "brand": "LOTTERIA",
+    "id": "18195",
+    "title": "9월의 리아데이! 데리버거 2개 할인!",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/09/14/20260914085241931_6.png/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18195",
+    "startDate": "2026-09-17",
+    "endDate": "2026-09-18",
+    "category": "시간대 특가",
+    "ongoing": true,
+    "daysLeft": 4,
+    "isNew": true
+  },
+  {
     "brand": "FRANKBURGER",
     "id": "179",
     "title": "[프랭크치즈버거데이 이벤트] 치즈버거세트 4종 3,000원 할인!",
     "image": "https://frankburger.co.kr/upload/event_01/2026_09_07/admin_MHYRH_2026_09_07_00_58_37.jpg",
     "link": "https://frankburger.co.kr/board/index.php?board=event_01&tab=1&type=view&select=&search=&idx=179",
-    "startDate": "2026-09-07",
+    "startDate": "2026-09-14",
     "endDate": "2026-09-18",
     "category": "세트･콤보",
     "ongoing": true,
     "daysLeft": 4,
     "isNew": false
+  },
+  {
+    "brand": "MOMSTOUCH",
+    "id": "350",
+    "title": "요기요 기본 3,000원 할인 프로모션",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1789384318-TFFKF.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=350",
+    "startDate": "2026-09-14",
+    "endDate": "2026-09-20",
+    "category": "배달",
+    "ongoing": true,
+    "daysLeft": 6,
+    "isNew": true
   },
   {
     "brand": "LOTTERIA",
@@ -78,7 +118,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 9,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -93,6 +133,19 @@
     "ongoing": true,
     "daysLeft": 9,
     "isNew": false
+  },
+  {
+    "brand": "MOMSTOUCH",
+    "id": "351",
+    "title": "땡겨요 3,000원 할인 프로모션",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1789384406-XGIIC.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=351",
+    "startDate": "2026-09-14",
+    "endDate": "2026-09-27",
+    "category": "배달",
+    "ongoing": true,
+    "daysLeft": 13,
+    "isNew": true
   },
   {
     "brand": "MOMSTOUCH",
