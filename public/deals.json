@@ -135,6 +135,19 @@
   },
   {
     "brand": "LOTTERIA",
+    "id": "18204",
+    "title": "롯데리아 매장에서 엘페이 결제하면 엘포인트 1천포인트 적립",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/09/16/20260916145703971_8.png/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18204",
+    "startDate": "2026-09-04",
+    "endDate": "2026-09-30",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 14,
+    "isNew": true
+  },
+  {
+    "brand": "LOTTERIA",
     "id": "18036",
     "title": "2026 전국 떼닝왕 선발전!",
     "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/09/02/2026090209542074_2.jpg/dims/resize/x200/optimize",
@@ -373,7 +386,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 35,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -591,7 +604,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 111,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "NOBRANDBURGER",
