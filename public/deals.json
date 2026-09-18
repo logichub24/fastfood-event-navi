@@ -358,7 +358,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 28,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -399,6 +399,19 @@
     "ongoing": true,
     "daysLeft": 33,
     "isNew": false
+  },
+  {
+    "brand": "MOMSTOUCH",
+    "id": "352",
+    "title": "행운과 응원의 마음을 담은 맘스터치 '불 밝혀라 세트' 출시!",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1789551704-UDXON.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=352",
+    "startDate": "2026-09-17",
+    "endDate": "2026-10-31",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 43,
+    "isNew": true
   },
   {
     "brand": "BURGERKING",
@@ -463,20 +476,6 @@
     "image": "https://order.nobrandburger.com/upload/imbo/up/2026/07//20260723163920159665007174064084.png",
     "link": "https://order.nobrandburger.com/event/",
     "startDate": "2026-07-28",
-    "endDate": "2026-10-31",
-    "isOngoingText": "진행중",
-    "category": "신메뉴",
-    "ongoing": true,
-    "daysLeft": 43,
-    "isNew": false
-  },
-  {
-    "brand": "NOBRANDBURGER",
-    "id": "2026020380",
-    "title": "NBB 어메이징 불고기 출시",
-    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/02//20260225110459146857746518877712.png",
-    "link": "https://order.nobrandburger.com/event/",
-    "startDate": "2026-02-26",
     "endDate": "2026-10-31",
     "isOngoingText": "진행중",
     "category": "신메뉴",
@@ -1052,6 +1051,19 @@
   },
   {
     "brand": "SUBWAY",
+    "id": "288",
+    "title": "신제품 시식회",
+    "image": "https://www.subway.co.kr/upload/event/1789634436274_lfkxYV.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-09-17",
+    "endDate": null,
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
+  },
+  {
+    "brand": "SUBWAY",
     "id": "287",
     "title": "프로틴 시리즈",
     "image": "https://www.subway.co.kr/upload/event/1785830956714_lVNtK9.png",
@@ -1109,19 +1121,6 @@
     "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_쎄봉잠봉.png",
     "link": "https://www.subway.co.kr/eventList",
     "startDate": "2026-03-17",
-    "endDate": null,
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": null,
-    "isNew": false
-  },
-  {
-    "brand": "SUBWAY",
-    "id": "279",
-    "title": "피자썹",
-    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_피자썹.png",
-    "link": "https://www.subway.co.kr/eventList",
-    "startDate": "2026-02-13",
     "endDate": null,
     "category": "메뉴소식",
     "ongoing": true,
