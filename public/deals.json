@@ -52,7 +52,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -79,7 +79,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -110,11 +110,11 @@
   },
   {
     "brand": "MCDONALDS",
-    "id": "1035",
+    "id": "1032",
     "title": "고추장 버터 세트 + 맥너겟 + 디핑 소스<br>포토카드 3장까지!",
     "image": "https://www.mcdonalds.co.kr/upload/2026/09/Asia_special_corpsite_thumbnail_860x704.jpg",
     "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-09-21",
+    "startDate": "2026-09-10",
     "endDate": "2026-09-30",
     "category": "세트･콤보",
     "ongoing": true,
