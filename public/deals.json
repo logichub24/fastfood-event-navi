@@ -85,15 +85,15 @@
     "brand": "KFC",
     "id": "1128",
     "title": "KFC 풍성한가위팩",
-    "image": "https://www.kfckorea.com/nas/event/2026/09/17/52SeDEVlsL2q.png",
+    "image": "https://www.kfckorea.com/nas/event/2026/09/22/5mmMLM8nQtLl.png",
     "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
     "startDate": "2026-09-22",
     "endDate": "2026-09-28",
-    "isOngoingText": "진행종료",
+    "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
