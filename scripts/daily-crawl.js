@@ -25,6 +25,8 @@ const WORKTREE = path.join(ROOT, '..', 'fastfood-crawl-main');
 const LOG_PATH = path.join(ROOT, 'daily-crawl.log');
 // 20시에 성공했으면 21시 재시도분은 그냥 끝낸다. 실패했거나 PC가 꺼져 있었으면 21시에 이어받는다.
 const STATE_PATH = path.join(ROOT, 'daily-crawl.state');
+const LOCK_PATH = path.join(ROOT, 'daily-crawl.lock');
+const LOCK_MAX_AGE_MS = 35 * 60 * 1000;
 
 function todayKey() {
   const d = new Date();
@@ -57,6 +59,37 @@ function log(message) {
   }
 }
 
+function acquireRunLock() {
+  try {
+    fs.writeFileSync(LOCK_PATH, `${process.pid}\n${Date.now()}\n`, { flag: 'wx' });
+    return true;
+  } catch (e) {
+    if (e.code !== 'EEXIST') {
+      log('실행 잠금을 만들지 못해 중단: ' + e.message);
+      return false;
+    }
+    try {
+      if (Date.now() - fs.statSync(LOCK_PATH).mtimeMs > LOCK_MAX_AGE_MS) {
+        fs.unlinkSync(LOCK_PATH);
+        return acquireRunLock();
+      }
+    } catch (lockError) {
+      log('기존 실행 잠금을 확인하지 못해 중단: ' + lockError.message);
+      return false;
+    }
+    log('다른 로컬 크롤이 실행 중 - 건너뜀');
+    return false;
+  }
+}
+
+function releaseRunLock() {
+  try {
+    fs.unlinkSync(LOCK_PATH);
+  } catch (_) {
+    // 이미 정리됐거나 잠금 파일을 쓸 수 없는 환경이면 무시한다.
+  }
+}
+
 // 실패해도 스크립트가 계속 판단할 수 있도록 예외 대신 결과 객체를 돌려준다.
 // 크롤러는 진행 상황을 stderr로 찍으므로 두 스트림을 모두 모아야 로그가 쓸모 있다.
 // 타임아웃이 없으면 git이 자격증명 입력을 기다리며 멈출 때 프로세스가 영원히 살아남고,
@@ -78,22 +111,30 @@ function run(command, opts = {}) {
   return { ok: res.status === 0, out };
 }
 
-// 크롤 전용 worktree를 준비한다. 없으면 만들고, 있으면 origin/main과 똑같이 되돌린다.
+// 원격 이름 대신 URL로 가져와 공유 remote-tracking ref(origin/main)를 건드리지 않는다.
+// 개발용 저장소와 worktree가 동시에 fetch해도 ref 잠금 충돌이 나지 않는다.
+function fetchMain(cwd) {
+  const remote = run('git remote get-url origin', { cwd: ROOT });
+  if (!remote.ok) return remote;
+  return run(`git fetch --no-tags "${remote.out.trim()}" main`, { cwd });
+}
+
+// 크롤 전용 worktree를 준비한다. 없으면 만들고, 있으면 FETCH_HEAD와 똑같이 되돌린다.
 function prepareWorktree() {
   if (!fs.existsSync(WORKTREE)) {
     log('크롤 전용 worktree가 없어 새로 만든다: ' + WORKTREE);
-    const fetched = run('git fetch origin main', { cwd: ROOT });
+    const fetched = fetchMain(ROOT);
     if (!fetched.ok) return { ok: false, out: fetched.out };
     const added = run(`git worktree add "${WORKTREE}" main`, { cwd: ROOT });
     if (!added.ok) return { ok: false, out: added.out };
   }
 
-  const fetched = run('git fetch origin main');
+  const fetched = fetchMain(WORKTREE);
   if (!fetched.ok) return { ok: false, out: fetched.out };
 
   // 여기서 hard reset을 하기 때문에 충돌이 발생할 수 없다.
   // 이 worktree에는 사람이 만든 변경이 없으므로 잃을 것도 없다.
-  const reset = run('git reset --hard origin/main');
+  const reset = run('git reset --hard FETCH_HEAD');
   if (!reset.ok) return { ok: false, out: reset.out };
 
   const branch = run('git rev-parse --abbrev-ref HEAD');
@@ -152,7 +193,7 @@ function main() {
     process.exit(1);
   }
 
-  // 푸시가 거부되면(Actions와 경합) origin/main을 다시 받아 그 위에 얹어 재시도한다.
+  // 푸시가 거부되면(Actions와 경합) 원격 main을 다시 받아 그 위에 얹어 재시도한다.
   // rebase 대신 fetch + reset 후 재커밋이 아니라, 데이터 파일 하나뿐이라 rebase가 안전하다.
   for (let attempt = 1; attempt <= 3; attempt++) {
     if (run('git push origin main').ok) {
@@ -161,13 +202,14 @@ function main() {
       return;
     }
     log(`푸시 거부됨 - 원격 변경을 받아 재시도 (${attempt}/3)`);
-    const rebased = run('git pull --rebase origin main');
+    const fetched = fetchMain(WORKTREE);
+    const rebased = fetched.ok ? run('git rebase FETCH_HEAD') : fetched;
     if (!rebased.ok) {
       // 충돌 등으로 rebase가 걸리면 worktree를 깨끗한 상태로 되돌리고 포기한다.
       // 다음 실행에서 hard reset으로 정상 복구되므로 저장소가 망가진 채 남지 않는다.
       log('리베이스 실패 - worktree를 되돌리고 중단한다\n' + rebased.out.trim());
       run('git rebase --abort');
-      run('git reset --hard origin/main');
+      run('git reset --hard FETCH_HEAD');
       process.exit(1);
     }
   }
@@ -176,4 +218,7 @@ function main() {
   process.exit(1);
 }
 
-main();
+if (acquireRunLock()) {
+  process.on('exit', releaseRunLock);
+  main();
+}
