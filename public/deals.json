@@ -171,7 +171,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 17,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -223,7 +223,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 22,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -1004,5 +1004,18 @@
     "ongoing": true,
     "daysLeft": null,
     "isNew": false
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "279",
+    "title": "피자썹",
+    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_피자썹.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-02-13",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
   }
 ]
