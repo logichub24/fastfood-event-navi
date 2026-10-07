@@ -376,6 +376,19 @@
     "isNew": false
   },
   {
+    "brand": "MOMSTOUCH",
+    "id": "354",
+    "title": "맘스피자 피치세트 5천원 할인",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1790928491-LGLXV.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=354",
+    "startDate": "2026-10-06",
+    "endDate": "2026-11-02",
+    "category": "세트･콤보",
+    "ongoing": true,
+    "daysLeft": 26,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1593",
     "title": "데리야킹 크리스퍼 출시",
@@ -440,7 +453,7 @@
     "category": "쿠폰･할인",
     "ongoing": true,
     "daysLeft": 54,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -966,6 +979,19 @@
     "ongoing": true,
     "daysLeft": null,
     "isNew": false
+  },
+  {
+    "brand": "FRANKBURGER",
+    "id": "184",
+    "title": "[프랭크버거 매장 이벤트] BEST메뉴 런치할인!",
+    "image": "https://frankburger.co.kr/upload/event_01/2026_10_07/ksy5415_5l43q_2026_10_07_13_08_15.jpg",
+    "link": "https://frankburger.co.kr/board/index.php?board=event_01&tab=1&type=view&select=&search=&idx=184",
+    "startDate": null,
+    "endDate": null,
+    "category": "시간대 특가",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
   },
   {
     "brand": "SUBWAY",
