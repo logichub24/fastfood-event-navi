@@ -13,6 +13,19 @@
     "isNew": false
   },
   {
+    "brand": "MCDONALDS",
+    "id": "1025",
+    "title": "여름 시즌 한정 간식이 1000원부터!",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/05/BAQ2_corpsite_thumbnail_860x704.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-08-20",
+    "endDate": "2026-10-11",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 3,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1694",
     "title": "26년 10월 딜리버리 21,000원 이상 주문 시 4,000원 할인",
@@ -982,19 +995,6 @@
   },
   {
     "brand": "SUBWAY",
-    "id": "288",
-    "title": "신제품 시식회",
-    "image": "https://www.subway.co.kr/upload/event/1789634436274_lfkxYV.png",
-    "link": "https://www.subway.co.kr/eventList",
-    "startDate": "2026-09-17",
-    "endDate": null,
-    "category": "신메뉴",
-    "ongoing": true,
-    "daysLeft": null,
-    "isNew": false
-  },
-  {
-    "brand": "SUBWAY",
     "id": "284",
     "title": "New 샐러드",
     "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_뉴샐러드.png",
@@ -1031,5 +1031,18 @@
     "ongoing": true,
     "daysLeft": null,
     "isNew": false
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "273",
+    "title": "오늘의 수프",
+    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2025-11-18",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
   }
 ]
