@@ -27,6 +27,7 @@ const LOG_PATH = path.join(ROOT, 'daily-crawl.log');
 const STATE_PATH = path.join(ROOT, 'daily-crawl.state');
 const LOCK_PATH = path.join(ROOT, 'daily-crawl.lock');
 const LOCK_MAX_AGE_MS = 35 * 60 * 1000;
+const FETCH_ATTEMPTS = 3;
 
 function todayKey() {
   const d = new Date();
@@ -116,7 +117,13 @@ function run(command, opts = {}) {
 function fetchMain(cwd) {
   const remote = run('git remote get-url origin', { cwd: ROOT });
   if (!remote.ok) return remote;
-  return run(`git fetch --no-tags "${remote.out.trim()}" main`, { cwd });
+  let fetched;
+  for (let attempt = 1; attempt <= FETCH_ATTEMPTS; attempt++) {
+    fetched = run(`git fetch --no-tags "${remote.out.trim()}" main`, { cwd });
+    if (fetched.ok) return fetched;
+    if (attempt < FETCH_ATTEMPTS) log(`원격 main 조회 실패 - 재시도 (${attempt}/${FETCH_ATTEMPTS})`);
+  }
+  return fetched;
 }
 
 // 크롤 전용 worktree를 준비한다. 없으면 만들고, 있으면 FETCH_HEAD와 똑같이 되돌린다.
