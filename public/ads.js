@@ -3,7 +3,7 @@
 // 3.x의 isSupported()는 토스 밖에서 false를 주지 않고 TypeError를 던지므로
 // 호출부를 반드시 try/catch로 감싼다(2.x는 조용히 false였다).
 // 토스 앱 WebView 안에서 열렸을 때만 실제 광고가 붙는다.
-import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy, requestNotificationAgreement, Analytics } from 'https://esm.sh/@apps-in-toss/web-framework@3.1.1';
+import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy, requestNotificationAgreement, Analytics, graniteEvent, Screen } from 'https://esm.sh/@apps-in-toss/web-framework@3.1.1';
 
 const AD_CONFIG = {
   banner: 'ait.v2.live.2d12e1c821d44d97',
@@ -130,6 +130,14 @@ function init() {
   if (!supported) return;
 
   document.body.classList.add('in-toss-app');
+
+  // 토스의 시스템 뒤로가기를 앱 안 탐색에 먼저 사용한다. 홈에서만 토스가 앱을 닫는다.
+  graniteEvent.addEventListener('backEvent', {
+    onEvent: () => {
+      if (!window.handleTossBack?.()) Screen.close().catch(() => {});
+    },
+    onError: () => {},
+  });
 
   TossAds.initialize({
     callbacks: {

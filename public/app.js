@@ -1462,6 +1462,32 @@
                 .catch(() => showToast('알림 동의를 완료하지 못했어요.'));
         }
 
+        // 토스 시스템 뒤로가기: 열린 레이어를 먼저 닫고, 보조 탭에서는 행사 목록으로 돌아간다.
+        // 행사 목록에서는 아무 작업도 하지 않아 토스의 기본 앱 종료 동작을 유지한다.
+        window.handleTossBack = function handleTossBack() {
+            const layers = [
+                ['onboardingBg', closeOnboarding],
+                ['settingsBg', closeSettings],
+                ['categoryModalBg', closeCategoryModal],
+                ['brandModalBg', closeBrandModal],
+                ['locationSearchBg', closeLocationSearch],
+                ['detailSheetBg', closeDetailSheet],
+                ['storeSheetBg', closeStoreSheet],
+            ];
+            const active = layers.find(([id]) => document.getElementById(id).classList.contains('active'));
+            if (active) {
+                active[1]();
+                return true;
+            }
+
+            const current = PANEL_TABS.find((tab) => !document.getElementById('panel-' + tab).classList.contains('hidden'));
+            if (current && current !== 'events') {
+                switchTab('events');
+                return true;
+            }
+            return false;
+        };
+
         updateLikedBadge();
         startPromoChip();
         loadDeals().then(applyDeepLink); // 특정 행사로 바로 열기는 ALL_DEALS가 로드된 뒤에만 가능
