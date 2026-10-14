@@ -13,6 +13,19 @@
     "isNew": false
   },
   {
+    "brand": "MOMSTOUCH",
+    "id": "355",
+    "title": "땡겨요 3,000원 할인 프로모션",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1791766680-DZSQV.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=355",
+    "startDate": "2026-10-12",
+    "endDate": "2026-10-18",
+    "category": "배달",
+    "ongoing": true,
+    "daysLeft": 4,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1493",
     "title": "펜타치즈와퍼 출시",
@@ -30,7 +43,7 @@
     "brand": "NOBRANDBURGER",
     "id": "2026100439",
     "title": "애니모",
-    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/10//20261002115737170527901061391229.png",
+    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/10//20261014201139171594343211061611.png",
     "link": "https://order.nobrandburger.com/event/",
     "startDate": "2026-10-02",
     "endDate": "2026-10-20",
@@ -468,7 +481,7 @@
     "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 83,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
@@ -926,6 +939,19 @@
     "ongoing": true,
     "daysLeft": null,
     "isNew": false
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "289",
+    "title": "램 컬렉션",
+    "image": "https://www.subway.co.kr/upload/event/1791881824178_f02DdU.jpg",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-10-13",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
   },
   {
     "brand": "SUBWAY",
