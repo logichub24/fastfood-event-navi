@@ -133,6 +133,19 @@
     "isNew": false
   },
   {
+    "brand": "SUBWAY",
+    "id": "290",
+    "title": "MMA2026",
+    "image": "https://www.subway.co.kr/upload/event/1791444635090_kM1Lfd.jpg",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-10-15",
+    "endDate": "2026-10-26",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 10,
+    "isNew": true
+  },
+  {
     "brand": "NOBRANDBURGER",
     "id": "2026100440",
     "title": "NBB 훅,펀치 세트업",
