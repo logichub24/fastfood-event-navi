@@ -14,20 +14,6 @@
     "isNew": false
   },
   {
-    "brand": "NOBRANDBURGER",
-    "id": "2026100439",
-    "title": "애니모",
-    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/10//20261014201139171594343211061611.png",
-    "link": "https://order.nobrandburger.com/event/",
-    "startDate": "2026-10-02",
-    "endDate": "2026-10-20",
-    "isOngoingText": "진행중",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 1,
-    "isNew": false
-  },
-  {
     "brand": "MCDONALDS",
     "id": "1030",
     "title": "한국인 입맛에 딱!<br>고추장 버터",
@@ -70,7 +56,7 @@
     "brand": "LOTTERIA",
     "id": "18257",
     "title": "10월의 리아데이! 치킨버거 2개 할인!",
-    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/09/30/20260930085612652_4.jpg/dims/resize/x200/optimize",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/10/19/20261019101805558_1.jpg/dims/resize/x200/optimize",
     "link": "https://www.lotteeatz.com/event/main/selectEvent/18257",
     "startDate": "2026-10-22",
     "endDate": "2026-10-23",
@@ -104,7 +90,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -453,7 +439,21 @@
     "category": "쿠폰･할인",
     "ongoing": true,
     "daysLeft": 73,
-    "isNew": true
+    "isNew": false
+  },
+  {
+    "brand": "BURGERKING",
+    "id": "1714",
+    "title": "불맛을 연구하는 공간, Flamelab을 소개합니다",
+    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/10/16/d04073b8-496f-4f13-86b6-4a565b421ca8.png",
+    "link": "https://www.burgerking.co.kr/event/ongoing",
+    "startDate": "2026-10-19",
+    "endDate": "2026-12-31",
+    "isOngoingText": "진행중",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 73,
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -470,18 +470,18 @@
     "isNew": false
   },
   {
-    "brand": "BURGERKING",
-    "id": "1714",
-    "title": "불맛을 연구하는 공간, Flamelab을 소개합니다",
-    "image": "https://mob-prd.burgerking.co.kr/images/event/web/list/2026/10/16/d04073b8-496f-4f13-86b6-4a565b421ca8.png",
-    "link": "https://www.burgerking.co.kr/event/ongoing",
-    "startDate": "2026-10-19",
+    "brand": "NOBRANDBURGER",
+    "id": "2026100439",
+    "title": "애니모",
+    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/10//20261019165634405498381804345.png",
+    "link": "https://order.nobrandburger.com/event/",
+    "startDate": "2026-10-02",
     "endDate": "2026-12-31",
     "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 73,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
