@@ -28,6 +28,32 @@
   },
   {
     "brand": "MCDONALDS",
+    "id": "1032",
+    "title": "고추장 버터 세트 + 맥너겟 + 디핑 소스<br>포토카드 3장까지!",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/09/Asia_special_corpsite_thumbnail_860x704.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-09-10",
+    "endDate": "2026-10-21",
+    "category": "세트･콤보",
+    "ongoing": true,
+    "daysLeft": 1,
+    "isNew": false
+  },
+  {
+    "brand": "MCDONALDS",
+    "id": "1033",
+    "title": "맥도날드 x PEACEMINUSONE<br>스페셜 굿즈 출시!",
+    "image": "https://www.mcdonalds.co.kr/upload/2026/09/Asia_Goods_thumbnail_860x704.jpg",
+    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
+    "startDate": "2026-09-28",
+    "endDate": "2026-10-21",
+    "category": "신메뉴",
+    "ongoing": true,
+    "daysLeft": 1,
+    "isNew": false
+  },
+  {
+    "brand": "MCDONALDS",
     "id": "1027",
     "title": "오직 맥드라이브에서 만나요!",
     "image": "https://www.mcdonalds.co.kr/upload/2026/08/McDrive_corpsite_thumbnail_860x704.jpg",
@@ -131,32 +157,6 @@
     "category": "세트･콤보",
     "ongoing": true,
     "daysLeft": 8,
-    "isNew": false
-  },
-  {
-    "brand": "MCDONALDS",
-    "id": "1032",
-    "title": "고추장 버터 세트 + 맥너겟 + 디핑 소스<br>포토카드 3장까지!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/09/Asia_special_corpsite_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-09-10",
-    "endDate": "2026-10-30",
-    "category": "세트･콤보",
-    "ongoing": true,
-    "daysLeft": 10,
-    "isNew": false
-  },
-  {
-    "brand": "MCDONALDS",
-    "id": "1033",
-    "title": "맥도날드 x PEACEMINUSONE<br>스페셜 굿즈 출시!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/09/Asia_Goods_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-09-28",
-    "endDate": "2026-10-31",
-    "category": "신메뉴",
-    "ongoing": true,
-    "daysLeft": 11,
     "isNew": false
   },
   {
