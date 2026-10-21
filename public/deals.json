@@ -130,7 +130,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 4,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "SUBWAY",
@@ -360,19 +360,6 @@
     "ongoing": true,
     "daysLeft": 55,
     "isNew": false
-  },
-  {
-    "brand": "MCDONALDS",
-    "id": "1038",
-    "title": "맥도날드의 새로운 아이콘!",
-    "image": "https://www.mcdonalds.co.kr/upload/2026/10/BigArch_corpsite_thumbnail_860x704.jpg",
-    "link": "https://www.mcdonalds.co.kr/kor/promotion/list",
-    "startDate": "2026-10-21",
-    "endDate": "2026-12-27",
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": 67,
-    "isNew": true
   },
   {
     "brand": "MCDONALDS",
