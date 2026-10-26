@@ -132,7 +132,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -146,7 +146,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -200,7 +200,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 13,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
@@ -506,7 +506,7 @@
     "brand": "KFC",
     "id": "1123",
     "title": "치킨나이트 1+1 우리 매장은 한 시간 더 일찍!",
-    "image": "https://www.kfckorea.com/nas/event/2026/08/12/bpwfdcvNVlYD.png",
+    "image": "https://www.kfckorea.com/nas/event/2026/10/26/ByNIxpNwOsVr.png",
     "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
     "startDate": "2026-08-18",
     "endDate": "2099-12-31",
@@ -876,6 +876,19 @@
     "ongoing": true,
     "daysLeft": null,
     "isNew": false
+  },
+  {
+    "brand": "FRANKBURGER",
+    "id": "186",
+    "title": "[진격의거인 콜라보]진격의거인 2차 이벤트",
+    "image": "https://frankburger.co.kr/upload/event_01/2026_10_26/ksy5415_RbHCT_2026_10_26_09_49_51.jpg",
+    "link": "https://frankburger.co.kr/board/index.php?board=event_01&tab=1&type=view&select=&search=&idx=186",
+    "startDate": null,
+    "endDate": null,
+    "category": "쿠폰･할인",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
   },
   {
     "brand": "FRANKBURGER",
