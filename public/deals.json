@@ -176,6 +176,20 @@
     "isNew": false
   },
   {
+    "brand": "NOBRANDBURGER",
+    "id": "2026110445",
+    "title": "11월 쿠폰팩",
+    "image": "https://order.nobrandburger.com/upload/imbo/bev/up/2026/11//202611051331251861989266676810.png",
+    "link": "https://order.nobrandburger.com/event/",
+    "startDate": "2026-11-05",
+    "endDate": "2026-11-30",
+    "isOngoingText": "진행중",
+    "category": "쿠폰･할인",
+    "ongoing": true,
+    "daysLeft": 25,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1679",
     "title": "스낵 메뉴가 하루종일 1000원부터 올데이스낵~ NEW Line-up, 크리스퍼 텐더!",
