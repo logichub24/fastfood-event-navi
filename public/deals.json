@@ -7,11 +7,11 @@
     "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
     "startDate": "2026-11-06",
     "endDate": "2026-11-08",
-    "isOngoingText": "진행종료",
+    "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 2,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -106,6 +106,19 @@
     "endDate": "2026-11-09",
     "isOngoingText": "진행중",
     "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 3,
+    "isNew": false
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "284",
+    "title": "New 샐러드",
+    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_뉴샐러드.png",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-06-01",
+    "endDate": "2026-11-09",
+    "category": "신메뉴",
     "ongoing": true,
     "daysLeft": 3,
     "isNew": false
@@ -884,32 +897,6 @@
     "image": "https://www.subway.co.kr/upload/event/1791881824178_f02DdU.jpg",
     "link": "https://www.subway.co.kr/eventList",
     "startDate": "2026-10-13",
-    "endDate": null,
-    "category": "메뉴소식",
-    "ongoing": true,
-    "daysLeft": null,
-    "isNew": false
-  },
-  {
-    "brand": "SUBWAY",
-    "id": "284",
-    "title": "New 샐러드",
-    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_뉴샐러드.png",
-    "link": "https://www.subway.co.kr/eventList",
-    "startDate": "2026-06-01",
-    "endDate": null,
-    "category": "신메뉴",
-    "ongoing": true,
-    "daysLeft": null,
-    "isNew": false
-  },
-  {
-    "brand": "SUBWAY",
-    "id": "280",
-    "title": "잠봉",
-    "image": "https://www.subway.co.kr/upload/event/01_PC_EVENT_배너_370X192_쎄봉잠봉.png",
-    "link": "https://www.subway.co.kr/eventList",
-    "startDate": "2026-03-17",
     "endDate": null,
     "category": "메뉴소식",
     "ongoing": true,
