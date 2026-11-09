@@ -1,6 +1,20 @@
 [
   {
     "brand": "KFC",
+    "id": "1132",
+    "title": "EARLY ACCESS",
+    "image": "https://www.kfckorea.com/nas/event/2026/11/04/Y1J6wW3kL4GI.png",
+    "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
+    "startDate": "2026-11-06",
+    "endDate": "2026-11-09",
+    "isOngoingText": "진행종료",
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": 0,
+    "isNew": true
+  },
+  {
+    "brand": "KFC",
     "id": "1129",
     "title": "2배 더 풍성하게 돌아온 바삭함! KFC 닭껍질튀김!",
     "image": "https://www.kfckorea.com/nas/event/2026/10/01/Yaf7bi1GHB5S.png",
@@ -38,6 +52,19 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 4,
+    "isNew": false
+  },
+  {
+    "brand": "MOMSTOUCH",
+    "id": "358",
+    "title": "땡겨요 3,000원 할인 프로모션",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1793783570-CIUWG.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=358",
+    "startDate": "2026-11-09",
+    "endDate": "2026-11-15",
+    "category": "배달",
+    "ongoing": true,
+    "daysLeft": 6,
     "isNew": true
   },
   {
