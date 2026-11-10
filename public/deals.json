@@ -94,6 +94,19 @@
   },
   {
     "brand": "LOTTERIA",
+    "id": "18281",
+    "title": "11월 롯데리아 이달의 쿠폰!",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/11/10/20261110142257453_3.jpg/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18281",
+    "startDate": "2026-11-01",
+    "endDate": "2026-11-30",
+    "category": "쿠폰･할인",
+    "ongoing": true,
+    "daysLeft": 20,
+    "isNew": true
+  },
+  {
+    "brand": "LOTTERIA",
     "id": "18403",
     "title": "오후 2시부터 6시까지! 리아스낵타임",
     "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/10/30/20261030171329836_9.jpg/dims/resize/x200/optimize",
@@ -104,6 +117,19 @@
     "ongoing": true,
     "daysLeft": 20,
     "isNew": false
+  },
+  {
+    "brand": "FRANKBURGER",
+    "id": "187",
+    "title": "[진격의 거인] 망토 증정 SNS 이벤트",
+    "image": "https://frankburger.co.kr/upload/event_01/2026_11_10/igc2160_YMxw1_2026_11_10_13_33_12.jpg",
+    "link": "https://frankburger.co.kr/board/index.php?board=event_01&tab=1&type=view&select=&search=&idx=187",
+    "startDate": "2026-11-09",
+    "endDate": "2026-11-30",
+    "category": "쿠폰･할인",
+    "ongoing": true,
+    "daysLeft": 20,
+    "isNew": true
   },
   {
     "brand": "NOBRANDBURGER",
@@ -279,7 +305,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 55,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
@@ -289,11 +315,11 @@
     "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
     "startDate": "2026-11-10",
     "endDate": "2027-01-04",
-    "isOngoingText": "진행종료",
+    "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 55,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -820,6 +846,19 @@
     "ongoing": true,
     "daysLeft": null,
     "isNew": false
+  },
+  {
+    "brand": "SUBWAY",
+    "id": "291",
+    "title": "알짜배기 써브랩",
+    "image": "https://www.subway.co.kr/upload/event/1794192460071_cQG0a2.jpg",
+    "link": "https://www.subway.co.kr/eventList",
+    "startDate": "2026-11-10",
+    "endDate": null,
+    "category": "메뉴소식",
+    "ongoing": true,
+    "daysLeft": null,
+    "isNew": true
   },
   {
     "brand": "SUBWAY",
