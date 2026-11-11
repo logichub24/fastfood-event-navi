@@ -301,7 +301,7 @@
     "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
     "startDate": "2026-11-10",
     "endDate": "2027-01-04",
-    "isOngoingText": "진행종료",
+    "isOngoingText": "진행중",
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 54,
@@ -430,7 +430,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 148,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
@@ -444,7 +444,7 @@
     "category": "시간대 특가",
     "ongoing": true,
     "daysLeft": 415,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
