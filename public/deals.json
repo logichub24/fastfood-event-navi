@@ -63,7 +63,7 @@
     "category": "세트･콤보",
     "ongoing": true,
     "daysLeft": 8,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
@@ -130,7 +130,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 15,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MCDONALDS",
