@@ -26,6 +26,19 @@
     "isNew": false
   },
   {
+    "brand": "LOTTERIA",
+    "id": "18482",
+    "title": "11월의 리아데이! 데리버거 2개 할인!",
+    "image": "https://img.lotteeatz.com/upload/event/THUMBNAIL/2026/11/16/20261116175057887_8.jpg/dims/resize/x200/optimize",
+    "link": "https://www.lotteeatz.com/event/main/selectEvent/18482",
+    "startDate": "2026-11-19",
+    "endDate": "2026-11-20",
+    "category": "시간대 특가",
+    "ongoing": true,
+    "daysLeft": 4,
+    "isNew": true
+  },
+  {
     "brand": "BURGERKING",
     "id": "1815",
     "title": "트머와 세트 4종 1,500원 할인",
@@ -51,7 +64,7 @@
     "category": "배달",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
