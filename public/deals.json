@@ -268,6 +268,19 @@
   },
   {
     "brand": "MOMSTOUCH",
+    "id": "360",
+    "title": "맘스피자 피치세트 5천원 할인",
+    "image": "https://momstouch.co.kr/upload_file/promotion_info/1794897588-OKOKG.png",
+    "link": "https://momstouch.co.kr/promotion/view.php?idx=360",
+    "startDate": "2026-11-20",
+    "endDate": "2026-12-31",
+    "category": "세트･콤보",
+    "ongoing": true,
+    "daysLeft": 41,
+    "isNew": true
+  },
+  {
+    "brand": "MOMSTOUCH",
     "id": "257",
     "title": "맘스터치 앱 신규회원 웰컴쿠폰팩 이벤트!",
     "image": "https://momstouch.co.kr/upload_file/promotion_info/1743557776-XUNZW.png",
