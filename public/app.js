@@ -26,7 +26,8 @@
         let newOnly = false; // '오늘 새 행사' 배너로 켜는 신규만 보기 필터
         let endingOnly = false; // '오늘 종료' 칩으로 켜는 오늘마감만 보기 필터
         let sinceOnly = false; // '지난 방문 이후 새 행사' 배너로 켜는 필터
-        let likedIds = new Set(JSON.parse(localStorage.getItem('ff_liked') || '[]'));
+        let likedIds = new Set();
+        try { likedIds = new Set(JSON.parse(localStorage.getItem('ff_liked') || '[]')); } catch (e) {}
         // 행사 탭 필터에 노출할 브랜드. 9개 브랜드 모두 크롤러가 있고 실제 행사가 수집된다.
         const EVENT_BRANDS = ['MCDONALDS', 'KFC', 'LOTTERIA', 'MOMSTOUCH', 'BURGERKING', 'NOBRANDBURGER', 'FRANKBURGER', 'SHAKESHACK', 'SUBWAY'];
 
@@ -45,6 +46,20 @@
         const VWORLD_KEY = '6888EEC4-8F4B-3D0D-87AE-7AE4C071E4CA';
 
         function dealKey(d) { return `${d.brand}:${d.id}`; }
+
+        // 최근 본 행사는 추천에서만 약하게 뒤로 보내며, 찜 데이터와 분리한다.
+        const VIEWED_STORAGE_KEY = 'ff_viewed_deals';
+        const VIEWED_LIMIT = 80;
+        let viewedDealKeys = [];
+        try {
+            const saved = JSON.parse(localStorage.getItem(VIEWED_STORAGE_KEY) || '[]');
+            viewedDealKeys = Array.isArray(saved) ? saved.slice(-VIEWED_LIMIT) : [];
+        } catch (e) {}
+
+        function rememberViewed(key) {
+            viewedDealKeys = [...viewedDealKeys.filter((saved) => saved !== key), key].slice(-VIEWED_LIMIT);
+            try { localStorage.setItem(VIEWED_STORAGE_KEY, JSON.stringify(viewedDealKeys)); } catch (e) {}
+        }
 
         // 재방문 동기: deals.json의 isNew는 "크롤 시점 기준 전날 대비" 신규라, 며칠 만에 들어온
         // 사용자는 그동안 쌓인 행사를 전부 놓친다. 지난 방문 때 존재하던 행사 키를 저장해두고
@@ -112,7 +127,7 @@
         }
 
         function saveLiked() {
-            localStorage.setItem('ff_liked', JSON.stringify([...likedIds]));
+            try { localStorage.setItem('ff_liked', JSON.stringify([...likedIds])); } catch (e) {}
             updateLikedBadge();
         }
 
@@ -160,6 +175,7 @@
             logVisit();
             renderBrands();
             renderCategories();
+            renderDailyDiscovery();
             renderDeals();
             updateAlertBanners();
         }
@@ -422,6 +438,103 @@
             return { t: `${d.daysLeft}일 남음`, cls: d.daysLeft <= 3 ? 'text-red-500' : 'text-gray-400' };
         }
 
+        let discoveryImpressionLogged = false;
+        function daySeed(key) {
+            const today = new Date();
+            const input = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}:${key}`;
+            let hash = 0;
+            for (const ch of input) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+            return hash % 100;
+        }
+
+        function likedBrands() {
+            return new Set([...likedIds].map((key) => key.split(':')[0]));
+        }
+
+        function numericDaysLeft(d) {
+            if (d.daysLeft === null || d.daysLeft === undefined || d.daysLeft === '') return null;
+            const days = Number(d.daysLeft);
+            return Number.isFinite(days) ? days : null;
+        }
+
+        function discoveryScore(d) {
+            const key = dealKey(d);
+            const days = numericDaysLeft(d);
+            let score = 0;
+            if (d.isNew) score += 60;
+            if (sinceLastVisitKeys.has(key)) score += 70;
+            if (likedIds.has(key)) score += 55;
+            if (likedBrands().has(d.brand)) score += 25;
+            if (days !== null && days <= 0) score += 80;
+            else if (days !== null && days <= 3) score += 40;
+            else if (days !== null && days <= 7) score += 15;
+            if (viewedDealKeys.includes(key)) score -= 10;
+            return score;
+        }
+
+        function sortForDiscovery(deals) {
+            return [...deals].sort((a, b) =>
+                discoveryScore(b) - discoveryScore(a) || daySeed(dealKey(a)) - daySeed(dealKey(b))
+            );
+        }
+
+        function discoveryReason(d) {
+            const days = numericDaysLeft(d);
+            if (days !== null && days <= 0) return '오늘 종료';
+            if (sinceLastVisitKeys.has(dealKey(d))) return '지난 방문 이후 새 행사';
+            if (d.isNew) return '오늘 새로 올라온 행사';
+            if (days !== null && days <= 2) return `D-${days} 마감 임박`;
+            if (likedIds.has(dealKey(d))) return '찜한 행사';
+            if (likedBrands().has(d.brand)) return '관심 브랜드 행사';
+            return '오늘 확인해볼 행사';
+        }
+
+        function openDiscoveryDeal(key, position) {
+            const d = findDeal(key);
+            if (!d) return;
+            window.tossLog?.('click', { log_name: 'daily_discovery_card', position, brand: d.brand });
+            openDetail(key);
+        }
+
+        function renderDailyDiscovery() {
+            const section = document.getElementById('dailyDiscovery');
+            if (!section || dealsLoadFailed || ALL_DEALS.length === 0) {
+                section?.classList.add('hidden');
+                return;
+            }
+            const recommendations = sortForDiscovery(ALL_DEALS).slice(0, 3);
+            const newCount = ALL_DEALS.filter((d) => d.isNew).length;
+            const endingCount = ALL_DEALS.filter((d) => {
+                const days = numericDaysLeft(d);
+                return days !== null && days >= 0 && days <= 3;
+            }).length;
+            const now = new Date();
+            const date = `${now.getMonth() + 1}/${now.getDate()}`;
+            section.className = 'daily-discovery mb-3';
+            section.innerHTML = `
+                <div class="flex items-start justify-between gap-3">
+                    <div><h2 class="text-sm font-black text-orange-900">오늘의 발견</h2><p class="mt-0.5 text-[11px] text-orange-800">오늘 확인할 만한 행사만 먼저 골랐어요</p></div>
+                    <span class="text-[11px] font-bold text-orange-700 shrink-0">${date}</span>
+                </div>
+                <div class="discovery-stats">
+                    <span class="discovery-stat">새 행사 ${newCount}</span>
+                    <span class="discovery-stat">마감 임박 ${endingCount}</span>
+                    ${sinceLastVisitKeys.size ? `<span class="discovery-stat">새로 생김 ${sinceLastVisitKeys.size}</span>` : ''}
+                </div>
+                <div class="discovery-grid">${recommendations.map((d, i) => {
+                    const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
+                    return `<button onclick="openDiscoveryDeal('${dealKey(d)}', ${i + 1})" class="discovery-card" aria-label="${b.text} 행사 상세 보기">
+                        <span class="block text-[11px] font-bold text-orange-700 truncate">${b.emoji} ${b.text}</span>
+                        <span class="discovery-title mt-1 text-[12px] font-black leading-snug text-gray-900">${d.title}</span>
+                        <span class="mt-1.5 block text-[10px] font-bold text-orange-600">${discoveryReason(d)}</span>
+                    </button>`;
+                }).join('')}</div>`;
+            if (!discoveryImpressionLogged) {
+                discoveryImpressionLogged = true;
+                window.tossLog?.('impression', { log_name: 'daily_discovery', card_count: recommendations.length, new_count: newCount, ending_count: endingCount });
+            }
+        }
+
         // 공식 프로모션 배너 대신 자체 제작 브랜드 비주얼 밴드를 쓴다 (저작권·심사 리스크 회피).
         // isHero: 목록 첫 카드는 등장 모션·반짝임으로 시선을 잡는 히어로로 렌더한다.
         function dealCardHtml(d, isHero) {
@@ -480,7 +593,7 @@
 
         function renderDeals() {
             const list = document.getElementById('dealList');
-            const filtered = getFiltered();
+            const filtered = sortForDiscovery(getFiltered());
             if (filtered.length === 0) {
                 list.innerHTML = '';
                 // 불러오기 자체가 실패한 것과, 필터에 걸리는 행사가 없는 것은 다른 상황이다.
@@ -604,6 +717,7 @@
             window.tossLog?.('click', { log_name: 'deal_like', brand: key.split(':')[0], liked: !wasLiked });
             if (wasLiked) likedIds.delete(key); else likedIds.add(key);
             saveLiked();
+            renderDailyDiscovery();
             renderDeals();
             renderLikedList();
             updateAlertBanners();
@@ -614,12 +728,16 @@
         // 설정 메뉴에 묻어둔 것보다 이 타이밍이 동의율이 훨씬 높다.
         const NOTIF_PROMPTED_KEY = 'ff_notif_prompted';
         function maybePromptNotifOnLike() {
-            if (localStorage.getItem(NOTIF_PROMPTED_KEY)) return;
+            try { if (localStorage.getItem(NOTIF_PROMPTED_KEY)) return; } catch (e) { return; }
+            if (window.tossNotificationReady !== true) return;
             if (!document.body.classList.contains('in-toss-app') || !window.tossRequestNotificationAgreement) return;
-            localStorage.setItem(NOTIF_PROMPTED_KEY, '1');
+            try { localStorage.setItem(NOTIF_PROMPTED_KEY, '1'); } catch (e) { return; }
             window.tossRequestNotificationAgreement()
-                .then(() => showToast('마감·새 행사 알림을 보내드릴게요!'))
-                .catch(() => {});
+                .then(() => {
+                    window.tossLog?.('click', { log_name: 'notification_agreement', result: 'accepted' });
+                    showToast('마감·새 행사 알림을 보내드릴게요!');
+                })
+                .catch((error) => window.tossLog?.('click', { log_name: 'notification_agreement', result: 'failed', reason: error?.message || 'unknown' }));
         }
 
         // 1,324명 중 첫 주에 돌아온 사람이 최대 82명뿐이라, 다시 열 이유를 만들 장치가 필요하다.
@@ -643,6 +761,8 @@
         function openDetail(key) {
             const d = findDeal(key);
             if (!d) return;
+            rememberViewed(key);
+            renderDailyDiscovery();
             window.tossLog?.('click', { log_name: 'deal_detail', brand: d.brand, category: d.category, is_new: !!d.isNew });
             maybeHintLike();
             window.onAdTrigger?.('detail'); // 행사 상세보기 - 빈도 낮게 제한
@@ -855,7 +975,11 @@
 
         function shareText(d) {
             const b = BRAND_INFO[d.brand] || { text: d.brand };
-            return `🍔 ${b.text} 행사 발견!\n[${d.title}]\n\n📱 패스트푸드 행사 앱에서 확인하세요!\n${dealDeepLink(d)}`;
+            const days = numericDaysLeft(d);
+            const urgency = days !== null && days >= 0 && days <= 7
+                ? `\n⏰ ${days === 0 ? '오늘 마감 행사예요.' : `D-${days} 행사예요.`}\n`
+                : '\n';
+            return `🍔 ${b.text} 행사 발견!\n[${d.title}]${urgency}\n📱 내 주변 매장과 공식 행사 페이지를 바로 확인하세요.\n${dealDeepLink(d)}`;
         }
 
         function shareDeal(key) {
@@ -1445,6 +1569,7 @@
             if (!confirm('찜 목록을 초기화할까요?')) return;
             likedIds = new Set();
             saveLiked();
+            renderDailyDiscovery();
             renderDeals();
             renderLikedList();
             updateAlertBanners();
@@ -1457,9 +1582,20 @@
                 showToast('토스 앱에서만 알림 설정이 가능해요.');
                 return;
             }
+            if (window.tossNotificationReady !== true) {
+                window.tossLog?.('click', { log_name: 'notification_agreement', result: 'failed', reason: 'template_not_ready' });
+                showToast('알림 발송 준비 중이에요.');
+                return;
+            }
             window.tossRequestNotificationAgreement()
-                .then(() => showToast('알림 동의가 완료됐어요!'))
-                .catch(() => showToast('알림 동의를 완료하지 못했어요.'));
+                .then(() => {
+                    window.tossLog?.('click', { log_name: 'notification_agreement', result: 'accepted' });
+                    showToast('알림 동의가 완료됐어요!');
+                })
+                .catch((error) => {
+                    window.tossLog?.('click', { log_name: 'notification_agreement', result: 'failed', reason: error?.message || 'unknown' });
+                    showToast('알림 동의를 완료하지 못했어요.');
+                });
         }
 
         // 토스 시스템 뒤로가기: 열린 레이어를 먼저 닫고, 보조 탭에서는 행사 목록으로 돌아간다.
