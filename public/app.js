@@ -525,8 +525,8 @@
                     const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
                     return `<button onclick="openDiscoveryDeal('${dealKey(d)}', ${i + 1})" class="discovery-card" aria-label="${b.text} 행사 상세 보기">
                         <span class="block text-[11px] font-bold text-orange-700 truncate">${b.emoji} ${b.text}</span>
-                        <span class="discovery-title mt-1 text-[12px] font-black leading-snug text-gray-900">${d.title}</span>
-                        <span class="mt-1.5 block text-[10px] font-bold text-orange-600">${discoveryReason(d)}</span>
+                        <span class="discovery-title mt-0.5 text-[12px] font-black leading-snug text-gray-900">${d.title}</span>
+                        <span class="mt-1 block text-[10px] font-bold text-orange-600">${discoveryReason(d)}</span>
                     </button>`;
                 }).join('')}</div>`;
             if (!discoveryImpressionLogged) {
