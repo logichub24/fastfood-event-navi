@@ -508,7 +508,6 @@
                 const days = numericDaysLeft(d);
                 return days !== null && days >= 0 && days <= 3;
             }).length;
-            const endingTodayCount = ALL_DEALS.filter((d) => numericDaysLeft(d) === 0).length;
             const now = new Date();
             const date = `${now.getMonth() + 1}/${now.getDate()}`;
             section.className = 'daily-discovery mb-3';
@@ -519,10 +518,7 @@
                 </div>
                 <div class="discovery-stats">
                     <button onclick="openMealChoice()" class="discovery-stat">🍽️ 지금 뭐 먹지?</button>
-                    <span class="discovery-stat">새 행사 ${newCount}</span>
-                    <button onclick="toggleEndingToday()" class="discovery-stat">오늘 마감 ${endingTodayCount}</button>
                     <span class="discovery-stat">3일 내 마감 ${endingCount}</span>
-                    ${sinceLastVisitKeys.size ? `<button onclick="toggleSinceOnly()" class="discovery-stat">새로 생김 ${sinceLastVisitKeys.size}</button>` : ''}
                 </div>
                 <div class="discovery-grid">${recommendations.map((d, i) => {
                     const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
