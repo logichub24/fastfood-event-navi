@@ -508,6 +508,7 @@
                 const days = numericDaysLeft(d);
                 return days !== null && days >= 0 && days <= 3;
             }).length;
+            const endingTodayCount = ALL_DEALS.filter((d) => numericDaysLeft(d) === 0).length;
             const now = new Date();
             const date = `${now.getMonth() + 1}/${now.getDate()}`;
             section.className = 'daily-discovery mb-3';
@@ -517,9 +518,11 @@
                     <span class="text-[11px] font-bold text-orange-700 shrink-0">${date}</span>
                 </div>
                 <div class="discovery-stats">
+                    <button onclick="openMealChoice()" class="discovery-stat">🍽️ 지금 뭐 먹지?</button>
                     <span class="discovery-stat">새 행사 ${newCount}</span>
-                    <span class="discovery-stat">마감 임박 ${endingCount}</span>
-                    ${sinceLastVisitKeys.size ? `<span class="discovery-stat">새로 생김 ${sinceLastVisitKeys.size}</span>` : ''}
+                    <button onclick="toggleEndingToday()" class="discovery-stat">오늘 마감 ${endingTodayCount}</button>
+                    <span class="discovery-stat">3일 내 마감 ${endingCount}</span>
+                    ${sinceLastVisitKeys.size ? `<button onclick="toggleSinceOnly()" class="discovery-stat">새로 생김 ${sinceLastVisitKeys.size}</button>` : ''}
                 </div>
                 <div class="discovery-grid">${recommendations.map((d, i) => {
                     const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
@@ -794,6 +797,7 @@
                         <button onclick="toggleLike('${dealKey(d)}'); openDetail('${dealKey(d)}')" class="py-3 rounded-xl font-bold text-sm border ${likedIds.has(dealKey(d)) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-gray-50 border-gray-200 text-gray-600'}"><i class="fa-solid fa-heart mr-1"></i>${likedIds.has(dealKey(d)) ? '찜 완료' : '찜하기'}</button>
                         <button onclick="shareDeal('${dealKey(d)}')" class="py-3 rounded-xl font-bold text-sm bg-gray-50 border border-gray-200 text-gray-600"><i class="fa-solid fa-share-nodes mr-1"></i>공유하기</button>
                     </div>
+                    <button onclick="viewBrandStores('${d.brand}')" class="w-full mt-2 py-3 rounded-xl font-bold text-sm border border-orange-200 bg-orange-50 text-orange-700"><i class="fa-solid fa-map-location-dot mr-1"></i>${b.text} 내 주변 매장 보기</button>
                     <a href="${d.link}" target="_blank" rel="noopener" class="block text-center mt-2 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white shadow"><i class="fa-solid fa-arrow-up-right-from-square mr-1.5 text-xs"></i>공식 이벤트 보기</a>
                     <div class="mt-4 bg-gray-50 rounded-xl p-3.5">
                         <p class="text-[11px] font-bold text-gray-600 mb-1.5"><i class="fa-solid fa-circle-info mr-1 text-gray-400"></i>행사 안내</p>
@@ -811,6 +815,47 @@
         function closeDetailSheet() {
             document.getElementById('detailSheetBg').classList.remove('active');
             document.getElementById('detailSheet').classList.remove('active');
+        }
+
+        const MEAL_CHOICES = {
+            budget: { label: '저렴하게', test: (d) => /할인|쿠폰|1\+1|2for|특가|무료|증정/i.test(`${d.title} ${d.category || ''}`) },
+            delivery: { label: '배달로', test: (d) => /배달|요기요|배민|쿠팡|딜리버리/i.test(`${d.title} ${d.category || ''}`) },
+            store: { label: '매장 방문', test: (d) => !/배달|요기요|배민|쿠팡|딜리버리/i.test(`${d.title} ${d.category || ''}`) },
+        };
+
+        function openMealChoice() {
+            document.getElementById('mealChoiceResults').innerHTML = '';
+            document.getElementById('mealChoiceBg').classList.add('active');
+            document.getElementById('mealChoiceSheet').classList.add('active');
+            window.tossLog?.('click', { log_name: 'meal_choice_open' });
+        }
+
+        function closeMealChoice() {
+            document.getElementById('mealChoiceBg').classList.remove('active');
+            document.getElementById('mealChoiceSheet').classList.remove('active');
+        }
+
+        function chooseMeal(type) {
+            const choice = MEAL_CHOICES[type];
+            if (!choice) return;
+            const matched = ALL_DEALS.filter(choice.test);
+            const recommendations = sortForDiscovery(matched.length ? matched : ALL_DEALS).slice(0, 3);
+            document.getElementById('mealChoiceResults').innerHTML = `
+                <p class="mt-4 text-xs font-bold text-gray-500">${choice.label} 좋다면 이 행사부터 확인해보세요.</p>
+                <div class="mt-2 flex flex-col gap-2">${recommendations.map((d) => {
+                    const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
+                    return `<button onclick="closeMealChoice(); openDetail('${dealKey(d)}')" class="w-full text-left p-3 rounded-xl bg-gray-50 border border-gray-100 active:bg-orange-50"><span class="text-xs font-black text-gray-900">${b.emoji} ${b.text}</span><span class="block mt-0.5 text-xs text-gray-600">${d.title}</span></button>`;
+                }).join('')}</div>`;
+            window.tossLog?.('click', { log_name: 'meal_choice_select', choice: type, result_count: matched.length });
+        }
+
+        function viewBrandStores(brand) {
+            closeDetailSheet();
+            mapBrand = brand;
+            switchTab('map');
+            renderMapBrandChips();
+            loadStoresInRadius();
+            window.tossLog?.('click', { log_name: 'deal_nearby_stores', brand });
         }
 
         // ===== 통합 검색 (카페행사맵 이식 - 초성 검색 지원) =====
@@ -1607,6 +1652,7 @@
                 ['categoryModalBg', closeCategoryModal],
                 ['brandModalBg', closeBrandModal],
                 ['locationSearchBg', closeLocationSearch],
+                ['mealChoiceBg', closeMealChoice],
                 ['detailSheetBg', closeDetailSheet],
                 ['storeSheetBg', closeStoreSheet],
             ];

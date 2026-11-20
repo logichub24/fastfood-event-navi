@@ -221,6 +221,23 @@
             <div id="detailContent" class="flex-1 overflow-y-auto hide-scrollbar"></div>
         </div>
 
+        <!-- 사용자가 열었을 때만 표시하는 간단 추천 시트 -->
+        <div class="sheet-bg" id="mealChoiceBg" onclick="closeMealChoice()"></div>
+        <div class="bottom-sheet" id="mealChoiceSheet" style="height:auto; max-height:70vh;">
+            <div class="p-5">
+                <div class="flex items-center justify-between gap-3">
+                    <div><h2 class="text-lg font-black">지금 뭐 먹지?</h2><p class="mt-1 text-xs text-gray-500">원하는 방식 하나만 골라주세요.</p></div>
+                    <button onclick="closeMealChoice()" aria-label="추천 닫기" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mt-4">
+                    <button onclick="chooseMeal('budget')" class="py-3 rounded-xl bg-orange-50 border border-orange-100 text-xs font-bold text-orange-700">💸<span class="block mt-1">저렴하게</span></button>
+                    <button onclick="chooseMeal('delivery')" class="py-3 rounded-xl bg-sky-50 border border-sky-100 text-xs font-bold text-sky-700">🛵<span class="block mt-1">배달로</span></button>
+                    <button onclick="chooseMeal('store')" class="py-3 rounded-xl bg-emerald-50 border border-emerald-100 text-xs font-bold text-emerald-700">🏪<span class="block mt-1">매장 방문</span></button>
+                </div>
+                <div id="mealChoiceResults"></div>
+            </div>
+        </div>
+
         <!-- 지역/주소 검색 바텀시트 -->
         <div class="sheet-bg" id="locationSearchBg" onclick="closeLocationSearch()"></div>
         <div class="bottom-sheet" id="locationSearchSheet" style="height: 85vh;">
