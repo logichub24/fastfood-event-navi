@@ -6,7 +6,6 @@
 import { TossAds, loadFullScreenAd, showFullScreenAd, share, getCurrentLocation, Accuracy, requestNotificationAgreement, Analytics, graniteEvent, Screen } from 'https://esm.sh/@apps-in-toss/web-framework@3.1.1';
 
 const AD_CONFIG = {
-  banner: 'ait.v2.live.2d12e1c821d44d97',
   interstitial: 'ait.v2.live.ac39f712a06f42c5',
 };
 
@@ -143,8 +142,6 @@ function init() {
   TossAds.initialize({
     callbacks: {
       onInitialized: () => {
-        const slot = document.getElementById('adBannerSlot');
-        if (slot) TossAds.attachBanner(AD_CONFIG.banner, slot);
         loadInterstitial();
       },
     },
