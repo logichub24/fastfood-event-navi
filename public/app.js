@@ -518,7 +518,6 @@
                 </div>
                 <div class="discovery-stats">
                     <button onclick="openMealChoice()" class="discovery-stat">🍽️ 지금 뭐 먹지?</button>
-                    <span class="discovery-stat">3일 내 마감 ${endingCount}</span>
                 </div>
                 <div class="discovery-grid">${recommendations.map((d, i) => {
                     const b = BRAND_INFO[d.brand] || { text: d.brand, emoji: '🍽️' };
