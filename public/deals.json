@@ -61,11 +61,11 @@
     "link": "https://www.kfckorea.com/promotion/promotionlist/a801",
     "startDate": "2026-11-23",
     "endDate": "2026-11-29",
-    "isOngoingText": "진행종료",
+    "isOngoingText": "진행중",
     "category": "시간대 특가",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "KFC",
@@ -79,7 +79,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 6,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "MOMSTOUCH",
@@ -403,7 +403,7 @@
     "category": "메뉴소식",
     "ongoing": true,
     "daysLeft": 43,
-    "isNew": true
+    "isNew": false
   },
   {
     "brand": "BURGERKING",
